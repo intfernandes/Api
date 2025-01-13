@@ -1,0 +1,7 @@
+
+// users list
+GET https://localhost:5001/api/v1/users
+
+###
+// user by id
+GET https://localhost:5001/api/v1/users/1
