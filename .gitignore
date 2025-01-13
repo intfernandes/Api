@@ -1,2 +1,4 @@
 /obj
 /bin
+constance.db-shm
+constance.db-wal
