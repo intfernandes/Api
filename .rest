@@ -1,27 +1,170 @@
 
-// users list
+### users list
 GET https://localhost:5001/api/v1/users
 
-###
-// user by id
+### user by id
 GET https://localhost:5001/api/v1/users/1
 
-###
-
-// create user
+### create user
 POST https://localhost:5001/api/v1/users HTTP/1.1
 content-type: application/json
 
 {
-    "name": "John Doe",
+    "name": "John Doe 3",
     "email": "john.doe@test.com"
 }
 
-###
-PUT https://localhost:5001/api/v1/users/4  HTTP/1.1
+### update user
+PUT https://localhost:5001/api/v1/users/1  HTTP/1.1
 content-type: application/json
 
 {
     "name": "João Jurupinga",
     "email": "john.doe@test.com"
 }
+
+### delete user
+DELETE https://localhost:5001/api/v1/users/2
+
+### products list
+GET https://localhost:5001/api/v1/products
+
+### product by id
+GET https://localhost:5001/api/v1/products/2
+
+### create product
+POST https://localhost:5001/api/v1/products HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Product 4",
+    "price": 10.5
+}
+
+### update product
+PUT https://localhost:5001/api/v1/products/3  HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Product 33",
+    "price": 10.5
+}
+
+### delete product
+DELETE https://localhost:5001/api/v1/products/3
+
+### list customers
+GET https://localhost:5001/api/v1/customers
+
+### customer by id
+GET https://localhost:5001/api/v1/customers/2
+
+### create customer
+POST https://localhost:5001/api/v1/customers HTTP/1.1
+content-type: application/json
+
+{
+    "name": "João Jurupinga",
+    "email": "john.doe@test.com",
+    "phone": "999999999",
+    "address": "Rua do João",
+    "city": "São Paulo",
+    "state": "SP",
+    "zipCode": "99999999",
+    "customerGender": "M",
+    "customerType": "happy",
+    "dateOfBirth": "2025-01-13T22:53:48.011198-03:00",
+    "accountId": 1,
+    "country": "Brasil",
+    "notes": "Cliente muito importante",
+    "active": true
+}
+
+### update customer
+PUT https://localhost:5001/api/v1/customers/1  HTTP/1.1
+content-type: application/json
+
+{
+    "name": "João Jurupinguço",
+    "email": "john.doe@test.com",
+    "phone": "999999999",
+    "address": "Rua do João",
+    "city": "São Paulo",
+    "state": "SP",
+    "zipCode": "99999999",
+    "customerGender": "M",
+    "customerType": "happy",
+    "dateOfBirth": "2025-01-13T22:53:48.011198-03:00",
+    "accountId": 2,
+    "country": "Brasil",
+    "notes": "Cliente muito importante",
+    "active": true
+}
+
+### delete customer
+DELETE https://localhost:5001/api/v1/customers/1
+
+### list transactions
+GET https://localhost:5001/api/v1/transactions
+
+### transaction by id
+GET https://localhost:5001/api/v1/transactions/1
+
+### create transaction
+POST https://localhost:5001/api/v1/transactions HTTP/1.1
+content-type: application/json
+
+{
+    "userId": 1,
+    "customerId": 2,
+    "productId": 1,
+    "quantity": 1,
+    "price": 10.5,
+    "transactionDate": "2025-01-13T22:53:48.011198-03:00"
+}
+
+### update transaction
+PUT https://localhost:5001/api/v1/transactions/1  HTTP/1.1
+content-type: application/json
+
+{
+    "customerId": 1,
+    "productId": 1,
+    "quantity": 1,
+    "total": 10.5,
+    "transactionDate": "2025-01-13T22:53:48.011198-03:00"
+}
+
+### delete transaction
+DELETE https://localhost:5001/api/v1/transactions/1
+
+### list accounts
+GET https://localhost:5001/api/v1/accounts
+
+### account by id
+GET https://localhost:5001/api/v1/accounts/1
+
+### create account
+POST https://localhost:5001/api/v1/accounts HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Account 123", 
+    "AccountName": "mainn",
+    "BankName": "Inter",
+    "BankCode": "066",
+    "AccountType": "main",
+    "balance": 100.5
+}
+
+### update account
+PUT https://localhost:5001/api/v1/accounts/1  HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Account 1",
+    "balance": 100.5
+}
+
+### delete account
+DELETE https://localhost:5001/api/v1/accounts/1

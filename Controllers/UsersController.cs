@@ -33,7 +33,6 @@ public class UsersController(DataContext context) : ControllerBase
     public async Task<ActionResult<User>> CreateUser(User user) {
         context.Users.Add(user);
         await context.SaveChangesAsync();
-
         return Ok(user);
     }
 
@@ -46,9 +45,9 @@ public class UsersController(DataContext context) : ControllerBase
             return NotFound();
         }
 
-        existingUser.Name = user.Name;
-        existingUser.Email = user.Email;
-
+        if(user.Name.Length > 0) existingUser.Name = user.Name;
+        if(user.Email.Length > 0) existingUser.Email = user.Email;
+        
         await context.SaveChangesAsync();
 
         return Ok(existingUser);
