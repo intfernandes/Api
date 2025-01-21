@@ -1,18 +1,33 @@
 
-### users list
-GET https://localhost:5001/api/v1/users
-
-### user by id
-GET https://localhost:5001/api/v1/users/1
-
-### create user
-POST https://localhost:5001/api/v1/users HTTP/1.1
+### registers a new user
+POST https://localhost:5001/api/v1/auth/register  HTTP/1.1
 content-type: application/json
 
 {
-    "name": "John Doe 3",
-    "email": "john.doe@test.com"
+    "name": "autht",
+    "email": "auth2@test.com",
+    "password": "123456"
 }
+
+### log user in
+
+POST https://localhost:5001/api/v1/auth/login  HTTP/1.1
+content-type: application/json
+
+{ 
+   "email": "authtt@test.com",
+    "password": "123456"
+}
+
+
+### get users list
+GET https://localhost:5001/api/v1/users
+
+### get user by id
+GET https://localhost:5001/api/v1/users/10
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJhdXRodCIsIm5iZiI6MTczNzQyMjI0OCwiZXhwIjoxNzM4MDI3MDQ4LCJpYXQiOjE3Mzc0MjIyNDh9.k0H9lNsjYcyq9Xru_SVslwBqkY9s9M1ey_8mp1K72WzzHrhgW9j3TAYjOAu_DL9tfQf6lAH3krFgv1lPcsNTCQ
+
 
 ### update user
 PUT https://localhost:5001/api/v1/users/1  HTTP/1.1
@@ -26,10 +41,10 @@ content-type: application/json
 ### delete user
 DELETE https://localhost:5001/api/v1/users/2
 
-### products list
+### get products list
 GET https://localhost:5001/api/v1/products
 
-### product by id
+### get product by id
 GET https://localhost:5001/api/v1/products/2
 
 ### create product
@@ -53,10 +68,10 @@ content-type: application/json
 ### delete product
 DELETE https://localhost:5001/api/v1/products/3
 
-### list customers
+### get customers list
 GET https://localhost:5001/api/v1/customers
 
-### customer by id
+### get customer by id
 GET https://localhost:5001/api/v1/customers/2
 
 ### create customer
@@ -74,7 +89,7 @@ content-type: application/json
     "customerGender": "M",
     "customerType": "happy",
     "dateOfBirth": "2025-01-13T22:53:48.011198-03:00",
-    "accountId": 1,
+    "accountId": 4,
     "country": "Brasil",
     "notes": "Cliente muito importante",
     "active": true
@@ -95,7 +110,7 @@ content-type: application/json
     "customerGender": "M",
     "customerType": "happy",
     "dateOfBirth": "2025-01-13T22:53:48.011198-03:00",
-    "accountId": 2,
+    "accountId": 6,
     "country": "Brasil",
     "notes": "Cliente muito importante",
     "active": true
@@ -104,10 +119,10 @@ content-type: application/json
 ### delete customer
 DELETE https://localhost:5001/api/v1/customers/1
 
-### list transactions
+### get transactions list
 GET https://localhost:5001/api/v1/transactions
 
-### transaction by id
+### get transaction by id
 GET https://localhost:5001/api/v1/transactions/1
 
 ### create transaction
@@ -116,9 +131,9 @@ content-type: application/json
 
 {
     "userId": 1,
-    "customerId": 2,
+    "customerId": 1,
     "productId": 1,
-    "quantity": 1,
+    "quantity": 5,
     "price": 10.5,
     "transactionDate": "2025-01-13T22:53:48.011198-03:00"
 }
@@ -138,10 +153,10 @@ content-type: application/json
 ### delete transaction
 DELETE https://localhost:5001/api/v1/transactions/1
 
-### list accounts
+### get accounts list
 GET https://localhost:5001/api/v1/accounts
 
-### account by id
+### get account by id
 GET https://localhost:5001/api/v1/accounts/1
 
 ### create account

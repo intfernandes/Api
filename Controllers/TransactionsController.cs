@@ -6,9 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
-    [ApiController]
-    [Route("api/v1/[controller]")] // GET: api/v1/transactions
-    public class TransactionsController(DataContext context) : ControllerBase
+
+    public class TransactionsController(DataContext context) : BaseController
     {
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactions() {

@@ -6,9 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
-    [ApiController]
-    [Route("api/v1/[controller]")] // GET: api/v1/customers
-        public class CustomersController(DataContext context) : ControllerBase
+
+        public class CustomersController(DataContext context) : BaseController
     {
            [HttpGet]
             public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers() {
@@ -46,6 +45,7 @@ namespace Api.Controllers
                 if(customer.Name.Length > 0) existingCustomer.Name = customer.Name;
                 if(customer.Email.Length > 0) existingCustomer.Email = customer.Email;
                 if(customer.Phone.Length > 0) existingCustomer.Phone = customer.Phone;
+                if(customer.AccountId != existingCustomer.AccountId) existingCustomer.AccountId = customer.AccountId;
                 
                 await context.SaveChangesAsync();
     
