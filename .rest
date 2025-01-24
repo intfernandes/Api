@@ -4,8 +4,8 @@ POST https://localhost:5001/api/v1/auth/register  HTTP/1.1
 content-type: application/json
 
 {
-    "name": "autht",
-    "email": "auth2@test.com",
+    "name": "ng4",
+    "email": "ng4@test.com",
     "password": "123456"
 }
 
@@ -15,7 +15,7 @@ POST https://localhost:5001/api/v1/auth/login  HTTP/1.1
 content-type: application/json
 
 { 
-   "email": "authtt@test.com",
+   "email": "ng@test.com",
     "password": "123456"
 }
 
@@ -30,12 +30,14 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJhdXRod
 
 
 ### update user
-PUT https://localhost:5001/api/v1/users/1  HTTP/1.1
+PUT https://localhost:5001/api/v1/users/5  HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJhdXRodCIsIm5iZiI6MTczNzQyMjI0OCwiZXhwIjoxNzM4MDI3MDQ4LCJpYXQiOjE3Mzc0MjIyNDh9.k0H9lNsjYcyq9Xru_SVslwBqkY9s9M1ey_8mp1K72WzzHrhgW9j3TAYjOAu_DL9tfQf6lAH3krFgv1lPcsNTCQ
 
 {
-    "name": "João Jurupinga",
-    "email": "john.doe@test.com"
+    "name": "Ng5",
+    "email": "ng5@test.com",
+    "password": "123456"
 }
 
 ### delete user

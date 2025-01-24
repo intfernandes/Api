@@ -24,7 +24,8 @@ namespace Api.Controllers
 
             var user = new User {
                 Name = register.Name,
-                Email = register.Email.ToLower(),
+                Email = register.Email.ToLower(), 
+                Status = "inactive",
                 PwdHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(register.Password) ),
                 PwdSalt = hmac.Key
             };
@@ -32,9 +33,12 @@ namespace Api.Controllers
             context.Users.Add(user);
 
             await context.SaveChangesAsync();
-
-                    return Ok(new UserDto {
+            
+            return Ok(new UserDto {
                 Name = user.Name,
+                Email = user.Email,
+                Gender = register.Gender,
+                Status = "inactive",
                 Token = tokenService.CreateToken(user)
             } );
         }
@@ -58,8 +62,11 @@ namespace Api.Controllers
 
             return Ok(new UserDto {
                 Name = user.Name,
+                Gender = user.Gender,
+                Email = user.Email,
+                Status = user.Status,
                 Token = tokenService.CreateToken(user)
-            } );
+            });
         
         }
 
