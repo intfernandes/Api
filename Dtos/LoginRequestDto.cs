@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 namespace Api.Dtos
 {
-    public class LoginDto
+    public class LoginRequestDto
     {
 
     [Required]

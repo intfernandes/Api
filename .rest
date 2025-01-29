@@ -1,187 +1,209 @@
-
 ### registers a new user
-POST https://localhost:5001/api/v1/auth/register  HTTP/1.1
+
+POST https://localhost:5001/api/v1/auth/register HTTP/1.1
 content-type: application/json
 
 {
-    "name": "ng4",
-    "email": "ng4@test.com",
-    "password": "123456"
+"name": "ng4",
+"email": "ng4@test.com",
+"password": "123456"
 }
 
 ### log user in
 
-POST https://localhost:5001/api/v1/auth/login  HTTP/1.1
+POST https://localhost:5001/api/v1/auth/login HTTP/1.1
 content-type: application/json
 
-{ 
-   "email": "ng@test.com",
-    "password": "123456"
+{
+"email": "randallforbes@vertide.com",
+"password": "123456"
 }
 
-
 ### get users list
+
 GET https://localhost:5001/api/v1/users
 
 ### get user by id
+
 GET https://localhost:5001/api/v1/users/10
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJhdXRodCIsIm5iZiI6MTczNzQyMjI0OCwiZXhwIjoxNzM4MDI3MDQ4LCJpYXQiOjE3Mzc0MjIyNDh9.k0H9lNsjYcyq9Xru_SVslwBqkY9s9M1ey_8mp1K72WzzHrhgW9j3TAYjOAu_DL9tfQf6lAH3krFgv1lPcsNTCQ
 
-
 ### update user
-PUT https://localhost:5001/api/v1/users/5  HTTP/1.1
+
+PUT https://localhost:5001/api/v1/users/5 HTTP/1.1
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJhdXRodCIsIm5iZiI6MTczNzQyMjI0OCwiZXhwIjoxNzM4MDI3MDQ4LCJpYXQiOjE3Mzc0MjIyNDh9.k0H9lNsjYcyq9Xru_SVslwBqkY9s9M1ey_8mp1K72WzzHrhgW9j3TAYjOAu_DL9tfQf6lAH3krFgv1lPcsNTCQ
 
 {
-    "name": "Ng5",
-    "email": "ng5@test.com",
-    "password": "123456"
+"name": "Ng5",
+"email": "ng5@test.com",
+"password": "123456"
 }
 
 ### delete user
+
 DELETE https://localhost:5001/api/v1/users/2
 
 ### get products list
+
 GET https://localhost:5001/api/v1/products
 
 ### get product by id
+
 GET https://localhost:5001/api/v1/products/2
 
 ### create product
+
 POST https://localhost:5001/api/v1/products HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Product 4",
-    "price": 10.5
+"name": "Product 4",
+"price": 10.5
 }
 
 ### update product
-PUT https://localhost:5001/api/v1/products/3  HTTP/1.1
+
+PUT https://localhost:5001/api/v1/products/3 HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Product 33",
-    "price": 10.5
+"name": "Product 33",
+"price": 10.5
 }
 
 ### delete product
+
 DELETE https://localhost:5001/api/v1/products/3
 
 ### get customers list
+
 GET https://localhost:5001/api/v1/customers
 
 ### get customer by id
+
 GET https://localhost:5001/api/v1/customers/2
 
 ### create customer
+
 POST https://localhost:5001/api/v1/customers HTTP/1.1
 content-type: application/json
 
 {
-    "name": "João Jurupinga",
-    "email": "john.doe@test.com",
-    "phone": "999999999",
-    "address": "Rua do João",
-    "city": "São Paulo",
-    "state": "SP",
-    "zipCode": "99999999",
-    "customerGender": "M",
-    "customerType": "happy",
-    "dateOfBirth": "2025-01-13T22:53:48.011198-03:00",
-    "accountId": 4,
-    "country": "Brasil",
-    "notes": "Cliente muito importante",
-    "active": true
+"name": "João Jurupinga",
+"email": "john.doe@test.com",
+"phone": "999999999",
+"address": "Rua do João",
+"city": "São Paulo",
+"state": "SP",
+"zipCode": "99999999",
+"customerGender": "M",
+"customerType": "happy",
+"dateOfBirth": "2025-01-13T22:53:48.011198-03:00",
+"accountId": 4,
+"country": "Brasil",
+"notes": "Cliente muito importante",
+"active": true
 }
 
 ### update customer
-PUT https://localhost:5001/api/v1/customers/1  HTTP/1.1
+
+PUT https://localhost:5001/api/v1/customers/1 HTTP/1.1
 content-type: application/json
 
 {
-    "name": "João Jurupinguço",
-    "email": "john.doe@test.com",
-    "phone": "999999999",
-    "address": "Rua do João",
-    "city": "São Paulo",
-    "state": "SP",
-    "zipCode": "99999999",
-    "customerGender": "M",
-    "customerType": "happy",
-    "dateOfBirth": "2025-01-13T22:53:48.011198-03:00",
-    "accountId": 6,
-    "country": "Brasil",
-    "notes": "Cliente muito importante",
-    "active": true
+"name": "João Jurupinguço",
+"email": "john.doe@test.com",
+"phone": "999999999",
+"address": "Rua do João",
+"city": "São Paulo",
+"state": "SP",
+"zipCode": "99999999",
+"customerGender": "M",
+"customerType": "happy",
+"dateOfBirth": "2025-01-13T22:53:48.011198-03:00",
+"accountId": 6,
+"country": "Brasil",
+"notes": "Cliente muito importante",
+"active": true
 }
 
 ### delete customer
+
 DELETE https://localhost:5001/api/v1/customers/1
 
 ### get transactions list
+
 GET https://localhost:5001/api/v1/transactions
 
 ### get transaction by id
+
 GET https://localhost:5001/api/v1/transactions/1
 
 ### create transaction
+
 POST https://localhost:5001/api/v1/transactions HTTP/1.1
 content-type: application/json
 
 {
-    "userId": 1,
-    "customerId": 1,
-    "productId": 1,
-    "quantity": 5,
-    "price": 10.5,
-    "transactionDate": "2025-01-13T22:53:48.011198-03:00"
+"userId": 1,
+"customerId": 1,
+"productId": 1,
+"quantity": 5,
+"price": 10.5,
+"transactionDate": "2025-01-13T22:53:48.011198-03:00"
 }
 
 ### update transaction
-PUT https://localhost:5001/api/v1/transactions/1  HTTP/1.1
+
+PUT https://localhost:5001/api/v1/transactions/1 HTTP/1.1
 content-type: application/json
 
 {
-    "customerId": 1,
-    "productId": 1,
-    "quantity": 1,
-    "total": 10.5,
-    "transactionDate": "2025-01-13T22:53:48.011198-03:00"
+"customerId": 1,
+"productId": 1,
+"quantity": 1,
+"total": 10.5,
+"transactionDate": "2025-01-13T22:53:48.011198-03:00"
 }
 
 ### delete transaction
+
 DELETE https://localhost:5001/api/v1/transactions/1
 
 ### get accounts list
+
 GET https://localhost:5001/api/v1/accounts
 
 ### get account by id
+
 GET https://localhost:5001/api/v1/accounts/1
 
 ### create account
+
 POST https://localhost:5001/api/v1/accounts HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Account 123", 
-    "AccountName": "mainn",
-    "BankName": "Inter",
-    "BankCode": "066",
-    "AccountType": "main",
-    "balance": 100.5
+"name": "Account 123",
+"AccountName": "mainn",
+"BankName": "Inter",
+"BankCode": "066",
+"AccountType": "main",
+"balance": 100.5
 }
 
 ### update account
-PUT https://localhost:5001/api/v1/accounts/1  HTTP/1.1
+
+PUT https://localhost:5001/api/v1/accounts/1 HTTP/1.1
 content-type: application/json
 
 {
-    "name": "Account 1",
-    "balance": 100.5
+"name": "Account 1",
+"balance": 100.5
 }
 
 ### delete account
+
 DELETE https://localhost:5001/api/v1/accounts/1

@@ -1,60 +1,62 @@
 
-using Api.Data;
 using Api.Dtos;
 using Api.Entities;
+using Api.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc; 
 
 namespace Api.Controllers
 
 { 
-public class UsersController(DataContext context) : BaseController
+[Authorize]
+public class UsersController(IUserRepository userRepository, IMapper mapper) : BaseController
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers() {
-        var users = await context.Users.ToListAsync();
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers() {
+        var users = await userRepository.GetUsersDtosAsync(); 
 
         return Ok(users);
     }
 
     [HttpGet("{id:int}")] // GET: api/v1/users/{id}
-    public async Task<ActionResult<User>> GetUser(int Id) {
-        var user = await context.Users.FindAsync(Id);
+    public async Task<ActionResult<UserDto>> GetUser(int Id) {
+        var user = await userRepository.GetUserByIdAsync(Id);
 
         if(user == null) {
             return NotFound();
         }
 
-        return Ok(user);
+        var userDto = mapper.Map<UserDto>(user);
+
+
+        return Ok(userDto);
     }
 
     [HttpPut("{id:int}")] // PUT: api/v1/users/{id}
     [ProducesResponseType(typeof(UserDto), 200)]
     public async Task<ActionResult<UserDto>> UpdateUser(int id, UserDto user) {
-        var existingUser = await context.Users.FindAsync(id);
+        await Task.Delay(500);
+        return Ok();
 
-        if(existingUser == null) return NotFound();
+        // var existingUser = await userRepository.Update();
 
-        if(user?.Name?.Length > 0) existingUser.Name = user.Name;
-        if(user?.Email?.Length > 0) existingUser.Email = user.Email;
+        // if(existingUser == null) return NotFound();
+
+        // if(user?.Name?.Length > 0) existingUser.Name = user.Name;
+        // if(user?.Email?.Length > 0) existingUser.Email = user.Email;
         
-        await context.SaveChangesAsync();
+        // await userRepository.SaveAllAsync();
 
-        return Ok(UserDto.FromUser( existingUser));
+        // return Ok(UserDto.FromUser( existingUser));
     }
 
     [HttpDelete("{id:int}")] // DELETE: api/v1/users/{id}
-    public async Task<ActionResult<User>> DeleteUser(int Id) {
-        var user = await context.Users.FindAsync(Id);
+    public async Task<ActionResult> DeleteUserAsync(int Id) {
+        var user = await userRepository.DeleteUserAsync(Id);
 
-        if(user == null) {
-            return NotFound();
-        }
-
-        context.Users.Remove(user);
-        await context.SaveChangesAsync();
-
-        return Ok(user);
+   
+        return Ok(new Dictionary<string, string>()
+             {{"status","success"}});
 } 
 } }

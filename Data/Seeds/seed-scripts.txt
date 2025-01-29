@@ -1,0 +1,23 @@
+### USERSEEDSCRIPT ###
+
+[
+  '{{repeat(5)}}',
+  {
+    Name: '{{firstName("male")}}',
+    Email: '{{email()}}',
+    Gender: 'm',
+    DateOfBirth: '{{date(new Date(1950,0,1), new Date(1999, 11, 31), "YYYY-MM-dd")}}',
+    CreatedAt: '{{date(new Date(2019, 0, 1), new Date(2020,5,30), "YYYY-MM-dd")}}',
+    LastActiveAt: '{{date(new Date(2020, 4, 1), new Date(2020,5,30), "YYYY-MM-dd")}}',
+    City: '{{city()}}',
+    Country: '{{country()}}',
+    Photos: [
+        {
+          Url: function(num) {
+          return 'https://randomuser.me/api/portraits/men/' + num.integer(1,99) + '.jpg';
+        },
+        IsMain: true
+      }
+    ]
+  }
+]

@@ -1,0 +1,18 @@
+
+### auth
+GET https://localhost:5001/api/v1/bugs/auth  HTTP/1.1
+content-type: application/json
+
+### not-found
+GET https://localhost:5001/api/v1/bugs/not-found  HTTP/1.1
+content-type: application/json
+
+
+### server-error
+GET https://localhost:5001/api/v1/bugs/server-error  HTTP/1.1
+content-type: application/json
+
+
+### bad-request
+GET https://localhost:5001/api/v1/bugs/bad-request  HTTP/1.1
+content-type: application/json
