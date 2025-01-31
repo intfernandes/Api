@@ -38,15 +38,15 @@ namespace Api.Controllers
             public async Task<ActionResult<Customer>> UpdateCustomer(int Id, Customer customer) {
                 var existingCustomer = await context.Customers.FindAsync(Id);
     
-                if(existingCustomer == null) {
-                    return NotFound();
-                }
-    
-                if(customer.Name.Length > 0) existingCustomer.Name = customer.Name;
-                if(customer.Email.Length > 0) existingCustomer.Email = customer.Email;
-                if(customer.Phone.Length > 0) existingCustomer.Phone = customer.Phone;
-                if(customer.AccountId != existingCustomer.AccountId) existingCustomer.AccountId = customer.AccountId;
+                if(existingCustomer == null) return NotFound();
+
+                if(customer?.FirstName != null) existingCustomer.FirstName = customer.FirstName;
+                if(customer?.LastName != null) existingCustomer.LastName = customer.LastName;
+                if(customer?.Email != null) existingCustomer.Email = customer.Email;
+                if(customer?.Phone != null) existingCustomer.Phone = customer.Phone;
+                if(customer?.Address != null) existingCustomer.Address = customer.Address; 
                 
+            
                 await context.SaveChangesAsync();
     
                 return Ok(existingCustomer);

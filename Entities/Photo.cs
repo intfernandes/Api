@@ -1,17 +1,28 @@
 
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Api.Entities.Users;
 
 namespace Api.Entities
 {
     [Table("Photos")]
-    public class Photo
-    {
-    public int Id { get; set; }
-    public required string Url { get; set; }
-    public bool IsMain { get; set; }
-    public string? PublicId { get; set; }
-    // Navigation properties
-    public int UserId { get; set; }
-    public User User { get; set; } = null!;
-    }
+public class Photo : AuditableBaseEntity
+{
+    [Required]
+    [MaxLength(2048)]
+    public string Url { get; set; } = null!;
+    public bool IsHighlight { get; set; }
+
+    #region Relationships
+
+    public int? UserId { get; set; }
+    public virtual IUser? User { get; set; } 
+
+    public int? ProductId { get; set; }
+    public virtual Product? Product { get; set; }
+
+    #endregion
+
+
+}
 }

@@ -1,5 +1,6 @@
 using Api.Data;
 using Api.Entities;
+using Api.Entities.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc; 
 
@@ -14,19 +15,19 @@ namespace Api.Controllers
         }
 
         [HttpGet("not-found")]
-        public ActionResult<User> GetNotFound(){
-            var user = context.Users.Find(-1);
+        public ActionResult<Member> GetNotFound(){
+            var member = context.Members.Find(-1);
 
-            if(user == null)   return NotFound();
+            if(member == null)   return NotFound();
 
-            return user;
+            return member;
         }
 
 
     [HttpGet("server-error")]
-    public ActionResult<User> GetServerError()
+    public ActionResult<Member> GetServerError()
     {
-        var thing = context.Users.Find(-1) ?? throw new Exception("A bad thing has happened");
+        var thing = context.Members.Find(-1) ?? throw new Exception("A bad thing has happened");
         return thing;
     }
     [HttpGet("bad-request")]

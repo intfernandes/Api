@@ -1,35 +1,31 @@
 
+using System.ComponentModel.DataAnnotations;
+
 namespace Api.Entities
 {
-    public class Product(int id, string name, decimal price)
-    {
-        public int Id { get; set; } = id;
-        public required string Name { get; set; } = name;
-        public required decimal Price { get; set; } = price; 
-        public string? Description { get; set;}
+public class Product : AuditableBaseEntity
+{
+    [Required]
+    [MaxLength(255)]
+    public string Name { get; set; } = null!;
+    [MaxLength(500)]
+    public string? Description { get; set; }
+    [Range(0, double.MaxValue)]
+    public decimal Price { get; set; }
+    public List<Photo> Photos { get; set; } = [];
+    public int? HighlightPhotoId { get; set; }
+    public virtual Photo? HighlightPhoto { get; set; }
 
-        public override string ToString()
-        {
-            return $"Id: {Id}, Name: {Name}, Price: {Price}";
-        }
+    #region Relationships
+    public Company Company { get; set; } = null!;
+    public virtual Guid CompanyId { get; set; } 
+    public virtual Guid OrderId { get; set; } 
+    public virtual ICollection<Order> Order { get; set; } = [];
+    public virtual ICollection<Category> Categories { get; set; } = [];
 
-        public override bool Equals(object? obj)
-        {
-            if(obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+    #endregion
 
-            Product product = (Product)obj;
-            return Id == product.Id && Name == product.Name && Price == product.Price;
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Id, Name, Price);
-        }
-
-
-
-    }
 }
+}
+
+

@@ -48,24 +48,23 @@ namespace Api.Controllers
         }
 
         [HttpPut("{id:int}")] 
-        public async Task<ActionResult<Account>> UpdateAccount(int Id, Account account) {
-            var existingAccount = await context.Accounts.FindAsync(Id);
+        public async Task<ActionResult<Account>> UpdateAccount( Account account) {
+            var existingAccount = await context.Accounts.SingleOrDefaultAsync(x => x.Id == account.Id);
 
-            if(existingAccount == null) {
-                return NotFound();
-            }
-
-            if(account.AccountName.Length > 0) existingAccount.AccountName = account.AccountName;
-            if(account.AccountType.Length > 0) existingAccount.AccountType = account.AccountType;
-            if(account.Balance > 0) existingAccount.Balance = account.Balance;
+            if(existingAccount == null) return NotFound();
             
+            if(account?.Instance != null) existingAccount.Instance = account.Instance;
+            if(account?.Permissions != null ) existingAccount.Permissions = account.Permissions;
+            if(account?.AccountType != null) existingAccount.AccountType = account.AccountType;
+            if(account?.AccountStatus != null) existingAccount.AccountStatus = account.AccountStatus;
+
             await context.SaveChangesAsync();
 
             return Ok(existingAccount);
         }
 
         [HttpDelete("{id:int}")] 
-        public async Task<ActionResult> DeleteAccount(int id) {
+        public async Task<ActionResult> DeleteAccount(Guid id) {
             var existingAccount = await context.Accounts.Where(x => x.Id == id ).ToListAsync();
             if(existingAccount == null) {
                 return NotFound();

@@ -10,7 +10,7 @@ namespace Api.Services
 {
     public class TokenService(IConfiguration config) : ITokenService
     {
-        public string CreateToken(User user)
+        public string CreateToken(IUser user)
         {
             var secret = config["JwtSecret"] ?? throw new Exception("Cannot get JwtSecret frorm appsettings");
 
@@ -20,7 +20,7 @@ namespace Api.Services
 
             var claims = new List<Claim>
             {
-                new(ClaimTypes.NameIdentifier, user.Name)
+                new(ClaimTypes.NameIdentifier, user.FirstName)
             };
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);

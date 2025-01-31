@@ -1,21 +1,27 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
+using Api.Entities.Users;
 
-namespace Api.Entities
+namespace Api.Entities 
 {
+public class Account : AuditableBaseEntity
+{
+    [Required]
+    [MaxLength(255)]
+    public string Instance { get; set; } = null!; 
+    [MaxLength(20)]
+    public List<string>? Permissions { get; set; } 
+    public AccountType AccountType { get; set; } 
+    public AccountStatus AccountStatus { get; set; } 
 
-    public class Account( string accountName, string bankName, string bankCode, string accountType)
-    {
-    
-        public int Id { get; set; }
-        public int AccountNumber { get; set;}
-        public required string AccountName { get; set;} = accountName;
-        public required string BankName { get; set;} = bankName;
-        public required string BankCode { get; set;} = bankCode;
-        public required string AccountType { get; set;} = accountType;
-        public decimal Balance { get; set;} = 0;
-        
-        
-        
-    }
+    #region Relationships
+    public int? MemberId { get; set; }
+    public virtual Member? Member { get; set; }
+    public int? CustomerId { get; set; }
+    public virtual Customer? Customer { get; set; } 
+    public int? CompanyId { get; set; }
+    public virtual Company? Company { get; set; } 
+
+    #endregion
 }
+}
+

@@ -31,7 +31,8 @@ namespace Api.Extensions
                 services.AddCors();
                 
                 services.AddScoped<ITokenService, TokenService>();
-                services.AddScoped<IUserRepository, UserRepository>();
+                services.AddScoped<IMembersRepository, MembersRepository>();
+                services.AddScoped<ICustomersRepository, CustomersRepository>(); 
                 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
                 
                 return services;
