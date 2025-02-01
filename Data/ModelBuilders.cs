@@ -8,34 +8,35 @@ namespace Api.Data
         public class ModelBuilders
         {
 
-            public static void ConfigureAccounts(ModelBuilder modelBuilder)
-            {
-                modelBuilder.Entity<Account>(b =>
-                {
-                b.HasKey(a => a.Id);
-                });
-            }
-
+       
               public static void ConfigureCompanies(ModelBuilder modelBuilder)
               {
                  modelBuilder.Entity<Company>(b =>
                  {
 
             modelBuilder.Entity<Company>().ToTable("Companies");
-
-            b.HasKey(c => c.Id);
-
+      
             b.HasOne(c => c.Account)
              .WithOne(a => a.Company)
              .HasForeignKey<Account>(a => a.CompanyId);  
 
             b.HasOne(u => u.Address)
              .WithOne(a => a.Company)
-             .HasForeignKey<Address>(p => p.CompanyId)
+             .HasForeignKey<Address>(a => a.CompanyId)
              .OnDelete(DeleteBehavior.SetNull);
+
+             b.HasMany(c => c.Members)
+            .WithOne(m => m.Company)
+            .HasForeignKey(m => m.CompanyId);
+
+            b.HasMany(c => c.Products)
+            .WithOne(p => p.Company)
+            .HasForeignKey(p => p.CompanyId);
+
+             b.HasMany(c => c.Orders)
+            .WithOne(o => o.Company)
+            .HasForeignKey(o => o.CompanyId);
         }); 
-
-
          
     }
 
@@ -46,24 +47,22 @@ namespace Api.Data
         {
             modelBuilder.Entity<Member>().ToTable("Members");
 
-            b.HasKey(c => c.Id);
-
             b.HasOne(m => m.Company)
                 .WithMany()
-                .HasForeignKey(m => m.Id)
+                .HasForeignKey(m => m.CompanyId )
                  .OnDelete(DeleteBehavior.Restrict); 
 
-            b.HasMany(u => u.Accounts)
-             .WithOne(a => a.Member )
-             .HasForeignKey(u => u.MemberId)
+            b.HasMany(m => m.Accounts)
+             .WithOne( )
+             .HasForeignKey(a => a.MemberId)
              .OnDelete(DeleteBehavior.Restrict); 
 
-            b.HasOne(u => u.Address)
-             .WithOne(a => a.Member )
-             .HasForeignKey<Address>(p => p.MemberId)
+            b.HasOne(m => m.Address)
+             .WithOne()
+             .HasForeignKey<Address>(a => a.MemberId)
              .OnDelete(DeleteBehavior.SetNull);
 
-            b.HasMany(u => u.Photos)
+            b.HasMany(m => m.Photos)
              .WithOne()
              .HasForeignKey(p => p.MemberId)
              .OnDelete(DeleteBehavior.SetNull);
@@ -75,26 +74,22 @@ namespace Api.Data
 
 
         });
-
-
-         
     }
 
    public static void ConfigureCustomer(ModelBuilder modelBuilder)
 {
         modelBuilder.Entity<Customer>(b =>
         {
-            modelBuilder.Entity<Customer>().ToTable("Customers");
-             b.HasKey(c => c.Id);
+            modelBuilder.Entity<Customer>().ToTable("Customers"); 
 
             b.HasMany(u => u.Accounts)
              .WithOne(a => a.Customer ) 
              .HasForeignKey(a => a.CustomerId)
              .OnDelete(DeleteBehavior.Restrict); 
 
-               b.HasOne(u => u.Address)
+            b.HasOne(u => u.Address)
              .WithOne(a => a.Customer)
-             .HasForeignKey<Address>(p => p.CustomerId)
+             .HasForeignKey<Address>(a => a.CustomerId)
              .OnDelete(DeleteBehavior.SetNull);
 
             b.HasMany(u => u.Photos)
@@ -106,7 +101,7 @@ namespace Api.Data
                 .WithOne()
                 .HasForeignKey<Customer>(u => u.HighlightPhotoId)
                 .OnDelete(DeleteBehavior.SetNull);
- #region Relations 
+
               b.HasMany(c => c.PaymentMethods)
              .WithOne(p => p.Customer)
              .HasForeignKey(p => p.CustomerId);
@@ -163,7 +158,7 @@ namespace Api.Data
              .WithOne(p => p.Customer)
              .HasForeignKey(p => p.CustomerId);
 
-             #endregion
+       
 
         });
 }
@@ -172,6 +167,10 @@ namespace Api.Data
     {
         modelBuilder.Entity<Product>(b =>
             { 
+                b.HasOne(p => p.Company)
+                .WithMany()
+                .HasForeignKey(p => p.CompanyId);
+
                 b.HasMany(p => p.Photos)
                     .WithOne()
                     .HasForeignKey(p => p.ProductId)
@@ -179,9 +178,9 @@ namespace Api.Data
 
                 b.HasOne(p => p.HighlightPhoto)
                     .WithOne()
-                    .HasForeignKey<Photo>(p => p.Id);
+                    .HasForeignKey<Photo>(p => p.Id); 
 
-                b.HasKey(p => p.Id);
+
                     b.HasMany(p => p.Categories)
                     .WithMany(c => c.Products)
                     .UsingEntity<ProductCategory>(
@@ -189,8 +188,7 @@ namespace Api.Data
 
                     
             
-        });
-        modelBuilder.Entity<Category>(b =>{b.HasKey(c => c.Id);});
+        }); 
 
     }
 

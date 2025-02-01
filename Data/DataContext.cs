@@ -39,7 +39,6 @@ namespace Api.Data
            protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         ModelBuilders.ConfigureCompanies(modelBuilder);
-     
         ModelBuilders.ConfigureMembers(modelBuilder);
         ModelBuilders.ConfigureCustomer(modelBuilder);
         ModelBuilders.ConfigureProducts(modelBuilder);
