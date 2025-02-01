@@ -6,12 +6,12 @@ namespace Api.Dtos
 {
   public class OrderDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     [Required]
-    public int CustomerId { get; set; }
+    public Guid CustomerId { get; set; }
 
-    public int? SellerId { get; set; }
+    public Guid? MemberId { get; set; }
 
     public DateTime OrderDate { get; set; }
 
@@ -35,10 +35,10 @@ namespace Api.Dtos
 
 public class OrderItemDto
 {
-    public int Id { get; set; }
-    public int OrderId { get; set; }
+    public Guid Id { get; set; }
+    public Guid OrderId { get; set; }
 
-    public int ProductId { get; set; }
+    public Guid ProductId { get; set; }
 
     [Range(1, int.MaxValue)]
     public int Quantity { get; set; }

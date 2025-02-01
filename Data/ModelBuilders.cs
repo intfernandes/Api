@@ -12,37 +12,25 @@ namespace Api.Data
             {
                 modelBuilder.Entity<Account>(b =>
                 {
-                    b.HasKey(a => a.Id);
-
-                    b.HasOne(a => a.Member)
-                        .WithMany()
-                        .HasForeignKey(m => m.MemberId)
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne(a => a.Customer)
-                        .WithMany()
-                        .HasForeignKey(c => c.CustomerId)
-                        .OnDelete(DeleteBehavior.Restrict);
-
-             
-               
-      
+                b.HasKey(a => a.Id);
                 });
             }
 
               public static void ConfigureCompanies(ModelBuilder modelBuilder)
-    {
-        
-                  modelBuilder.Entity<Company>(b =>
-        {
+              {
+                 modelBuilder.Entity<Company>(b =>
+                 {
+
+            modelBuilder.Entity<Company>().ToTable("Companies");
+
             b.HasKey(c => c.Id);
 
             b.HasOne(c => c.Account)
              .WithOne(a => a.Company)
              .HasForeignKey<Account>(a => a.CompanyId);  
 
-                    b.HasOne(u => u.Address)
-             .WithOne()
+            b.HasOne(u => u.Address)
+             .WithOne(a => a.Company)
              .HasForeignKey<Address>(p => p.CompanyId)
              .OnDelete(DeleteBehavior.SetNull);
         }); 
@@ -51,29 +39,41 @@ namespace Api.Data
          
     }
 
+
     public static void ConfigureMembers(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Member>(b =>
         {
+            modelBuilder.Entity<Member>().ToTable("Members");
+
+            b.HasKey(c => c.Id);
+
+            b.HasOne(m => m.Company)
+                .WithMany()
+                .HasForeignKey(m => m.Id)
+                 .OnDelete(DeleteBehavior.Restrict); 
+
             b.HasMany(u => u.Accounts)
-             .WithOne()
+             .WithOne(a => a.Member )
              .HasForeignKey(u => u.MemberId)
              .OnDelete(DeleteBehavior.Restrict); 
 
-                     b.HasOne(u => u.Address)
-             .WithOne()
+            b.HasOne(u => u.Address)
+             .WithOne(a => a.Member )
              .HasForeignKey<Address>(p => p.MemberId)
              .OnDelete(DeleteBehavior.SetNull);
 
             b.HasMany(u => u.Photos)
              .WithOne()
-             .HasForeignKey(p => p.UserId)
+             .HasForeignKey(p => p.MemberId)
              .OnDelete(DeleteBehavior.SetNull);
 
             b.HasOne(u => u.HighlightPhoto)
                 .WithOne()
                 .HasForeignKey<Member>(u => u.HighlightPhotoId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+
         });
 
 
@@ -84,19 +84,22 @@ namespace Api.Data
 {
         modelBuilder.Entity<Customer>(b =>
         {
+            modelBuilder.Entity<Customer>().ToTable("Customers");
+             b.HasKey(c => c.Id);
+
             b.HasMany(u => u.Accounts)
-             .WithOne() 
+             .WithOne(a => a.Customer ) 
              .HasForeignKey(a => a.CustomerId)
              .OnDelete(DeleteBehavior.Restrict); 
 
                b.HasOne(u => u.Address)
-             .WithOne()
+             .WithOne(a => a.Customer)
              .HasForeignKey<Address>(p => p.CustomerId)
              .OnDelete(DeleteBehavior.SetNull);
 
             b.HasMany(u => u.Photos)
              .WithOne()
-             .HasForeignKey(p => p.UserId)
+             .HasForeignKey(p => p.CustomerId)
              .OnDelete(DeleteBehavior.SetNull);
 
             b.HasOne(u => u.HighlightPhoto)
@@ -104,82 +107,61 @@ namespace Api.Data
                 .HasForeignKey<Customer>(u => u.HighlightPhotoId)
                 .OnDelete(DeleteBehavior.SetNull);
  #region Relations 
-                    b.HasOne(u => u.PaymentMethods)
-             .WithOne()
-             .HasForeignKey<PaymentMethod>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
+              b.HasMany(c => c.PaymentMethods)
+             .WithOne(p => p.Customer)
+             .HasForeignKey(p => p.CustomerId);
 
-                 b.HasOne(u => u.Reviews)
-             .WithOne()
-             .HasForeignKey<Review>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
+            b.HasMany(c => c.Ratings)
+             .WithOne(p => p.Customer)
+             .HasForeignKey(p => p.CustomerId);
 
-                 b.HasOne(u => u.Ratings)
-             .WithOne()
-             .HasForeignKey<Rating>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
+                b.HasMany(c => c.Carts)
+             .WithOne(p => p.Customer)
+             .HasForeignKey(p => p.CustomerId);
 
-                 b.HasOne(u => u.Carts)
-             .WithOne()
-             .HasForeignKey<Cart>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
+                b.HasMany(c => c.Wishlists)
+             .WithOne(p => p.Customer)
+             .HasForeignKey(p => p.CustomerId);
 
-                 b.HasOne(u => u.Wishlists)
-             .WithOne()
-             .HasForeignKey<Wishlist>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
+                b.HasMany(c => c.Subscriptions)
+             .WithOne(p => p.Customer)
+             .HasForeignKey(p => p.CustomerId);
 
-                 b.HasOne(u => u.Subscriptions)
-             .WithOne()
-             .HasForeignKey<Subscription>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
+                b.HasMany(c => c.Feedbacks)
+             .WithOne(p => p.Customer)
+             .HasForeignKey(p => p.CustomerId);
 
-                 b.HasOne(u => u.Feedbacks)
-             .WithOne()
-             .HasForeignKey<Feedback>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
+                b.HasMany(c => c.Complaints)
+             .WithOne(p => p.Customer)
+             .HasForeignKey(p => p.CustomerId);
 
-                 b.HasOne(u => u.Complaints)
-             .WithOne()
-             .HasForeignKey<Complaint>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
+                b.HasMany(c => c.Refunds)
+             .WithOne(p => p.Customer)
+             .HasForeignKey(p => p.CustomerId);
 
-                 b.HasOne(u => u.Refunds)
-             .WithOne()
-             .HasForeignKey<Refund>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
+                b.HasMany(c => c.Returns)
+             .WithOne(p => p.Customer)
+             .HasForeignKey(p => p.CustomerId);
 
-                 b.HasOne(u => u.Returns)
-             .WithOne()
-             .HasForeignKey<Return>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
+                b.HasMany(c => c.Reports)
+             .WithOne(p => p.Customer)
+             .HasForeignKey(p => p.CustomerId);
 
-                 b.HasOne(u => u.Reports)
-             .WithOne()
-             .HasForeignKey<Report>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
+                b.HasMany(c => c.Chats)
+             .WithOne(p => p.Customer)
+             .HasForeignKey(p => p.CustomerId);
 
-                 b.HasOne(u => u.Chats)
-             .WithOne()
-             .HasForeignKey<Chat>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
+                b.HasMany(c => c.Conversations)
+             .WithOne(p => p.Customer)
+             .HasForeignKey(p => p.CustomerId);
 
-                 b.HasOne(u => u.Conversations)
-             .WithOne()
-             .HasForeignKey<Conversation>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
+                b.HasMany(c => c.Messages)
+             .WithOne(p => p.Customer)
+             .HasForeignKey(p => p.CustomerId);
 
-                 b.HasOne(u => u.Messages)
-             .WithOne()
-             .HasForeignKey<Message>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
-
-                 b.HasOne(u => u.Notifications)
-             .WithOne()
-             .HasForeignKey<Notification>(p => p.CustomerId)
-             .OnDelete(DeleteBehavior.SetNull);
-
-
+                b.HasMany(c => c.Notifications)
+             .WithOne(p => p.Customer)
+             .HasForeignKey(p => p.CustomerId);
 
              #endregion
 
@@ -191,9 +173,13 @@ namespace Api.Data
         modelBuilder.Entity<Product>(b =>
             { 
                 b.HasMany(p => p.Photos)
-                    .WithOne(p => p.Product)
+                    .WithOne()
                     .HasForeignKey(p => p.ProductId)
                     .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne(p => p.HighlightPhoto)
+                    .WithOne()
+                    .HasForeignKey<Photo>(p => p.Id);
 
                 b.HasKey(p => p.Id);
                     b.HasMany(p => p.Categories)
@@ -214,9 +200,14 @@ namespace Api.Data
     {
         modelBuilder.Entity<Photo>(b =>
         {
-            b.HasOne(p => p.User)
+            b.HasOne(p => p.Member)
                 .WithMany(m => m.Photos)
-                .HasForeignKey(p => p.UserId)
+                .HasForeignKey(p => p.MemberId)
+                .OnDelete(DeleteBehavior.Cascade); 
+
+                  b.HasOne(p => p.Customer)
+                .WithMany(m => m.Photos)
+                .HasForeignKey(p => p.CustomerId)
                 .OnDelete(DeleteBehavior.Cascade); 
 
             b.HasOne(p => p.Product)
@@ -226,17 +217,40 @@ namespace Api.Data
         });
     }
 
+        public static void ConfigureAdresses(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Address>(b =>
+        {
+            b.HasKey(a => a.Id);
+
+            b.HasOne(a => a.Company)
+                .WithOne(u => u.Address )
+                .HasForeignKey<Company>(a => a.Id);
+
+            b.HasOne(a => a.Member)
+                .WithOne(u => u.Address )
+                .HasForeignKey<Member>(a => a.Id);
+
+            b.HasOne(a => a.Customer)
+                .WithOne(u => u.Address )
+                .HasForeignKey<Customer>(a => a.Id);
+        });
+    }
+
       public static void ConfigureOrder(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Order>(b =>
     {
+
+        b.HasKey(o => o.Id);
+
         b.HasOne(o => o.Customer)
-            .WithMany()
+            .WithMany(c => c.Orders)
             .HasForeignKey(o => o.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
 
         b.HasOne(o => o.Member)
-            .WithMany()
+            .WithMany(m => m.Orders)
             .HasForeignKey(o => o.MemberId)
             .OnDelete(DeleteBehavior.Restrict);
 

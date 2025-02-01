@@ -10,7 +10,7 @@ namespace Api.Services
 {
     public class TokenService(IConfiguration config) : ITokenService
     {
-        public string CreateToken(IUser user)
+        public string CreateToken(dynamic user)
         {
             var secret = config["JwtSecret"] ?? throw new Exception("Cannot get JwtSecret frorm appsettings");
 

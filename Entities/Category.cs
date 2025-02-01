@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Api.Entities
 {
 public class Category : AuditableBaseEntity
-{
+{ 
     [Required]
     [MaxLength(255)]
     public string Name { get; set; } = null!;
@@ -19,10 +19,10 @@ public class Category : AuditableBaseEntity
 
 public class ProductCategory
 {
-    public int ProductId { get; set; }
+    public Guid ProductId { get; set; }
     public required Product Product { get; set; } 
 
-    public int CategoryId { get; set; }
+    public Guid CategoryId { get; set; }
     public required Category Category { get; set; } 
 }
 }

@@ -7,6 +7,7 @@ namespace Api.Entities
 {
     public class Address : BaseEntity
     {
+
     [Required]
     [MaxLength(255)]
     public string? Street { get; set; } 
@@ -40,13 +41,13 @@ namespace Api.Entities
 
         #region Relationships
 
-    public int? MemberId { get; set; }
+    public Guid? MemberId { get; set; }
     public virtual Member? Member { get; set; }
 
-    public int? CustomerId { get; set; }
+    public Guid? CustomerId { get; set; }
     public virtual Customer? Customer { get; set; } 
 
-        public int? CompanyId { get; set; }
+        public Guid? CompanyId { get; set; }
     public virtual Company? Company { get; set; } 
 
     #endregion

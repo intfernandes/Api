@@ -6,8 +6,7 @@ using Api.Dtos;
 using Api.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore; 
-using Api.Interfaces;
-using Api.Entities.Users;
+using Api.Interfaces; 
 
 namespace Api.Controllers
 {
@@ -15,6 +14,8 @@ namespace Api.Controllers
     {
         [HttpPost("signup")] // auth/register
         public async Task<ActionResult<AuthResponseDto>> SignUp(SignUpDto signUp) {
+         
+
             var result = await auth.SignUpAsync(signUp);
             if (result == null) return BadRequest("Sign up failed");
             return result;
@@ -25,31 +26,47 @@ namespace Api.Controllers
         [HttpPost("login")] // auth/login
         public async Task<ActionResult<AuthResponseDto>> SignIn(SignInDto signin) {
 
-            IUser? user;
+         
 
               if(signin.AccountType == AccountType.Customer) {
-               user = await context.Customers.FirstOrDefaultAsync(
+              var cs = await context.Customers.FirstOrDefaultAsync(
                 x => x.Email.Equals(signin.Email.ToLower() ));
-              } else {
-                user = await context.Members.FirstOrDefaultAsync(
-                x => x.Email.Equals(signin.Email.ToLower() ));
-              } 
 
-
-                if(user == null) return Unauthorized("User not found"); 
-
-            using var hmac = new HMACSHA512(user.PasswordSalt);
+            if(cs == null) return Unauthorized("User not found"); 
+               using var hmac = new HMACSHA512(cs.PasswordSalt);
         
             var pwdHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signin.Password));
 
             for (int i = 0; i < pwdHash.Length ; i++)
             {
-                if(pwdHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password");
+                if(pwdHash[i] != cs.PasswordHash[i]) return Unauthorized("Invalid Password");
             }
 
             return Ok(new AuthResponseDto {  
-                Token = tokenService.CreateToken(user)
+                Token = tokenService.CreateToken(cs)
             });
+
+              } else {
+                var mb = await context.Members.FirstOrDefaultAsync(
+                x => x.Email.Equals(signin.Email.ToLower() ));
+                     if(mb == null) return Unauthorized("User not found"); 
+               using var hmac = new HMACSHA512(mb.PasswordSalt);
+        
+            var pwdHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signin.Password));
+
+            for (int i = 0; i < pwdHash.Length ; i++)
+            {
+                if(pwdHash[i] != mb.PasswordHash[i]) return Unauthorized("Invalid Password");
+            }
+
+            return Ok(new AuthResponseDto {  
+                Token = tokenService.CreateToken(mb)
+            });
+              } 
+
+
+
+         
         
         }
 

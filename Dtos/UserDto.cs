@@ -15,7 +15,7 @@ public class UserDto : BaseEntity
     [Required] 
     [MaxLength(22)]
     public string? Phone { get; set; } = string.Empty; 
-    public int? DateOfBirth { get; set; } 
+    public DateOnly? DateOfBirth { get; set; } 
     public int? Age { get; set; } 
     public Gender? Gender { get; set; } 
     public Address? Address { get; set; } 

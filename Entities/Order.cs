@@ -5,7 +5,7 @@ using Api.Entities.Users;
 namespace Api.Entities
 {
 public class Order : AuditableBaseEntity
-{
+{ 
     public DateTime DeliveryTerm { get; set; } = DateTime.UtcNow.Add(TimeSpan.FromHours(1));
 
     public OrderStatus Status { get; set; } = OrderStatus.Pending;  
@@ -20,16 +20,16 @@ public class Order : AuditableBaseEntity
 
     #region Relationships
     [Required]
-    public required int CustomerId { get; set; }
+    public required Guid CustomerId { get; set; }
     public virtual Customer Customer { get; set; } = null!;  
     [Required]
-    public required int MemberId { get; set; }  
+    public required Guid MemberId { get; set; }  
     public virtual Member Member { get; set; } = null!;
     [Required]
-    public int? CompanyId { get; set; }
+    public Guid? CompanyId { get; set; }
     public virtual Company? Company { get; set; }
-    public int? ShippingAddressId { get; set; } 
-    public int? BillingAddressId { get; set; } 
+    public Guid? ShippingAddressId { get; set; } 
+    public Guid? BillingAddressId { get; set; } 
     [MaxLength(255)]
     public required Address ShippingAddress { get; set; }
     [MaxLength(255)]
@@ -52,9 +52,9 @@ public class OrderItem
     public decimal Price { get; set; }  
 
     #region Relationships
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
     public virtual Order Order { get; set; } = null!;  
-    public int ProductId { get; set; }
+    public Guid ProductId { get; set; }
     public virtual Product Product { get; set; } = null!;  
     #endregion
 
