@@ -25,8 +25,7 @@ namespace Api.Dtos
     [Compare("Password", ErrorMessage = "Passwords do not match")] 
     public string ConfirmPassword { get; set; } = null!; 
 
-    [Required]
-    public AccountType AccountType { get; set; } 
+   
 }
 
 public class SignInDto

@@ -29,7 +29,7 @@ namespace Api.Helpers
                 .ForMember(d => d.Age, o => o.MapFrom(s => s.DateOfBirth.HasValue ? s.DateOfBirth.Value.CalculateAge() : (int?)null) )
                 .ForMember(d => d.HighlightPhoto,
                     o => o.MapFrom(
-                        s => s.Photos.FirstOrDefault(x => x.IsHighlight)!.Url
+                        s => s.Photos.FirstOrDefault(x => x.Highlight)!.ImageUrl
                     ));
                     
             CreateMap<Product, ProductDto>();

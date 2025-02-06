@@ -1,27 +1,27 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Api.Entities.Users;
 
-namespace Api.Entities 
+namespace Api.Entities
 {
-public class Account : AuditableBaseEntity
-{   
-    [Required]
-    [MaxLength(255)]
-    public string Instance { get; set; } = null!; 
-    [MaxLength(20)]
-    public List<string>? Permissions { get; set; } 
-    public AccountType AccountType { get; set; } 
-    public AccountStatus AccountStatus { get; set; } 
+    public class Account : AuditableBaseEntity
+    {
+        [MaxLength(20)]
+        public List<string>? Permissions { get; set; }
+        [Column(TypeName = "nvarchar(24)")]
+        public AccountType AccountType { get; set; }
+        [Column(TypeName = "nvarchar(24)")]
+        public AccountStatus AccountStatus { get; set; }
 
-    #region Relationships
-    public Guid? MemberId { get; set; }
-    public virtual Member? Member { get; set; }
-    public Guid? CustomerId { get; set; }
-    public virtual Customer? Customer { get; set; } 
-    public Guid? CompanyId { get; set; }
-    public virtual Company? Company { get; set; } 
+        #region Relationships
 
-    #endregion
+        // Replaced MemberId, CustomerId, Member, Customer with generic IUser relationship:
+
+        public Guid? UserId { get; set; }       
+        public virtual IUser? User { get; set; }  
+        public Guid? CompanyId { get; set; }      
+        public virtual Company? Company { get; set; }
+
+        #endregion
+    }
 }
-}
-

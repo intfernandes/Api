@@ -1,4 +1,3 @@
-
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
@@ -25,6 +24,70 @@ namespace Api.Data.Repositories
             return mapper.Map<UserDto>(user);
         }
 
+        public async Task<AuthResponseDto?> RegisterAsync(SignUpDto signUpDto)
+        {
+            Console.WriteLine(signUpDto);
+
+            string? validate = await CheckEmail(signUpDto.Email, AccountType.Company);
+
+            if(validate.Length > 0 ) return new AuthResponseDto { 
+                Errors = [validate],
+            };
+
+            using var hmac = new HMACSHA512();
+
+            var company = new Company {
+                Id = new Guid(),
+                Name = signUpDto.CompanyName,
+                Email = signUpDto.Email.ToLower(),  
+                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signUpDto.Password)),
+                PasswordSalt = hmac.Key,
+            };
+
+            ctx.Companies.Add(company);
+
+            await ctx.SaveChangesAsync(); 
+
+
+              var companyAcc = new Account {
+                Id = new Guid(),
+                CompanyId = company.Id,
+                AccountStatus = AccountStatus.Active,
+                AccountType = AccountType.Company
+            };
+
+            ctx.Accounts.Add(companyAcc);
+            await ctx.SaveChangesAsync(); 
+
+
+            var member = new Member {
+                Id = new Guid(),
+                CompanyId = company.Id,
+                FirstName = signUpDto.FirstName, 
+                LastName = signUpDto.LastName,
+                Email = signUpDto.Email.ToLower(),  
+                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signUpDto.Password) ),
+                PasswordSalt = hmac.Key, 
+            };
+
+            ctx.Members.Add(member);
+            await ctx.SaveChangesAsync(); 
+
+            var memberAcc = new Account {
+                Id = new Guid(),
+                CompanyId = member.Id,
+                AccountStatus = AccountStatus.Active,
+                AccountType = AccountType.Manager
+            };
+
+            ctx.Accounts.Add(memberAcc);
+            await ctx.SaveChangesAsync(); 
+
+            return new AuthResponseDto { 
+                Token = tokenService.CreateToken(company)
+            };
+        }
+
         public Task<AuthResponseDto?> SignInAsync(SignInDto signInDto)
         {
             throw new NotImplementedException();
@@ -39,7 +102,9 @@ namespace Api.Data.Repositories
 
         public async Task<AuthResponseDto?> SignUpAsync(SignUpDto signUpDto)
         {
-                   string? validate = await CheckEmail(signUpDto.Email,  signUpDto.AccountType);
+            Console.WriteLine(signUpDto);
+
+                   string? validate = await CheckEmail(signUpDto.Email,   AccountType.Company );
 
             if(validate.Length > 0 ) return new AuthResponseDto { 
                 Errors = [validate],
@@ -48,31 +113,31 @@ namespace Api.Data.Repositories
             using var hmac = new HMACSHA512();
 
 
-            if(signUpDto.AccountType == AccountType.Customer) {
-                // add specific logics for customer 
-                Customer cs = new() {
-                FirstName = signUpDto.FirstName, 
-                LastName = signUpDto.LastName,
-                Email = signUpDto.Email.ToLower(),  
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signUpDto.Password) ),
-                PasswordSalt = hmac.Key
-                };
 
-            ctx.Customers.Add(cs);
-            await ctx.SaveChangesAsync();
-            return new AuthResponseDto { 
-                Token = tokenService.CreateToken(cs)
-            };
-            }
+           
+            //     // add specific logics for customer 
+            //     Customer cs = new() {
+            //     FirstName = signUpDto.FirstName, 
+            //     LastName = signUpDto.LastName,
+            //     Email = signUpDto.Email.ToLower(),  
+            //     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signUpDto.Password) ),
+            //     PasswordSalt = hmac.Key
+            //     };
 
-
+            // ctx.Customers.Add(cs);
+            // await ctx.SaveChangesAsync();
+            // return new AuthResponseDto { 
+            //     Token = tokenService.CreateToken(cs)
+            // };
+            
 
             var member = new Member {
                 FirstName = signUpDto.FirstName, 
                 LastName = signUpDto.LastName,
                 Email = signUpDto.Email.ToLower(),  
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signUpDto.Password) ),
-                PasswordSalt = hmac.Key
+                PasswordSalt = hmac.Key,
+                Accounts = []
             };
 
             ctx.Members.Add(member);

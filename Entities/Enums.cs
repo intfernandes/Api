@@ -9,6 +9,8 @@ public enum Gender
     Other
 }
 
+
+
 public enum AccountStatus 
 {
     Active,
@@ -31,6 +33,7 @@ public enum OrderStatus
     Processing,
     Shipped,
     Delivered,
+    Completed,
     Cancelled
 }
 }

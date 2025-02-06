@@ -12,18 +12,15 @@ namespace Api.Controllers
 {
     public class AuthController(DataContext context, ITokenService tokenService, IAuthRepository auth ) : BaseController
     {
-        [HttpPost("signup")] // auth/register
+        [HttpPost("signup")] // auth/signup
         public async Task<ActionResult<AuthResponseDto>> SignUp(SignUpDto signUp) {
-         
-
             var result = await auth.SignUpAsync(signUp);
             if (result == null) return BadRequest("Sign up failed");
             return result;
        
-     
         }
 
-        [HttpPost("login")] // auth/login
+        [HttpPost("signin")] // auth/signin
         public async Task<ActionResult<AuthResponseDto>> SignIn(SignInDto signin) {
 
          
@@ -63,11 +60,14 @@ namespace Api.Controllers
                 Token = tokenService.CreateToken(mb)
             });
               } 
+        }
 
-
-
-         
-        
+            [HttpPost("register")] // auth/signup
+        public async Task<ActionResult<AuthResponseDto>> Register(SignUpDto signUp) {
+            var result = await auth.RegisterAsync(signUp);
+            if (result == null) return BadRequest("Sign up failed");
+            return result;
+       
         }
 
 

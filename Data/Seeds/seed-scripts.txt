@@ -1,22 +1,217 @@
-### USERSEEDSCRIPT ###
+
+
+### Company Seed Script ###
 
 [
-  '{{repeat(5)}}',
+  '{{repeat(3)}}',
   {
-    Name: '{{firstName("male")}}',
+    Name: '{{company()}}',
+    Description: '{{lorem(1, "paragraphs")}}',   
+    Members: [
+         
+  {
+    FirstName: '{{firstName("male")}}',
     Email: '{{email()}}',
-    Gender: 'm',
+    Phone: '{{phone()}}', 
     DateOfBirth: '{{date(new Date(1950,0,1), new Date(1999, 11, 31), "YYYY-MM-dd")}}',
     CreatedAt: '{{date(new Date(2019, 0, 1), new Date(2020,5,30), "YYYY-MM-dd")}}',
     LastActiveAt: '{{date(new Date(2020, 4, 1), new Date(2020,5,30), "YYYY-MM-dd")}}',
-    City: '{{city()}}',
+    Address:   {
     Country: '{{country()}}',
+    State: '{{state()}}',
+    City: '{{city()}}',
+    Street: '{{street()}}',
+    ZipCode: '{{phone()}}'
+  },
+    Account: {
+      Permissions: ['Cart', 'Products'],
+      AccountType: 'Admin',
+      AccountStatus: 'Active'
+    },
     Photos: [
         {
           Url: function(num) {
           return 'https://randomuser.me/api/portraits/men/' + num.integer(1,99) + '.jpg';
         },
-        IsMain: true
+        Highlight: true
+      },
+          {
+          Url: function(num) {
+          return 'https://randomuser.me/api/portraits/men/' + num.integer(1,99) + '.jpg';
+        },
+        Highlight: false
+      }
+    ]
+  },
+      
+      
+      
+      {
+    FirstName: '{{firstName("female")}}',
+    Email: '{{email()}}',
+    Phone: '{{phone()}}', 
+    DateOfBirth: '{{date(new Date(1950,0,1), new Date(1999, 11, 31), "YYYY-MM-dd")}}',
+    CreatedAt: '{{date(new Date(2019, 0, 1), new Date(2020,5,30), "YYYY-MM-dd")}}',
+    LastActiveAt: '{{date(new Date(2020, 4, 1), new Date(2020,5,30), "YYYY-MM-dd")}}',
+    Address:   {
+    Country: '{{country()}}',
+    State: '{{state()}}',
+    City: '{{city()}}',
+    Street: '{{street()}}',
+    ZipCode: '{{phone()}}' },
+    Account: {
+      Permissions: ['Orders', 'Products', 'Members' ],
+      AccountType: 'Manager',
+      AccountStatus: 'Active'
+    },
+    Photos: [
+        {
+          Url: function(num) {
+          return 'https://randomuser.me/api/portraits/women/' + num.integer(1,99) + '.jpg';
+        },
+        Highlight: true
+      },
+          {
+          Url: function(num) {
+          return 'https://randomuser.me/api/portraits/women/' + num.integer(1,99) + '.jpg';
+        },
+        Highlight: false
+      }
+    ]
+  },
+      
+      
+   
+  {
+    FirstName: '{{firstName("male")}}',
+    Email: '{{email()}}',
+    Phone: '{{phone()}}',
+    DateOfBirth: '{{date(new Date(1950,0,1), new Date(1999, 11, 31), "YYYY-MM-dd")}}',
+    CreatedAt: '{{date(new Date(2019, 0, 1), new Date(2020,5,30), "YYYY-MM-dd")}}',
+    LastActiveAt: '{{date(new Date(2020, 4, 1), new Date(2020,5,30), "YYYY-MM-dd")}}',
+    Address:   {
+    Country: '{{country()}}',
+    State: '{{state()}}',
+    City: '{{city()}}',
+    Street: '{{street()}}',
+    ZipCode: '{{phone()}}'
+  },
+    Account: {
+      Permissions: ['Cart', 'Products'],
+      AccountType: 'Staff',
+      AccountStatus: 'Active'
+    },
+    Photos: [
+        {
+          Url: function(num) {
+          return 'https://randomuser.me/api/portraits/men/' + num.integer(1,99) + '.jpg';
+        },
+        Highlight: true
+      },
+          {
+          Url: function(num) {
+          return 'https://randomuser.me/api/portraits/men/' + num.integer(1,99) + '.jpg';
+        },
+        Highlight: false
+      }
+    ]
+  }
+
+],
+    
+      Products: [
+  '{{repeat(5)}}',
+  {
+    Name: '{{company()}}', 
+    Description: '{{lorem(1, "paragraphs")}}',
+    Price: '{{floating([5], [35], [2] )}}',
+    Photos: [
+        {
+          Url: function(num) {
+          return 'https://randomuser.me/api/portraits/women/' + num.integer(1,99) + '.jpg';
+        },
+        Highlight: true
+      }
+    ]
+  }
+],
+      Orders: [
+ '{{repeat(5)}}',
+  {
+    MemberId: '{{guid()}}',
+    CustomerId: '{{guid()}}',
+    TotalAmount: '{{floating([5], [35], [2] )}}',
+    Notes: '{{lorem(1, "sentences ")}}', 
+    OrderItems: [
+     '{{repeat(3)}}',
+  {
+    Quantity:  '{{integer([1], [5] )}}',
+    Price: '{{floating([5], [35], [2] )}}', 
+    Product:   {
+    Name: '{{company()}}', 
+    Description: '{{lorem(1, "paragraphs")}}',
+    Price: '{{floating([5], [35], [2] )}}',
+    Photos: [
+        {
+          Url: function(num) {
+          return 'https://randomuser.me/api/portraits/women/' + num.integer(1,99) + '.jpg';
+        },
+        Highlight: true
+      }
+    ]
+  }
+  }
+    ]
+  }
+    ],
+        Photos: [
+        {
+          Url: function(num) {
+          return 'https://randomuser.me/api/portraits/men/' + num.integer(1,99) + '.jpg';
+        },
+        IsHighlight: true
+      }
+    ]
+  }
+]
+
+
+
+### Customer Seed Script ###
+
+[
+  '{{repeat(8)}}',
+  {
+    FirstName: '{{firstName("female")}}',
+    Email: '{{email()}}',
+    Phone: '{{phone()}}',
+    DateOfBirth: '{{date(new Date(1950,0,1), new Date(1999, 11, 31), "YYYY-MM-dd")}}',
+    CreatedAt: '{{date(new Date(2019, 0, 1), new Date(2020,5,30), "YYYY-MM-dd")}}',
+    LastActiveAt: '{{date(new Date(2020, 4, 1), new Date(2020,5,30), "YYYY-MM-dd")}}',
+    Address:   {
+    Country: '{{country()}}',
+    State: '{{state()}}',
+    City: '{{city()}}',
+    Street: '{{street()}}',
+    ZipCode: '{{phone()}}',
+  },
+    Account: {
+      Permissions: ['Cart', 'Products'],
+      AccountType: 'Customer',
+      AccountStatus: 'Active',
+    },
+    Photos: [
+        {
+          Url: function(num) {
+          return 'https://randomuser.me/api/portraits/women/' + num.integer(1,99) + '.jpg';
+        },
+        Highlight: true
+      },
+          {
+          Url: function(num) {
+          return 'https://randomuser.me/api/portraits/women/' + num.integer(1,99) + '.jpg';
+        },
+        Highlight: false
       }
     ]
   }

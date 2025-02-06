@@ -43,7 +43,7 @@ namespace Api.Controllers
                 if(customer?.FirstName != null) existingCustomer.FirstName = customer.FirstName;
                 if(customer?.LastName != null) existingCustomer.LastName = customer.LastName;
                 if(customer?.Email != null) existingCustomer.Email = customer.Email;
-                if(customer?.Phone != null) existingCustomer.Phone = customer.Phone;
+                if(customer?.PhoneNumber != null) existingCustomer.PhoneNumber = customer.PhoneNumber;
                 if(customer?.Address != null) existingCustomer.Address = customer.Address; 
                 
             

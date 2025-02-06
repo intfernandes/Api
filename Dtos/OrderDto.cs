@@ -6,12 +6,12 @@ namespace Api.Dtos
 {
   public class OrderDto
 {
-    public Guid Id { get; set; }
-
     [Required]
-    public Guid CustomerId { get; set; }
-
-    public Guid? MemberId { get; set; }
+    public Guid Id { get; set; } 
+    [Required]
+    public Guid CustomerId { get; set; } 
+    [Required]
+    public Guid MemberId { get; set; } 
 
     public DateTime OrderDate { get; set; }
 

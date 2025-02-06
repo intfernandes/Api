@@ -53,7 +53,7 @@ namespace Api.Data.Repositories
         {
                   var users = await ctx.Customers
             .Include(x => x.Photos)
-            .FirstOrDefaultAsync(x => x.Phone == phoneNumber);
+            .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
 
             return mapper.Map<UserDto>(users);
         }

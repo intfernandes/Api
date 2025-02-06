@@ -53,7 +53,7 @@ namespace Api.Controllers
 
             if(existingAccount == null) return NotFound();
             
-            if(account?.Instance != null) existingAccount.Instance = account.Instance;
+     
             if(account?.Permissions != null ) existingAccount.Permissions = account.Permissions;
             if(account?.AccountType != null) existingAccount.AccountType = account.AccountType;
             if(account?.AccountStatus != null) existingAccount.AccountStatus = account.AccountStatus;

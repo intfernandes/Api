@@ -22,19 +22,30 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-using var scope = app.Services.CreateScope();
-var services = scope.ServiceProvider;
+// Database Initialization and Seeding (CONDITIONAL using SeedDatabase class)
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<DataContext>(); // Get your DataContext
+        var environment = services.GetRequiredService<IWebHostEnvironment>();
+        var logger = services.GetRequiredService<ILogger<Program>>();
 
-try
-{
-    var ctx = services.GetRequiredService<DataContext>();
-    await ctx.Database.MigrateAsync();
-    await Seed.SeedUsers( ctx );
-}
-catch (Exception ex)
-{
-    var logger = services.GetRequiredService<ILogger<Program>>();
-    logger.LogError(ex, "An error occurr during migration");
+        // Apply Migrations - Ensure database is created and schema is up-to-date
+        context.Database.Migrate();
+
+        // Seed Database using SeedDatabase.Initialize - conditional logic is inside SeedDatabase.Initialize
+        logger.LogInformation("Initializing database seeding (SeedDatabase.Initialize)...");
+        SeedDatabase.Initialize(services, app.Environment); // Pass service provider and environment
+        logger.LogInformation("Database seeding completed via SeedDatabase.Initialize.");
+
     }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred during database initialization and seeding.");
+    }
+}
 
 app.Run();
