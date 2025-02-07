@@ -1,3 +1,4 @@
+
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
@@ -28,7 +29,7 @@ namespace Api.Data.Repositories
         {
             Console.WriteLine(signUpDto);
 
-            string? validate = await CheckEmail(signUpDto.Email, AccountType.Company);
+            string? validate = await CheckEmail(signUpDto.Email,   AccountType.Company );
 
             if(validate.Length > 0 ) return new AuthResponseDto { 
                 Errors = [validate],
@@ -38,9 +39,9 @@ namespace Api.Data.Repositories
 
             var company = new Company {
                 Id = new Guid(),
-                Name = signUpDto.CompanyName,
+                Name = signUpDto.FirstName, 
                 Email = signUpDto.Email.ToLower(),  
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signUpDto.Password)),
+                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signUpDto.Password) ),
                 PasswordSalt = hmac.Key,
             };
 

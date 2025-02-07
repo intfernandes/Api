@@ -22,6 +22,8 @@ namespace Api.Entities
         public byte[] PasswordHash { get; set; } = [];
         [Required]
         public byte[] PasswordSalt { get; set; } = [];
+        public string Token { get; set;} = string.Empty;
+        public string RefreshToken { get; set;} = string.Empty;
         public DateOnly? DateOfBirth { get; set; }
         public DateTime? LastActiveAt { get; set; }
         [Column(TypeName = "nvarchar(24)")]
