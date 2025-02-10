@@ -40,6 +40,8 @@ namespace Api.Data
                 // Ensure this runs only in development
                 if (!env.IsDevelopment()) return;
 
+                Console.WriteLine("Seeding database...");
+
                 GuidGenerator.ResetCounter(); // Reset GUID counter at the beginning of seeding
 
                 // --- Seed Addresses ---
@@ -363,6 +365,9 @@ namespace Api.Data
                 }
 
                 // ... (Seed Photos, OrderItems, ProductCategories, etc. further if needed) ...
+
+                Console.WriteLine("Seeding database completed.");
+
 
             }
         }

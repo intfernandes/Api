@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Api.Entities
 {
-    public abstract class IUser : AuditableBaseEntity // Inherits from AuditableBaseEntity
+    public abstract class IUser : AuditableBaseEntity 
     {
 
         [Required]
