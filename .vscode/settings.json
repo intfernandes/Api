@@ -1,4 +1,3 @@
 {
-  "omnisharp.enableRoslynAnalyzers": true,
-  "omnisharp.enableEditorConfigSupport": true
+
 }

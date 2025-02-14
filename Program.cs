@@ -28,17 +28,13 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
-        var context = services.GetRequiredService<DataContext>(); // Get your DataContext
-        var environment = services.GetRequiredService<IWebHostEnvironment>();
-        var logger = services.GetRequiredService<ILogger<Program>>();
+        var context = services.GetRequiredService<DataContext>(); // Get your DataContext  
 
         // Apply Migrations - Ensure database is created and schema is up-to-date
         context.Database.Migrate();
 
-        // Seed Database using SeedDatabase.Initialize - conditional logic is inside SeedDatabase.Initialize
-        logger.LogInformation("Initializing database seeding (SeedDatabase.Initialize)...");
-        SeedDatabase.Initialize(services, app.Environment); // Pass service provider and environment
-        logger.LogInformation("Database seeding completed via SeedDatabase.Initialize.");
+        // Seed Database using SeedDatabase.Initialize - conditional logic is inside SeedDatabase.Initialize 
+        SeedDatabase.Initialize(services, app.Environment); // Pass service provider and environment 
 
     }
     catch (Exception ex)
