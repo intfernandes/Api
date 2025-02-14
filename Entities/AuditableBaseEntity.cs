@@ -5,7 +5,7 @@ namespace Api.Entities
 {
  public class AuditableBaseEntity : BaseEntity
     {
-        public Guid? LastModifiedByEntityId { get; set; } // Tracks the ID of the Entity (Company, Member, Customer) that last updated this entity.
+        public Guid? LastModifiedByEntityId { get; set; } // Tracks the ID of the Entity (Domain, Member, Customer) that last updated this entity.
     }
 
 

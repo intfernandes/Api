@@ -19,8 +19,8 @@ namespace Api.Entities
 
         public Guid? UserId { get; set; }       
         public virtual IUser? User { get; set; }  
-        public Guid? CompanyId { get; set; }      
-        public virtual Company? Company { get; set; }
+        public Guid? DomainId { get; set; }      
+        public virtual Domain? Domain { get; set; }
 
         #endregion
     }

@@ -26,8 +26,8 @@ namespace Api.Entities
         public required Guid MemberId { get; set; }
         public virtual Member Member { get; set; } = null!;
         [Required]
-        public Guid CompanyId { get; set; }
-        public virtual Company? Company { get; set; }
+        public Guid DomainId { get; set; }
+        public virtual Domain? Domain { get; set; }
         public Guid? ShippingAddressId { get; set; }
         public Guid? BillingAddressId { get; set; }
         [MaxLength(255)]

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Api.Dtos
 {
-   public class CompanyDto
+   public class DomainDto
 {
     public int Id { get; set; }
 

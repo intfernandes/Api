@@ -31,10 +31,10 @@ namespace Api.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(24)");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<Guid?>("DomainId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -134,7 +134,7 @@ namespace Api.Data.Migrations
                     b.ToTable("Categories", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Entities.Company", b =>
+            modelBuilder.Entity("Api.Entities.Domain", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -295,6 +295,14 @@ namespace Api.Data.Migrations
                         .HasMaxLength(22)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
@@ -326,9 +334,6 @@ namespace Api.Data.Migrations
                     b.Property<Guid?>("BillingAddressId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("CompanyId")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
@@ -336,6 +341,9 @@ namespace Api.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DeliveryTerm")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("DomainId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -368,9 +376,9 @@ namespace Api.Data.Migrations
 
                     b.HasIndex("BillingAddressId");
 
-                    b.HasIndex("CompanyId");
-
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("DomainId");
 
                     b.HasIndex("MemberId");
 
@@ -421,14 +429,14 @@ namespace Api.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CompanyId")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("DomainId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Highlight")
@@ -456,7 +464,7 @@ namespace Api.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("DomainId");
 
                     b.HasIndex("ProductId");
 
@@ -471,14 +479,14 @@ namespace Api.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CompanyId")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("DomainId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -500,7 +508,7 @@ namespace Api.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("DomainId");
 
                     b.ToTable("Products", (string)null);
                 });
@@ -1349,13 +1357,13 @@ namespace Api.Data.Migrations
                 {
                     b.HasBaseType("Api.Entities.IUser");
 
-                    b.Property<Guid>("CompanyId")
+                    b.Property<Guid>("DomainId")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsCompanyResponsible")
+                    b.Property<bool>("IsDomainResponsible")
                         .HasColumnType("INTEGER");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("DomainId");
 
                     b.HasDiscriminator().HasValue("Member");
                 });
@@ -1370,17 +1378,17 @@ namespace Api.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Api.Entities.Company", b =>
+            modelBuilder.Entity("Api.Entities.Domain", b =>
                 {
                     b.HasOne("Api.Entities.Account", "Account")
-                        .WithOne("Company")
-                        .HasForeignKey("Api.Entities.Company", "AccountId")
+                        .WithOne("Domain")
+                        .HasForeignKey("Api.Entities.Domain", "AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Api.Entities.Address", "Address")
                         .WithOne()
-                        .HasForeignKey("Api.Entities.Company", "AddressId")
+                        .HasForeignKey("Api.Entities.Domain", "AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1422,16 +1430,16 @@ namespace Api.Data.Migrations
                         .HasForeignKey("BillingAddressId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Api.Entities.Company", "Company")
-                        .WithMany("Orders")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Api.Entities.IUser", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Api.Entities.Domain", "Domain")
+                        .WithMany("Orders")
+                        .HasForeignKey("DomainId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Api.Entities.Users.Member", "Member")
                         .WithMany()
@@ -1446,9 +1454,9 @@ namespace Api.Data.Migrations
 
                     b.Navigation("BillingAddress");
 
-                    b.Navigation("Company");
-
                     b.Navigation("Customer");
+
+                    b.Navigation("Domain");
 
                     b.Navigation("Member");
 
@@ -1476,9 +1484,9 @@ namespace Api.Data.Migrations
 
             modelBuilder.Entity("Api.Entities.Photo", b =>
                 {
-                    b.HasOne("Api.Entities.Company", "Company")
+                    b.HasOne("Api.Entities.Domain", "Domain")
                         .WithMany("Photos")
-                        .HasForeignKey("CompanyId")
+                        .HasForeignKey("DomainId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Api.Entities.Product", "Product")
@@ -1491,7 +1499,7 @@ namespace Api.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("Company");
+                    b.Navigation("Domain");
 
                     b.Navigation("Product");
 
@@ -1500,12 +1508,12 @@ namespace Api.Data.Migrations
 
             modelBuilder.Entity("Api.Entities.Product", b =>
                 {
-                    b.HasOne("Api.Entities.Company", "Company")
+                    b.HasOne("Api.Entities.Domain", "Domain")
                         .WithMany("Products")
-                        .HasForeignKey("CompanyId")
+                        .HasForeignKey("DomainId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Company");
+                    b.Navigation("Domain");
                 });
 
             modelBuilder.Entity("Api.Entities.ProductCategory", b =>
@@ -1839,21 +1847,21 @@ namespace Api.Data.Migrations
 
             modelBuilder.Entity("Api.Entities.Users.Member", b =>
                 {
-                    b.HasOne("Api.Entities.Company", "Company")
+                    b.HasOne("Api.Entities.Domain", "Domain")
                         .WithMany("Members")
-                        .HasForeignKey("CompanyId")
+                        .HasForeignKey("DomainId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Company");
+                    b.Navigation("Domain");
                 });
 
             modelBuilder.Entity("Api.Entities.Account", b =>
                 {
-                    b.Navigation("Company");
+                    b.Navigation("Domain");
                 });
 
-            modelBuilder.Entity("Api.Entities.Company", b =>
+            modelBuilder.Entity("Api.Entities.Domain", b =>
                 {
                     b.Navigation("Members");
 

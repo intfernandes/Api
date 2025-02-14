@@ -28,51 +28,51 @@ public static void ConfigureAccounts(ModelBuilder modelBuilder)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // The Company - Account relationship remains unchanged:
-        entity.HasOne(e => e.Company)
+        // The Domain - Account relationship remains unchanged:
+        entity.HasOne(e => e.Domain)
              .WithOne(c => c.Account)
-             .HasForeignKey<Account>(e => e.CompanyId)
+             .HasForeignKey<Account>(e => e.DomainId)
              .OnDelete(DeleteBehavior.Restrict);
     });
 }
 
 public static void ConfigureCompanies(ModelBuilder modelBuilder)
 {
-    modelBuilder.Entity<Company>(entity =>
+    modelBuilder.Entity<Domain>(entity =>
     {
         entity.ToTable("Companies");
 
         // 1. One-to-One (Required) relationship with Account
         entity.HasOne(c => c.Account)
-              .WithOne(a => a.Company)
-              .HasForeignKey<Company>(c => c.AccountId)
+              .WithOne(a => a.Domain)
+              .HasForeignKey<Domain>(c => c.AccountId)
               .IsRequired()
               .OnDelete(DeleteBehavior.Cascade);
 
         // 2. One-to-Zero-or-One (Required) relationship with Address
         entity.HasOne(c => c.Address)
               .WithOne()
-              .HasForeignKey<Company>(c => c.AddressId)
+              .HasForeignKey<Domain>(c => c.AddressId)
               .IsRequired()
               .OnDelete(DeleteBehavior.Cascade);
 
         // 3. One-to-Many relationship with Member
         entity.HasMany(c => c.Members)
-              .WithOne(m => m.Company)
-              .HasForeignKey(m => m.CompanyId)
+              .WithOne(m => m.Domain)
+              .HasForeignKey(m => m.DomainId)
               .IsRequired()
               .OnDelete(DeleteBehavior.Cascade);
 
         // 4. One-to-Many relationship with Product
         entity.HasMany(c => c.Products)
-              .WithOne(p => p.Company)
-              .HasForeignKey(p => p.CompanyId)
+              .WithOne(p => p.Domain)
+              .HasForeignKey(p => p.DomainId)
               .OnDelete(DeleteBehavior.Cascade);
 
         // 5. One-to-Many relationship with Order
         entity.HasMany(c => c.Orders)
-              .WithOne(o => o.Company)
-              .HasForeignKey(o => o.CompanyId)
+              .WithOne(o => o.Domain)
+              .HasForeignKey(o => o.DomainId)
               .IsRequired()
               .OnDelete(DeleteBehavior.Restrict);
     });
@@ -125,9 +125,9 @@ public static void ConfigureCompanies(ModelBuilder modelBuilder)
 //     {
 //         entity.ToTable("Members");
 
-//         entity.HasOne(m => m.Company)
+//         entity.HasOne(m => m.Domain)
 //               .WithMany(c => c.Members)
-//               .HasForeignKey(m => m.CompanyId)
+//               .HasForeignKey(m => m.DomainId)
 //               .IsRequired()
 //               .OnDelete(DeleteBehavior.Restrict);
 //     });
@@ -286,7 +286,7 @@ public static void ConfigureAddresses(ModelBuilder modelBuilder)
               .IsRequired(false)         // ZipCode is optional - no [Required] in Address class
               .HasMaxLength(10);        // As defined with [MaxLength(10)] - although might consider increasing for international zip codes if needed
 
-        // No relationships to configure directly in Address itself, as we decided on one-way navigation TO Address in other entities (Company, IUser, Order).
+        // No relationships to configure directly in Address itself, as we decided on one-way navigation TO Address in other entities (Domain, IUser, Order).
         // The relationships involving Address are configured in ConfigureCompanies, ConfigureIUser, and ConfigureOrders (for ShippingAddress and BillingAddress).
 
     });
@@ -316,14 +316,14 @@ public static void ConfigureProducts(ModelBuilder modelBuilder)
 
         // Relationships configuration
 
-        // 1. Many-to-One relationship with Company (Product belongs to one Company)
-        entity.HasOne(p => p.Company)         // Product belongs to one Company (navigation property in Product)
-              .WithMany(c => c.Products)        // Company has many Products (collection navigation in Company)
-              .HasForeignKey(p => p.CompanyId)  // FK is in Product, named CompanyId (nullable in Product class - relationship is optional)
-              .IsRequired(false)                 // Relationship is OPTIONAL - Product does not necessarily need to belong to a Company immediately upon creation.
-                                                  // Consider making it Required if business logic dictates Products always belong to a Company.
-              .OnDelete(DeleteBehavior.Restrict); // Restrict delete from Company to Products. If Company is deleted, prevent deletion if there are associated Products.
-                                                   // Consider Cascade if deleting a Company should also imply removing its Products.
+        // 1. Many-to-One relationship with Domain (Product belongs to one Domain)
+        entity.HasOne(p => p.Domain)         // Product belongs to one Domain (navigation property in Product)
+              .WithMany(c => c.Products)        // Domain has many Products (collection navigation in Domain)
+              .HasForeignKey(p => p.DomainId)  // FK is in Product, named DomainId (nullable in Product class - relationship is optional)
+              .IsRequired(false)                 // Relationship is OPTIONAL - Product does not necessarily need to belong to a Domain immediately upon creation.
+                                                  // Consider making it Required if business logic dictates Products always belong to a Domain.
+              .OnDelete(DeleteBehavior.Restrict); // Restrict delete from Domain to Products. If Domain is deleted, prevent deletion if there are associated Products.
+                                                   // Consider Cascade if deleting a Domain should also imply removing its Products.
 
         // 2. Many-to-Many relationship with Category (Product has many Categories, Category has many Products)
         entity.HasMany(p => p.Categories)      // Product has many Categories (collection navigation in Product)
@@ -442,9 +442,9 @@ public static void ConfigurePhotos(ModelBuilder modelBuilder)
               .HasForeignKey(p => p.ProductId)
               .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne(p => p.Company)
-                   .WithMany(comp => comp.Photos) // Assuming Company has a Photos collection navigation property
-                   .HasForeignKey(p => p.CompanyId)
+            entity.HasOne(p => p.Domain)
+                   .WithMany(comp => comp.Photos) // Assuming Domain has a Photos collection navigation property
+                   .HasForeignKey(p => p.DomainId)
                    .IsRequired(false)
                    .OnDelete(DeleteBehavior.Cascade); // Or choose appropriate DeleteBehavior
     });
@@ -467,16 +467,16 @@ public static void ConfigureOrders(ModelBuilder modelBuilder)
               .IsRequired(false) // Clarify: Should OrderPlacerId be Required or Optional? - Set to false for now.
               .OnDelete(DeleteBehavior.Restrict);
 
-        // The Member, Company, ShippingAddress, BillingAddress relationships remain unchanged:
+        // The Member, Domain, ShippingAddress, BillingAddress relationships remain unchanged:
         entity.HasOne(o => o.Member)
               .WithMany() // Member doesn't have a navigation collection for Orders
               .HasForeignKey(o => o.MemberId)
               .IsRequired()
               .OnDelete(DeleteBehavior.Restrict);
 
-        entity.HasOne(o => o.Company)
+        entity.HasOne(o => o.Domain)
               .WithMany(c => c.Orders)
-              .HasForeignKey(o => o.CompanyId)
+              .HasForeignKey(o => o.DomainId)
               .IsRequired()
               .OnDelete(DeleteBehavior.Restrict);
 
@@ -615,31 +615,31 @@ public static void ConfigureEntityAuditLogs(ModelBuilder modelBuilder)
        
 //               public static void ConfigureCompanies(ModelBuilder modelBuilder)
 //               {
-//                  modelBuilder.Entity<Company>(b =>
+//                  modelBuilder.Entity<Domain>(b =>
 //                  {
 
-//             modelBuilder.Entity<Company>().ToTable("Companies");
+//             modelBuilder.Entity<Domain>().ToTable("Companies");
       
 //             b.HasOne(c => c.Account)
-//              .WithOne(a => a.Company)
-//              .HasForeignKey<Account>(a => a.CompanyId);  
+//              .WithOne(a => a.Domain)
+//              .HasForeignKey<Account>(a => a.DomainId);  
 
 //             b.HasOne(u => u.Address)
-//              .WithOne(a => a.Company)
-//              .HasForeignKey<Address>(a => a.CompanyId)
+//              .WithOne(a => a.Domain)
+//              .HasForeignKey<Address>(a => a.DomainId)
 //              .OnDelete(DeleteBehavior.SetNull);
 
 //              b.HasMany(c => c.Members)
-//             .WithOne(m => m.Company)
-//             .HasForeignKey(m => m.CompanyId);
+//             .WithOne(m => m.Domain)
+//             .HasForeignKey(m => m.DomainId);
 
 //             b.HasMany(c => c.Products)
-//             .WithOne(p => p.Company)
-//             .HasForeignKey(p => p.CompanyId);
+//             .WithOne(p => p.Domain)
+//             .HasForeignKey(p => p.DomainId);
 
 //              b.HasMany(c => c.Orders)
-//             .WithOne(o => o.Company)
-//             .HasForeignKey(o => o.CompanyId);
+//             .WithOne(o => o.Domain)
+//             .HasForeignKey(o => o.DomainId);
 //         }); 
          
 //     }
@@ -774,9 +774,9 @@ public static void ConfigureEntityAuditLogs(ModelBuilder modelBuilder)
 //     {
 //         modelBuilder.Entity<Product>(b =>
 //             { 
-//                 b.HasOne(p => p.Company)
+//                 b.HasOne(p => p.Domain)
 //                 .WithMany(c => c.Products)
-//                 .HasForeignKey(p => p.CompanyId);
+//                 .HasForeignKey(p => p.DomainId);
 
 //                 b.HasMany(p => p.Photos)
 //                     .WithOne(p => p.Product)
@@ -825,9 +825,9 @@ public static void ConfigureEntityAuditLogs(ModelBuilder modelBuilder)
 //             {
 //                 b.HasKey(a => a.Id);
                 
-//                 b.HasOne(a => a.Company)
+//                 b.HasOne(a => a.Domain)
 //                     .WithOne(u => u.Address)
-//                     .HasForeignKey<Company>(a => a.AddressId)
+//                     .HasForeignKey<Domain>(a => a.AddressId)
 //                     .OnDelete(DeleteBehavior.SetNull);
 
 //                 b.HasOne(a => a.Member)

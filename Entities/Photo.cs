@@ -16,15 +16,15 @@ namespace Api.Entities
         #region Relationships
 
         // Replaced CustomerId, MemberId, Customer, Member with generic IUser relationship:
-        public Guid? UserId { get; set; }        // Foreign Key to IUser (replaces CustomerId & MemberId) - Nullable, exclusive with ProductId & CompanyId
+        public Guid? UserId { get; set; }        // Foreign Key to IUser (replaces CustomerId & MemberId) - Nullable, exclusive with ProductId & DomainId
         public virtual IUser? User { get; set; }  // Navigation to IUser (replaces Customer & Member)
 
-        public Guid? ProductId { get; set; }     // Foreign Key to Product - Nullable, exclusive with UserId & CompanyId
+        public Guid? ProductId { get; set; }     // Foreign Key to Product - Nullable, exclusive with UserId & DomainId
         public virtual Product? Product { get; set; }
 
-        // Add Company relationship:
-        public Guid? CompanyId { get; set; }     // Foreign Key to Company - Nullable, exclusive with UserId & ProductId
-        public virtual Company? Company { get; set; } // Navigation to Company
+        // Add Domain relationship:
+        public Guid? DomainId { get; set; }     // Foreign Key to Domain - Nullable, exclusive with UserId & ProductId
+        public virtual Domain? Domain { get; set; } // Navigation to Domain
 
         #endregion
     }

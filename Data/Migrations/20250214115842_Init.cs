@@ -56,7 +56,7 @@ namespace Api.Data.Migrations
                     AccountType = table.Column<string>(type: "nvarchar(24)", nullable: false),
                     AccountStatus = table.Column<string>(type: "nvarchar(24)", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    CompanyId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    DomainId = table.Column<Guid>(type: "TEXT", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
@@ -109,7 +109,7 @@ namespace Api.Data.Migrations
                     Name = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
                     Description = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    DomainId = table.Column<Guid>(type: "TEXT", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
@@ -119,8 +119,8 @@ namespace Api.Data.Migrations
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_Companies_CompanyId",
-                        column: x => x.CompanyId,
+                        name: "FK_Products_Companies_DomainId",
+                        column: x => x.DomainId,
                         principalTable: "Companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -384,7 +384,7 @@ namespace Api.Data.Migrations
                     TotalAmount = table.Column<decimal>(type: "TEXT", nullable: false),
                     CustomerId = table.Column<Guid>(type: "TEXT", nullable: false),
                     MemberId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DomainId = table.Column<Guid>(type: "TEXT", nullable: false),
                     ShippingAddressId = table.Column<Guid>(type: "TEXT", nullable: true),
                     BillingAddressId = table.Column<Guid>(type: "TEXT", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -408,8 +408,8 @@ namespace Api.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Orders_Companies_CompanyId",
-                        column: x => x.CompanyId,
+                        name: "FK_Orders_Companies_DomainId",
+                        column: x => x.DomainId,
                         principalTable: "Companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -447,7 +447,7 @@ namespace Api.Data.Migrations
                     Highlight = table.Column<bool>(type: "INTEGER", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: true),
                     ProductId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    CompanyId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    DomainId = table.Column<Guid>(type: "TEXT", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
@@ -457,8 +457,8 @@ namespace Api.Data.Migrations
                 {
                     table.PrimaryKey("PK_Photos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Photos_Companies_CompanyId",
-                        column: x => x.CompanyId,
+                        name: "FK_Photos_Companies_DomainId",
+                        column: x => x.DomainId,
                         principalTable: "Companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -481,6 +481,8 @@ namespace Api.Data.Migrations
                     PhoneNumber = table.Column<string>(type: "TEXT", maxLength: 22, nullable: false),
                     PasswordHash = table.Column<byte[]>(type: "BLOB", nullable: false),
                     PasswordSalt = table.Column<byte[]>(type: "BLOB", nullable: false),
+                    Token = table.Column<string>(type: "TEXT", nullable: false),
+                    RefreshToken = table.Column<string>(type: "TEXT", nullable: false),
                     DateOfBirth = table.Column<DateOnly>(type: "TEXT", nullable: true),
                     LastActiveAt = table.Column<DateTime>(type: "TEXT", nullable: true),
                     Gender = table.Column<string>(type: "nvarchar(24)", nullable: false),
@@ -488,8 +490,8 @@ namespace Api.Data.Migrations
                     AddressId = table.Column<Guid>(type: "TEXT", nullable: true),
                     CurrentAccount = table.Column<Guid>(type: "TEXT", nullable: false),
                     UserType = table.Column<string>(type: "TEXT", maxLength: 8, nullable: false),
-                    CompanyId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    IsCompanyResponsible = table.Column<bool>(type: "INTEGER", nullable: true),
+                    DomainId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    IsDomainResponsible = table.Column<bool>(type: "INTEGER", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
@@ -505,8 +507,8 @@ namespace Api.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Users_Companies_CompanyId",
-                        column: x => x.CompanyId,
+                        name: "FK_Users_Companies_DomainId",
+                        column: x => x.DomainId,
                         principalTable: "Companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -947,14 +949,14 @@ namespace Api.Data.Migrations
                 column: "BillingAddressId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_CompanyId",
-                table: "Orders",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Orders_CustomerId",
                 table: "Orders",
                 column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_DomainId",
+                table: "Orders",
+                column: "DomainId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_MemberId",
@@ -977,9 +979,9 @@ namespace Api.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Photos_CompanyId",
+                name: "IX_Photos_DomainId",
                 table: "Photos",
-                column: "CompanyId");
+                column: "DomainId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Photos_ProductId",
@@ -997,9 +999,9 @@ namespace Api.Data.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_CompanyId",
+                name: "IX_Products_DomainId",
                 table: "Products",
-                column: "CompanyId");
+                column: "DomainId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Rating_CustomerId",
@@ -1093,9 +1095,9 @@ namespace Api.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_CompanyId",
+                name: "IX_Users_DomainId",
                 table: "Users",
-                column: "CompanyId");
+                column: "DomainId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_HighlightPhotoId",

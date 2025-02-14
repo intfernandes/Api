@@ -6,7 +6,7 @@ namespace Api.Dtos
 public class CustomerDto : UserDto
 {
     [MaxLength(255)]
-    public string? CompanyName { get; set; }
+    public string? DomainName { get; set; }
 
     [MaxLength(255)]
     public string? ContactName { get; set; }

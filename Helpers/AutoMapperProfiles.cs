@@ -13,7 +13,7 @@ namespace Api.Helpers
         {   
             CreateMap<Account, AccountDto>();
 
-            CreateMap<Company, CompanyDto>()
+            CreateMap<Domain, DomainDto>()
                 .ForMember(d => d.Members, o => o.MapFrom(s => s.Members.Count))
                 .ForMember(d => d.Products, o => o.MapFrom(s => s.Products.Count))
                 .ForMember(d => d.Orders, o => o.MapFrom(s => s.Orders.Count))

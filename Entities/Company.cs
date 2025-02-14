@@ -3,7 +3,7 @@ using Api.Entities.Users;
 
 namespace Api.Entities
 {
-    public class Company : AuditableBaseEntity
+    public class Domain : AuditableBaseEntity
     {
         [Required]
         [MaxLength(255)]
@@ -21,17 +21,17 @@ namespace Api.Entities
 
         #region Relationships
 
-        [Required] // Enforcing Company MUST have an Address
+        [Required] // Enforcing Domain MUST have an Address
         public Guid AddressId { get; set; }
-        public virtual Address? Address { get; set; } // One-to-one or one-to-zero-or-one: Company has one Address
+        public virtual Address? Address { get; set; } // One-to-one or one-to-zero-or-one: Domain has one Address
 
-        [Required] // Enforcing Company MUST have an Account
+        [Required] // Enforcing Domain MUST have an Account
         public Guid AccountId { get; set; }
-        public virtual Account? Account { get; set; } // One-to-one: Company has one Account
+        public virtual Account? Account { get; set; } // One-to-one: Domain has one Account
 
-        public virtual ICollection<Member> Members { get; set; } = []; // One-to-many: Company has many Members
-        public virtual ICollection<Product> Products { get; set; } = []; // One-to-many: Company has many Products
-        public virtual ICollection<Order> Orders { get; set; } = [];   // One-to-many: Company receives many Orders
+        public virtual ICollection<Member> Members { get; set; } = []; // One-to-many: Domain has many Members
+        public virtual ICollection<Product> Products { get; set; } = []; // One-to-many: Domain has many Products
+        public virtual ICollection<Order> Orders { get; set; } = [];   // One-to-many: Domain receives many Orders
         public List<Photo> Photos { get; set; } = [];
 
 

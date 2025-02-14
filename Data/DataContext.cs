@@ -11,7 +11,7 @@ namespace Api.Data
    public DbSet<Account> Accounts { get; set; } = null!;
     public DbSet<Address> Addresses { get; set; } = null!;
     public DbSet<Category> Categories { get; set; } = null!;
-    public DbSet<Company> Companies { get; set; } = null!;
+    public DbSet<Domain> Domains { get; set; } = null!;
     public DbSet<EntityAuditLog> EntityAuditLogs { get; set; } = null!;
     public DbSet<Customer> Customers { get; set; } = null!;
     public DbSet<Member> Members { get; set; } = null!;
@@ -26,9 +26,7 @@ namespace Api.Data
     {
         EntityConfigurations.ConfigureAccounts(modelBuilder);
         EntityConfigurations.ConfigureCompanies(modelBuilder);
-        EntityConfigurations.ConfigureIUser(modelBuilder);
-        // EntityConfigurations.ConfigureMembers(modelBuilder);
-        // EntityConfigurations.ConfigureCustomers(modelBuilder);
+        EntityConfigurations.ConfigureIUser(modelBuilder); 
         EntityConfigurations.ConfigureAddresses(modelBuilder);
         EntityConfigurations.ConfigureProducts(modelBuilder);
         EntityConfigurations.ConfigureCategories(modelBuilder);

@@ -29,7 +29,7 @@ namespace Api.Data.Repositories
         {
             Console.WriteLine(signUpDto);
 
-            string? validate = await CheckEmail(signUpDto.Email,   AccountType.Company );
+            string? validate = await CheckEmail(signUpDto.Email,   AccountType.Domain );
 
             if(validate.Length > 0 ) return new AuthResponseDto { 
                 Errors = [validate],
@@ -37,7 +37,7 @@ namespace Api.Data.Repositories
 
             using var hmac = new HMACSHA512();
 
-            var company = new Company {
+            var Domain = new Domain {
                 Id = new Guid(),
                 Name = signUpDto.FirstName, 
                 Email = signUpDto.Email.ToLower(),  
@@ -45,25 +45,25 @@ namespace Api.Data.Repositories
                 PasswordSalt = hmac.Key,
             };
 
-            ctx.Companies.Add(company);
+            ctx.Domains.Add(Domain);
 
             await ctx.SaveChangesAsync(); 
 
 
-              var companyAcc = new Account {
+              var DomainAcc = new Account {
                 Id = new Guid(),
-                CompanyId = company.Id,
+                DomainId = Domain.Id,
                 AccountStatus = AccountStatus.Active,
-                AccountType = AccountType.Company
+                AccountType = AccountType.Domain
             };
 
-            ctx.Accounts.Add(companyAcc);
+            ctx.Accounts.Add(DomainAcc);
             await ctx.SaveChangesAsync(); 
 
 
             var member = new Member {
                 Id = new Guid(),
-                CompanyId = company.Id,
+                DomainId = Domain.Id,
                 FirstName = signUpDto.FirstName, 
                 LastName = signUpDto.LastName,
                 Email = signUpDto.Email.ToLower(),  
@@ -76,7 +76,7 @@ namespace Api.Data.Repositories
 
             var memberAcc = new Account {
                 Id = new Guid(),
-                CompanyId = member.Id,
+                DomainId = member.Id,
                 AccountStatus = AccountStatus.Active,
                 AccountType = AccountType.Manager
             };
@@ -85,7 +85,7 @@ namespace Api.Data.Repositories
             await ctx.SaveChangesAsync(); 
 
             return new AuthResponseDto { 
-                Token = tokenService.CreateToken(company)
+                Token = tokenService.CreateToken(Domain)
             };
         }
 
@@ -105,7 +105,7 @@ namespace Api.Data.Repositories
         {
             Console.WriteLine(signUpDto);
 
-                   string? validate = await CheckEmail(signUpDto.Email,   AccountType.Company );
+                   string? validate = await CheckEmail(signUpDto.Email,   AccountType.Domain );
 
             if(validate.Length > 0 ) return new AuthResponseDto { 
                 Errors = [validate],

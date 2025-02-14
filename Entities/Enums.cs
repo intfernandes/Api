@@ -20,7 +20,7 @@ public enum AccountStatus
 
 public enum AccountType
 {
-    Company,
+    Domain,
     Admin,
     Manager,
     Staff,

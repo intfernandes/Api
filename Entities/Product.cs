@@ -14,8 +14,8 @@ namespace Api.Entities
         public List<Photo> Photos { get; set; } = [];
 
         #region Relationships
-        public Guid? CompanyId { get; set; }
-        public virtual Company? Company { get; set; } = null!; // One-to-many: Product belongs to one Company
+        public Guid? DomainId { get; set; }
+        public virtual Domain? Domain { get; set; } = null!; // One-to-many: Product belongs to one Domain
         public virtual ICollection<Category> Categories { get; set; } = []; // Many-to-many: Product has many Categories
 
         #endregion

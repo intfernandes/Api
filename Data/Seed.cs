@@ -68,36 +68,36 @@ namespace Api.Data
                     context.SaveChanges(); // Save Categories
                 }
 
-                // --- Seed Company Accounts ---
-                // Seeds Account entities of type Company if no Company Accounts exist.
-                if (!context.Accounts.OfType<Account>().Any(a => a.AccountType == AccountType.Company)) // Check for Company Accounts
+                // --- Seed Domain Accounts ---
+                // Seeds Account entities of type Domain if no Domain Accounts exist.
+                if (!context.Accounts.OfType<Account>().Any(a => a.AccountType == AccountType.Domain)) // Check for Domain Accounts
                 {
                     context.Accounts.AddRange(
-                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Company, AccountStatus = AccountStatus.Active },
-                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Company, AccountStatus = AccountStatus.Active },
-                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Company, AccountStatus = AccountStatus.Inactive },
-                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Company, AccountStatus = AccountStatus.Pending },
-                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Company, AccountStatus = AccountStatus.Active }
+                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Domain, AccountStatus = AccountStatus.Active },
+                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Domain, AccountStatus = AccountStatus.Active },
+                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Domain, AccountStatus = AccountStatus.Inactive },
+                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Domain, AccountStatus = AccountStatus.Pending },
+                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Domain, AccountStatus = AccountStatus.Active }
                     );
-                    context.SaveChanges(); // Save Company Accounts
+                    context.SaveChanges(); // Save Domain Accounts
                 }
 
-                // --- Seed Companies ---
-                // Seeds Company entities if the Companies table is empty, using existing Company Accounts and Addresses.
-                if (!context.Companies.Any())
+                // --- Seed Domains ---
+                // Seeds Domain entities if the Domains table is empty, using existing Domain Accounts and Addresses.
+                if (!context.Domains.Any())
                 {
                     // Fetch required entities from context
-                    var companyAccounts = context.Accounts.OfType<Account>().Where(a => a.AccountType == AccountType.Company).ToList();
+                    var DomainAccounts = context.Accounts.OfType<Account>().Where(a => a.AccountType == AccountType.Domain).ToList();
                     var addresses = context.Addresses.ToList(); // Fetch addresses
 
-                    context.Companies.AddRange(
-                        new Company { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = companyAccounts[0].Id, AddressId = addresses[0].Id, Email = "admin@techcorp.com", Name = "TechCorp Inc.", Description = "Leading technology solutions provider" },
-                        new Company { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = companyAccounts[1].Id, AddressId = addresses[1].Id, Email = "admin@globalbooks.com", Name = "Global Books Ltd.", Description = "Worldwide book retailer" },
-                        new Company { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = companyAccounts[2].Id, AddressId = addresses[2].Id, Email = "admin@fashionhub.com", Name = "Fashion Hub", Description = "Trendy clothing and accessories" },
-                        new Company { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = companyAccounts[3].Id, AddressId = addresses[3].Id, Email = "admin@londonimports.com", Name = "London Imports", Description = "Importer of fine goods" },
-                        new Company { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = companyAccounts[4].Id, AddressId = addresses[4].Id, Email = "admin@citystyle.com", Name = "City Style Apparel", Description = "Urban fashion for everyone" }
+                    context.Domains.AddRange(
+                        new Domain { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = DomainAccounts[0].Id, AddressId = addresses[0].Id, Email = "admin@techcorp.com", Name = "TechCorp Inc.", Description = "Leading technology solutions provider" },
+                        new Domain { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = DomainAccounts[1].Id, AddressId = addresses[1].Id, Email = "admin@globalbooks.com", Name = "Global Books Ltd.", Description = "Worldwide book retailer" },
+                        new Domain { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = DomainAccounts[2].Id, AddressId = addresses[2].Id, Email = "admin@fashionhub.com", Name = "Fashion Hub", Description = "Trendy clothing and accessories" },
+                        new Domain { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = DomainAccounts[3].Id, AddressId = addresses[3].Id, Email = "admin@londonimports.com", Name = "London Imports", Description = "Importer of fine goods" },
+                        new Domain { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = DomainAccounts[4].Id, AddressId = addresses[4].Id, Email = "admin@citystyle.com", Name = "City Style Apparel", Description = "Urban fashion for everyone" }
                     );
-                    context.SaveChanges(); // Save Companies
+                    context.SaveChanges(); // Save Domains
                 }
 
                 // --- Seed Customer Accounts ---
@@ -161,24 +161,24 @@ namespace Api.Data
                 }
 
                 // --- Seed Members ---
-                // Seeds Member entities if the Members table is empty, using existing Member Accounts and Companies.
+                // Seeds Member entities if the Members table is empty, using existing Member Accounts and Domains.
                 if (!context.Members.Any())
                 {
                     var memberAccounts = context.Accounts.OfType<Account>().Where(a => a.AccountType == AccountType.Staff).ToList();
-                    var companies = context.Companies.ToList();
+                    var Domains = context.Domains.ToList();
 
                     context.Members.AddRange(
                         // Member 1 ... Member 10 (example Members)
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = companies[0].Id, Accounts = [memberAccounts[0]], FirstName = "Fiona", LastName = "Green", Email = "fiona.green@company1.com", PhoneNumber = "555-4321" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = companies[0].Id, Accounts = [memberAccounts[1]], FirstName = "George", LastName = "Harris", Email = "george.harris@company1.com", PhoneNumber = "555-8765" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = companies[1].Id, Accounts = [memberAccounts[2]], FirstName = "Hannah", LastName = "Indigo", Email = "hannah.indigo@company2.com", PhoneNumber = "555-2109" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = companies[1].Id, Accounts = [memberAccounts[3]], FirstName = "Ian", LastName = "Jones", Email = "ian.jones@company2.com", PhoneNumber = "555-6543" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = companies[2].Id, Accounts = [memberAccounts[4]], FirstName = "Jack", LastName = "King", Email = "jack.king@company3.com", PhoneNumber = "555-0987" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = companies[2].Id, Accounts = [memberAccounts[5]], FirstName = "Katie", LastName = "Lopez", Email = "katie.lopez@company3.com", PhoneNumber = "555-2233" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = companies[3].Id, Accounts = [memberAccounts[6]], FirstName = "Mason", LastName = "Nguyen", Email = "mason.nguyen@company4.com", PhoneNumber = "555-4455" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = companies[3].Id, Accounts = [memberAccounts[7]], FirstName = "Nora", LastName = "Perez", Email = "nora.perez@company4.com", PhoneNumber = "555-6677" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = companies[4].Id, Accounts = [memberAccounts[8]], FirstName = "Owen", LastName = "Baker", Email = "owen.baker@company5.com", PhoneNumber = "555-8899" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = companies[4].Id, Accounts = [memberAccounts[9]], FirstName = "Penelope", LastName = "Carter", Email = "penelope.carter@company5.com", PhoneNumber = "555-0011" }
+                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = Domains[0].Id, Accounts = [memberAccounts[0]], FirstName = "Fiona", LastName = "Green", Email = "fiona.green@Domain1.com", PhoneNumber = "555-4321" },
+                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = Domains[0].Id, Accounts = [memberAccounts[1]], FirstName = "George", LastName = "Harris", Email = "george.harris@Domain1.com", PhoneNumber = "555-8765" },
+                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = Domains[1].Id, Accounts = [memberAccounts[2]], FirstName = "Hannah", LastName = "Indigo", Email = "hannah.indigo@Domain2.com", PhoneNumber = "555-2109" },
+                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = Domains[1].Id, Accounts = [memberAccounts[3]], FirstName = "Ian", LastName = "Jones", Email = "ian.jones@Domain2.com", PhoneNumber = "555-6543" },
+                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = Domains[2].Id, Accounts = [memberAccounts[4]], FirstName = "Jack", LastName = "King", Email = "jack.king@Domain3.com", PhoneNumber = "555-0987" },
+                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = Domains[2].Id, Accounts = [memberAccounts[5]], FirstName = "Katie", LastName = "Lopez", Email = "katie.lopez@Domain3.com", PhoneNumber = "555-2233" },
+                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = Domains[3].Id, Accounts = [memberAccounts[6]], FirstName = "Mason", LastName = "Nguyen", Email = "mason.nguyen@Domain4.com", PhoneNumber = "555-4455" },
+                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = Domains[3].Id, Accounts = [memberAccounts[7]], FirstName = "Nora", LastName = "Perez", Email = "nora.perez@Domain4.com", PhoneNumber = "555-6677" },
+                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = Domains[4].Id, Accounts = [memberAccounts[8]], FirstName = "Owen", LastName = "Baker", Email = "owen.baker@Domain5.com", PhoneNumber = "555-8899" },
+                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = Domains[4].Id, Accounts = [memberAccounts[9]], FirstName = "Penelope", LastName = "Carter", Email = "penelope.carter@Domain5.com", PhoneNumber = "555-0011" }
                     );
                     context.SaveChanges(); // Save Members
                 }
@@ -190,39 +190,39 @@ namespace Api.Data
                     var categories = context.Categories.ToList();
 
                     context.Products.AddRange(
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = null, Name = "Laptop", Description = "High-performance laptop", Price = 1200.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Electronics")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = null, Name = "Smartphone", Description = "Latest smartphone model", Price = 900.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Electronics")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = null, Name = "The Lord of the Rings", Description = "Fantasy classic", Price = 25.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Books")! } }
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = null, Name = "Laptop", Description = "High-performance laptop", Price = 1200.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Electronics")! } },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = null, Name = "Smartphone", Description = "Latest smartphone model", Price = 900.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Electronics")! } },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = null, Name = "The Lord of the Rings", Description = "Fantasy classic", Price = 25.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Books")! } }
                     );
                     context.SaveChanges(); // Save Products
                 }
 
                  // --- Seed Photos ---
-                // Seeds Photo entities if the Photos table is empty, linking to existing Products and Companies.
+                // Seeds Photo entities if the Photos table is empty, linking to existing Products and Domains.
                 if (!context.Photos.Any())
                 {
                     var products = context.Products.ToList();
-                    var companies = context.Companies.ToList();
+                    var Domains = context.Domains.ToList();
 
                     context.Photos.AddRange(
                         // Product Photos (example photos for Laptop and Smartphone products)
                         new Photo { Id = GuidGenerator.GenerateSequentialGuid(), ProductId = products[0].Id, ImageUrl = "https://example.com/laptop1.jpg", Description = "Laptop Product Photo 1" },
                         new Photo { Id = GuidGenerator.GenerateSequentialGuid(), ProductId = products[0].Id, ImageUrl = "https://example.com/laptop2.jpg", Description = "Laptop Product Photo 2" },
                         new Photo { Id = GuidGenerator.GenerateSequentialGuid(), ProductId = products[1].Id, ImageUrl = "https://example.com/smartphone1.jpg", Description = "Smartphone Product Photo 1" },
-                        // Company Logos/Showcase (example logos for TechCorp and Global Books)
-                        new Photo { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = companies[0].Id, ImageUrl = "https://example.com/techcorp_logo.png", Description = "TechCorp Inc. Logo" },
-                        new Photo { Id = GuidGenerator.GenerateSequentialGuid(), CompanyId = companies[1].Id, ImageUrl = "https://example.com/globalbooks_showroom.jpg", Description = "Global Books Showroom" }
+                        // Domain Logos/Showcase (example logos for TechCorp and Global Books)
+                        new Photo { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = Domains[0].Id, ImageUrl = "https://example.com/techcorp_logo.png", Description = "TechCorp Inc. Logo" },
+                        new Photo { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = Domains[1].Id, ImageUrl = "https://example.com/globalbooks_showroom.jpg", Description = "Global Books Showroom" }
                     );
                     context.SaveChanges(); // Save Photos
                 }
 
                 // --- Seed Orders and OrderItems ---
-                // Seeds Order and OrderItem entities if the Orders table is empty, linking to existing Customers, Members, Companies, and Products.
+                // Seeds Order and OrderItem entities if the Orders table is empty, linking to existing Customers, Members, Domains, and Products.
                 if (!context.Orders.Any())
                 {
                     var customers = context.Customers.ToList();
                     var members = context.Members.ToList();
-                    var companies = context.Companies.ToList();
+                    var Domains = context.Domains.ToList();
                     var products = context.Products.ToList();
 
                     // --- Order 1 ---
@@ -232,7 +232,7 @@ namespace Api.Data
                         Id = order1Id,
                         CustomerId = customers[0].Id,
                         MemberId = members[0].Id,
-                        CompanyId = companies[0].Id,
+                        DomainId = Domains[0].Id,
                         DeliveryTerm = DateTime.UtcNow.AddDays(3),
                         Status = OrderStatus.Completed
                     });
@@ -250,7 +250,7 @@ namespace Api.Data
                         Id = order2Id,
                         CustomerId = customers[1].Id,
                         MemberId = members[1].Id,
-                        CompanyId = companies[1].Id,
+                        DomainId = Domains[1].Id,
                         DeliveryTerm = DateTime.UtcNow.AddDays(5),
                         Status = OrderStatus.Shipped
                     });
@@ -267,7 +267,7 @@ namespace Api.Data
                         Id = order3Id,
                         CustomerId = customers[2].Id,
                         MemberId = members[2].Id,
-                        CompanyId = companies[2].Id,
+                        DomainId = Domains[2].Id,
                         DeliveryTerm = DateTime.UtcNow.AddDays(2),
                         Status = OrderStatus.Processing
                     });
@@ -285,7 +285,7 @@ namespace Api.Data
                         Id = order4Id,
                         CustomerId = customers[3].Id,
                         MemberId = members[3].Id,
-                        CompanyId = companies[3].Id,
+                        DomainId = Domains[3].Id,
                         DeliveryTerm = DateTime.UtcNow.AddDays(7),
                         Status = OrderStatus.Pending
                     });
@@ -299,7 +299,7 @@ namespace Api.Data
                         Id = order5Id,
                         CustomerId = customers[4].Id,
                         MemberId = members[4].Id,
-                        CompanyId = companies[4].Id,
+                        DomainId = Domains[4].Id,
                         DeliveryTerm = DateTime.UtcNow.AddDays(1), // Express
                         Status = OrderStatus.Completed
                     });
@@ -317,7 +317,7 @@ namespace Api.Data
                         Id = order6Id,
                         CustomerId = customers[5].Id,
                         MemberId = members[5].Id,
-                        CompanyId = companies[0].Id, // Company 1 again
+                        DomainId = Domains[0].Id, // Domain 1 again
                         DeliveryTerm = DateTime.UtcNow.AddDays(4),
                         Status = OrderStatus.Shipped
                     });
@@ -334,7 +334,7 @@ namespace Api.Data
                         Id = order7Id,
                         CustomerId = customers[6].Id,
                         MemberId = members[6].Id,
-                        CompanyId = companies[2].Id, // Company 3 again
+                        DomainId = Domains[2].Id, // Domain 3 again
                         DeliveryTerm = DateTime.UtcNow.AddDays(6),
                         Status = OrderStatus.Completed
                     });
@@ -351,7 +351,7 @@ namespace Api.Data
                         Id = order8Id,
                         CustomerId = customers[7].Id,
                         MemberId = members[7].Id,
-                        CompanyId = companies[4].Id, // Company 5 again
+                        DomainId = Domains[4].Id, // Domain 5 again
                         DeliveryTerm = DateTime.UtcNow.AddDays(2),
                         Status = OrderStatus.Processing
                     });
