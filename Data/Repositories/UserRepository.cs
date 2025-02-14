@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using Api.Dtos;
 using Api.Entities;
 using Api.Entities.Users;
 using Api.Interfaces;
@@ -33,7 +34,7 @@ namespace Api.Data.Repositories
             return await _context.Users.AnyAsync(u => u.Email == email);
         }
 
-        public async Task<IUser?> SignupAsync(SignUpDto signUp)
+        public async Task<IUser?> SignUpAsync(SignUpDto signUp)
         {
             if (await CheckIfEmailExistsAsync(signUp.Email!))
             {
@@ -59,7 +60,7 @@ namespace Api.Data.Repositories
                     LastName = signUp.LastName,
                     Email = signUp.Email,
                     PhoneNumber = signUp.PhoneNumber,
-                    CompanyId = companyId,
+                    DomainId = companyId,
                     DateOfBirth = signUp.DateOfBirth,
                     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signUp.Password)),
                     PasswordSalt = hmac.Key,
@@ -89,11 +90,10 @@ namespace Api.Data.Repositories
             }
         }
 
-        public async Task<IUser?> SigninAsync(string usernameOrEmail, string password)
+        public async Task<IUser?> SignInAsync(SignInDto signIn)
         {
             IUser? user =
-                await GetUserByUsernameAsync(usernameOrEmail)
-                ?? await GetUserByEmailAsync(usernameOrEmail);
+                await GetUserByEmailAsync(signIn.Email);
 
             if (user == null)
             {
@@ -101,7 +101,7 @@ namespace Api.Data.Repositories
             }
 
             using var hmac = new HMACSHA512(user.PasswordSalt);
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signIn.Password ));
             for (int i = 0; i < computedHash.Length; i++)
             {
                 if (computedHash[i] != user.PasswordHash[i])
@@ -122,5 +122,7 @@ namespace Api.Data.Repositories
             // For now, we'll leave it empty to reflect that signout is usually a higher-level concern.
             await Task.CompletedTask; // Indicate async completion
         }
+
+   
     }
 }

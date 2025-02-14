@@ -19,10 +19,13 @@ namespace Api.Controllers
         [HttpPost("signup")] // auth/signup
         public async Task<ActionResult<AuthResponseDto>> SignUp(SignUpDto signUp)
         {
-            var result = await users.SignupAsync(signUp);
-            if (result == null)
-                return BadRequest("Sign up failed");
-            return result;
+            var user = await users.SignUpAsync(signUp);
+            if (user == null)  return BadRequest("Sign up failed");
+
+            return Ok(new AuthResponseDto {
+                Token = user.Token,
+                RefreshToken = user.RefreshToken,
+            }) ;
         }
 
         [HttpPost("signin")] // auth/signin
@@ -69,13 +72,6 @@ namespace Api.Controllers
             }
         }
 
-        [HttpPost("register")] // auth/signup
-        public async Task<ActionResult<AuthResponseDto>> Register(SignUpDto signUp)
-        {
-            var result = await auth.RegisterAsync(signUp);
-            if (result == null)
-                return BadRequest("Sign up failed");
-            return result;
-        }
+ 
     }
 }
