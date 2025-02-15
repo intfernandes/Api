@@ -16,6 +16,7 @@ public enum AccountStatus
     Active,
     Inactive,
     Pending, 
+    Deleted
 }
 
 public enum AccountType

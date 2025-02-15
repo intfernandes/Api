@@ -1,9 +1,8 @@
 using System.Security.Cryptography;
 using System.Text;
-using Api.Data;
-using Api.Data.Repositories;
+using Api.Data; 
 using Api.Dtos;
-using Api.Entities;
+using Api.Entities; 
 using Api.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,32 +12,45 @@ namespace Api.Controllers
     public class AuthController(
         DataContext context,
         ITokenService tokenService,
-        UserRepository users
-    ) : BaseController
+         ICustomersRepository customers,
+         IMembersRepository members
+    ) : V1Controller
     {
-        [HttpPost("signup")] // auth/signup
+        [HttpPost("signup")] // api/v1/auth/signup
         public async Task<ActionResult<AuthResponseDto>> SignUp(SignUpDto signUp)
         {
-            var user = await users.SignUpAsync(signUp);
-            if (user == null)  return BadRequest("Sign up failed");
+            if (signUp == null) return BadRequest("Invalid request");
 
-            return Ok(new AuthResponseDto {
-                Token = user.Token,
-                RefreshToken = user.RefreshToken,
-            }) ;
+            if (signUp.Type == AccountType.Customer)
+            { 
+                var cs = await customers.Create(signUp);
+
+                return Ok(new AuthResponseDto {
+                    Token = tokenService.CreateToken(cs)
+                });
+            }
+            else
+            {
+                var mb = await members.Create(signUp) ?? throw new Exception("An error occurred");
+
+                  return Ok(new AuthResponseDto {
+                    Token = tokenService.CreateToken(mb)
+                });
+            }
+        
+         
         }
 
-        [HttpPost("signin")] // auth/signin
+        [HttpPost("signin")] // api/v1/auth/signin
         public async Task<ActionResult<AuthResponseDto>> SignIn(SignInDto signin)
         {
-            if (signin.AccountType == AccountType.Customer)
-            {
-                var cs = await context.Customers.FirstOrDefaultAsync(x =>
+            if(signin == null || signin.Email == null || signin.Password == null) return BadRequest("Invalid request");
+            
+            var cs = await context.Customers.FirstOrDefaultAsync(x =>
                     x.Email.Equals(signin.Email.ToLower())
                 );
 
-                if (cs == null)
-                    return Unauthorized("User not found");
+             if(cs != null) {
                 using var hmac = new HMACSHA512(cs.PasswordSalt);
 
                 var pwdHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signin.Password));
@@ -50,14 +62,14 @@ namespace Api.Controllers
                 }
 
                 return Ok(new AuthResponseDto { Token = tokenService.CreateToken(cs) });
-            }
-            else
-            {
-                var mb = await context.Members.FirstOrDefaultAsync(x =>
+             }
+             
+             var mb = await context.Members.FirstOrDefaultAsync(x =>
                     x.Email.Equals(signin.Email.ToLower())
                 );
-                if (mb == null)
-                    return Unauthorized("User not found");
+
+            if (mb != null)
+            {
                 using var hmac = new HMACSHA512(mb.PasswordSalt);
 
                 var pwdHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signin.Password));
@@ -69,9 +81,12 @@ namespace Api.Controllers
                 }
 
                 return Ok(new AuthResponseDto { Token = tokenService.CreateToken(mb) });
+                
             }
-        }
+            
+            return Unauthorized("User not found");
 
- 
+            
+        } 
     }
 }

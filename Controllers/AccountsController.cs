@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Api.Controllers
 {
 
-    public class AccountsController( DataContext context )  : BaseController
+    public class AccountsController( DataContext context )  : V1Controller
     {
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Account>>> GetAccounts() {

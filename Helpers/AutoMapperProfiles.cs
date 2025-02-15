@@ -23,9 +23,9 @@ namespace Api.Helpers
 
             CreateMap<Address, AddressDto>();
 
-            CreateMap<Customer, UserDto>();
+            CreateMap<Customer, CustomerDto>(); 
 
-            CreateMap<Member, UserDto>()
+            CreateMap<Member, MemberDto>()
                 .ForMember(d => d.Age, o => o.MapFrom(s => s.DateOfBirth.HasValue ? s.DateOfBirth.Value.CalculateAge() : (int?)null) )
                 .ForMember(d => d.HighlightPhoto,
                     o => o.MapFrom(

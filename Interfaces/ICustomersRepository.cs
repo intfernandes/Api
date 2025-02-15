@@ -1,19 +1,20 @@
 
 
-using Api.Dtos; 
+using Api.Dtos;
+using Api.Entities;
 
 namespace Api.Interfaces
 {
     public interface ICustomersRepository
     {
-        Task<IEnumerable<UserDto>> GetCustomersAsync();
-        Task<UserDto?> GetCustomerByIdAsync(Guid id);
-        Task<UserDto?> GetCustomerByUsernameAsync(string username);
-        Task<UserDto?> GetCustomerByEmailAsync(string email);
-        Task<UserDto?> GetCustomerByPhoneNumberAsync(string phoneNumber);
-        void Create(SignInDto user);
-        void Update(UserDto user);
-        Task<bool> DeleteUserAsync(Guid id);  
-        Task<bool> SaveAllAsync(); 
+        Task<CustomerDto> Create(SignUpDto user);
+        Task<IEnumerable<CustomerDto>> Get();
+        Task<CustomerDto?> GetById(Guid id);
+        Task<CustomerDto?> GetByName(string username);
+        Task<CustomerDto?> GetByEmail(string email);
+        Task<CustomerDto?> GetByPhoneNumber(string phoneNumber);
+        Task<CustomerDto> Update(CustomerDto user);
+        Task<bool> Delete(Guid id);  
+        Task<bool> Save(); 
     }
 }

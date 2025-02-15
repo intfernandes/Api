@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Api.Controllers
 {
 
-    public class ProductsController(DataContext context) : BaseController
+    public class ProductsController(DataContext context) : V1Controller
     {
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts() {

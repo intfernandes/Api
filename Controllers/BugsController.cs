@@ -1,12 +1,11 @@
-using Api.Data;
-using Api.Entities;
+using Api.Data; 
 using Api.Entities.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc; 
 
 namespace Api.Controllers
 {
-    public class BugsController(DataContext context) : BaseController
+    public class BugsController(DataContext context) : V1Controller
     {
         [Authorize]
         [HttpGet("auth")]

@@ -31,10 +31,10 @@ namespace Api.Entities
         public List<Photo> Photos { get; set; } = [];
         public Guid? HighlightPhotoId { get; set; }
         public virtual Photo? HighlightPhoto { get; set; }
-        public Guid? AddressId { get; set; } // Foreign Key for optional Address - still nullable for Users
-        public virtual Address? Address { get; set; } // One-to-zero-or-one: IUser can have one Address (optional)
-        public ICollection<Order> Orders { get; set; } = []; // Orders placed by this User (Customer or potentially Member as Customer)
+        public Guid? AddressId { get; set; } 
+        public virtual Address? Address { get; set; }
+        public ICollection<Order> Orders { get; set; } = []; 
         public ICollection<Account> Accounts { get; set; } = []; // One-to-many: One IUser can have multiple Accounts (profile accounts)
-        public Guid CurrentAccount { get; set; } // Tracks the currently active Account for the IUser
+        public Guid CurrentAccount { get; set; } 
     }
 }

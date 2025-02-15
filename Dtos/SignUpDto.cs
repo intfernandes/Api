@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Api.Entities;
 
 public class SignUpDto
@@ -14,10 +15,13 @@ public class SignUpDto
         [Required]
         public string Password { get; set; }  = string.Empty;
         public string? PhoneNumber { get; set; } = string.Empty;
-        public Guid? CompanyId { get; set; } = null!;
-        public string Token { get; set;} = string.Empty;
-        public string RefreshToken { get; set;} = string.Empty;
+        public Guid? DomainId { get; set; } = null!;
+        public string? Token { get; set;} = string.Empty;
+        public string? RefreshToken { get; set;} = string.Empty;
         public DateOnly? DateOfBirth { get; set; } 
+        [JsonConverter(typeof(JsonStringEnumConverter<AccountType>))]
+        public AccountType? Type { get; set; } = AccountType.Customer;
+        [JsonConverter(typeof(JsonStringEnumConverter<Gender>))]
         public Gender Gender { get; set; } = Gender.Unknown;
         public List<Photo> Photos { get; set; } = [];
         public Guid? HighlightPhotoId { get; set; }

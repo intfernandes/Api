@@ -4,31 +4,23 @@ using Api.Entities;
 namespace Api.Dtos {
 public class UserDto : BaseEntity
 {
-    [Required]
-    [MaxLength(255)]
-    public string? FirstName { get; set; } = string.Empty; 
-    public string? LastName { get; set; } = string.Empty; 
-    [Required]
-    [EmailAddress]
-    [MaxLength(255)]
-    public  string? Email { get; set; } = string.Empty; 
-    [Required] 
-    [MaxLength(22)]
-    public string? Phone { get; set; } = string.Empty; 
-    public DateOnly? DateOfBirth { get; set; } 
-    public int? Age { get; set; } 
-    public Gender? Gender { get; set; } 
-    public Address? Address { get; set; } 
-
-     public ICollection<Order>? Orders { get; set; } = [];
-
-     #region Relationships
-    public virtual IEnumerable<Account>? Accounts { get; set; }
-    public List<Photo>? Photos { get; set; } = [];
-    public Guid? HighlightPhotoId { get; set; }
-    public virtual Photo? HighlightPhoto { get; set; }
-    
-     #endregion
-
+        public string? FirstName { get; set; } = null!;
+        public string? LastName { get; set; } = null!;
+        public string? Email { get; set; } = null!; 
+        public string? PhoneNumber { get; set; } = null!; 
+        public string? Password { get; set; } = null!; 
+        public int? Age { get; set; }= null!; 
+        public DateOnly? DateOfBirth { get; set; }= null!; 
+        public DateTime? LastActiveAt { get; set; }= null!; 
+        public Gender? Gender { get; set; } = null!;
+        public List<Photo> Photos { get; set; } = [];
+        public Guid? HighlightPhotoId { get; set; }= null!; 
+        public virtual Photo? HighlightPhoto { get; set; }= null!; 
+        public Guid? AddressId { get; set; } = null!; 
+        public virtual Address? Address { get; set; }= null!; 
+        public ICollection<Order> Orders { get; set; } = []; 
+        public ICollection<Account> Accounts { get; set; } = []; // One-to-many: One IUser can have multiple Accounts (profile accounts)
+        public Guid? CurrentAccount { get; set; } = null!;
+        public bool? IsDomainResponsible { get; set; } = null!; 
 }
 }

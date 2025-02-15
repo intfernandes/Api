@@ -16,11 +16,13 @@ namespace Api.Extensions
                 
                 services.AddControllers();
                 
-                if(env.IsDevelopment() ){
+                if(env.IsDevelopment() ){ 
                     // set db enviroment to development (sqlite on ./constance.db)
                     services.AddDbContext<DataContext >(opt => {
                         opt.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
                         });
+
+                    
                 } else {
                     // set db enviroment to production
                     services.AddDbContext<DataContext >(opt => {
@@ -34,6 +36,7 @@ namespace Api.Extensions
                 services.AddScoped<IMembersRepository, MembersRepository>();
                 services.AddScoped<IAuthRepository, AuthRepository>();
                 services.AddScoped<ICustomersRepository, CustomersRepository>(); 
+                services.AddScoped<IMembersRepository, MembersRepository>(); 
                 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
                 
                 return services;
