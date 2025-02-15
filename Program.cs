@@ -1,8 +1,7 @@
 using Api.Data;
 using Api.Extensions;
 using Api.Middlewares;
-using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
+using Microsoft.EntityFrameworkCore; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,11 +10,8 @@ builder.Services.AddAplicationServices(builder.Configuration, builder.Environmen
 
 builder.Services.AddIdentityServices(builder.Configuration);
 
-
-
 var app = builder.Build(); 
 
- 
 app.UseMiddleware<ExceptionsMiddleware>();
 
 app.UseCors(cors => cors.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://localhost:4200"));
