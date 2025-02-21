@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Api.Entities.Users;
+
 
 namespace Api.Entities
 {
@@ -32,8 +32,7 @@ namespace Api.Entities
         public virtual ICollection<Member> Members { get; set; } = []; // One-to-many: Domain has many Members
         public virtual ICollection<Product> Products { get; set; } = []; // One-to-many: Domain has many Products
         public virtual ICollection<Order> Orders { get; set; } = [];   // One-to-many: Domain receives many Orders
-        public List<Photo> Photos { get; set; } = [];
-
+        public List<Photo> Photos { get; set; } = []; 
 
         #endregion
     }

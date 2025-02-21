@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Api.Entities.Users;
+using Api.Dtos;
+
 
 namespace Api.Entities
 {
@@ -15,16 +16,16 @@ namespace Api.Entities
 
         #region Relationships
 
-        // Replaced CustomerId, MemberId, Customer, Member with generic IUser relationship:
-        public Guid? UserId { get; set; }        // Foreign Key to IUser (replaces CustomerId & MemberId) - Nullable, exclusive with ProductId & DomainId
-        public virtual IUser? User { get; set; }  // Navigation to IUser (replaces Customer & Member)
+        public Guid? UserId { get; set; }       
+        public virtual IUser? User { get; set; }  
 
-        public Guid? ProductId { get; set; }     // Foreign Key to Product - Nullable, exclusive with UserId & DomainId
+        public Guid? ProductId { get; set; } 
         public virtual Product? Product { get; set; }
+        public Guid? DomainId { get; set; }
+        public virtual Domain? Domain { get; set; }
 
-        // Add Domain relationship:
-        public Guid? DomainId { get; set; }     // Foreign Key to Domain - Nullable, exclusive with UserId & ProductId
-        public virtual Domain? Domain { get; set; } // Navigation to Domain
+        public Guid? CategoryId { get; set; }
+        public virtual Category? Category { get; set; }
 
         #endregion
     }

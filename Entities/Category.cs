@@ -12,6 +12,8 @@ namespace Api.Entities
         [MaxLength(500)]
         public string? Description { get; set; }
 
+        public List<Photo> Photos { get; set; } = [];
+
         #region Relationships
         public virtual ICollection<Product> Products { get; set; } = [];
         #endregion

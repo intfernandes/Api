@@ -1,5 +1,5 @@
-using Api.Data; 
-using Api.Entities.Users;
+using Api.Data;
+using Api.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc; 
 

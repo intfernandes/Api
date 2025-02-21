@@ -1,7 +1,7 @@
 
 using Api.Data.Configuration;
 using Api.Entities;
-using Api.Entities.Users;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Data
@@ -30,8 +30,7 @@ namespace Api.Data
         EntityConfigurations.ConfigureAddresses(modelBuilder);
         EntityConfigurations.ConfigureProducts(modelBuilder);
         EntityConfigurations.ConfigureCategories(modelBuilder);
-        EntityConfigurations.ConfigureProductCategories(modelBuilder);
-        EntityConfigurations.ConfigurePhotos(modelBuilder);
+        EntityConfigurations.ConfigureProductCategories(modelBuilder); 
         EntityConfigurations.ConfigureOrders(modelBuilder);
         EntityConfigurations.ConfigureOrderItems(modelBuilder);
         EntityConfigurations.ConfigureEntityAuditLogs(modelBuilder);

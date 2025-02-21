@@ -9,6 +9,6 @@ public class ProductDto
     public decimal Price { get; set; }
     public List<int> CategoryIds { get; set; } = [];
     public List<string> CategoryNames { get; set; } = []; 
-
+    public List<PhotoDto> Photos { get; set; } = [];
 }
 }

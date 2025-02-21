@@ -2,18 +2,20 @@ using Api.Dtos;
 using Api.Entities;
 using Api.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-
-        public class CustomersController(ICustomersRepository customers, IMapper mapper) : V1Controller
+    [Authorize]
+    public class CustomersController(ICustomersRepository customers, IMapper mapper) : V1Controller
     {
            [HttpGet] // api/v1/customers
             public async Task<ActionResult<IEnumerable<CustomerDto>>> Get() {
                 var result = await customers.Get(); 
+                var customersDtos = mapper.Map<IEnumerable<CustomerDto>>(result);
 
-             return Ok(result);
+             return Ok(customersDtos);
             }
     
             [HttpGet("{Id:Guid}")] // GET: api/v1/customers/{id}
@@ -73,7 +75,17 @@ namespace Api.Controllers
             if(customer?.PhoneNumber?.Length > 0) existingUser.PhoneNumber = customer.PhoneNumber;
             if(customer?.DateOfBirth != null ) existingUser.DateOfBirth = customer.DateOfBirth;
             if(customer?.Gender != null) existingUser.Gender = customer.Gender;
-            if(customer?.Address != null ) existingUser.Address = customer.Address;
+            if(customer?.Address != null ) {
+                var address = new Address {
+                    Street = customer.Address.Street,
+                    City = customer.Address.City,
+                    State = customer.Address.State,
+                    Country = customer.Address.Country,
+                    ZipCode = customer.Address.ZipCode
+                };
+                
+                existingUser.Address = address;
+                }
 
             await customers.Save();
 

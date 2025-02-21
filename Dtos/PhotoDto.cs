@@ -5,10 +5,12 @@ namespace Api.Dtos
 {
     public class PhotoDto
     {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     [Required]
     [MaxLength(2048)]
-    public string Url { get; set; } = null!;
-    public bool IsHighlight { get; set; }
+    public string ImageUrl { get; set; } = null!;
+    [MaxLength(2048)]
+    public string Description { get; set; } = null!;
+    public bool Highlight { get; set; }
     }
 }

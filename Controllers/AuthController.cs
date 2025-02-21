@@ -1,88 +1,52 @@
-using System.Security.Cryptography;
-using System.Text;
-using Api.Data; 
 using Api.Dtos;
 using Api.Entities; 
 using Api.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
-    public class AuthController(
-        DataContext context,
-        ITokenService tokenService,
-         ICustomersRepository customers,
-         IMembersRepository members
+    public class AuthController( 
+        ICustomersRepository customers,
+        IMembersRepository members,
+        IMapper mapper
     ) : V1Controller
     {
         [HttpPost("signup")] // api/v1/auth/signup
-        public async Task<ActionResult<AuthResponseDto>> SignUp(SignUpDto signUp)
+        public async Task<ActionResult<IUser>> SignUp(SignUpDto signUp)
         {
-            if (signUp == null) return BadRequest("Invalid request");
+            if(signUp == null || signUp.FirstName == null || signUp.Email == null || signUp.Password == null) return BadRequest("First name, email and password are required");
 
-            if (signUp.Type == AccountType.Customer)
+
+            if (signUp.AccountType != null && signUp.AccountType != AccountType.Customer)
             { 
-                var cs = await customers.Create(signUp);
+                var mb = await members.Create(signUp) ?? throw new Exception("An error occurred while creating a member");
+                var memberDto = mapper.Map<MemberDto>(mb); 
+                return Ok(memberDto);
 
-                return Ok(new AuthResponseDto {
-                    Token = tokenService.CreateToken(cs)
-                });
             }
             else
             {
-                var mb = await members.Create(signUp) ?? throw new Exception("An error occurred");
-
-                  return Ok(new AuthResponseDto {
-                    Token = tokenService.CreateToken(mb)
-                });
+                var cs = await customers.Create(signUp) ?? throw new Exception("An error occurred while creating a customer");
+                var customerDto = mapper.Map<CustomerDto>(cs);
+                return Ok(customerDto);
             }
         
          
         }
 
         [HttpPost("signin")] // api/v1/auth/signin
-        public async Task<ActionResult<AuthResponseDto>> SignIn(SignInDto signin)
+        public async Task<ActionResult<UserDto>> SignIn(SignInDto signin)
         {
-            if(signin == null || signin.Email == null || signin.Password == null) return BadRequest("Invalid request");
+            if(signin == null || signin.Email == null || signin.Password == null) return BadRequest("Check your password or email");
             
-            var cs = await context.Customers.FirstOrDefaultAsync(x =>
-                    x.Email.Equals(signin.Email.ToLower())
-                );
+            var cs = await customers.SignIn(signin);
 
-             if(cs != null) {
-                using var hmac = new HMACSHA512(cs.PasswordSalt);
+             if(cs != null) return Ok(mapper.Map<CustomerDto>(cs));
+        
+             var mb = await members.SignIn(signin);
 
-                var pwdHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signin.Password));
-
-                for (int i = 0; i < pwdHash.Length; i++)
-                {
-                    if (pwdHash[i] != cs.PasswordHash[i])
-                        return Unauthorized("Invalid Password");
-                }
-
-                return Ok(new AuthResponseDto { Token = tokenService.CreateToken(cs) });
-             }
-             
-             var mb = await context.Members.FirstOrDefaultAsync(x =>
-                    x.Email.Equals(signin.Email.ToLower())
-                );
-
-            if (mb != null)
-            {
-                using var hmac = new HMACSHA512(mb.PasswordSalt);
-
-                var pwdHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signin.Password));
-
-                for (int i = 0; i < pwdHash.Length; i++)
-                {
-                    if (pwdHash[i] != mb.PasswordHash[i])
-                        return Unauthorized("Invalid Password");
-                }
-
-                return Ok(new AuthResponseDto { Token = tokenService.CreateToken(mb) });
-                
-            }
+            if (mb != null) return Ok(mapper.Map<MemberDto>(mb));
             
             return Unauthorized("User not found");
 

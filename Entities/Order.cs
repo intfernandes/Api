@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Api.Entities.Users;
+
 
 namespace Api.Entities
 {     
@@ -18,9 +18,8 @@ namespace Api.Entities
 
         #region Relationships
         [Required]
-        // Replaced CustomerId, Customer with generic IUser OrderPlacer:
-        public required Guid CustomerId { get; set; } // Renamed from CustomerId to OrderPlacerId - FK to IUser who placed the order
-        public virtual IUser Customer { get; set; } = null!; // Renamed from Customer to OrderPlacer - Navigation to IUser who placed the order
+        public required Guid CustomerId { get; set; } 
+        public virtual IUser Customer { get; set; } = null!; 
 
         [Required]
         public required Guid MemberId { get; set; }

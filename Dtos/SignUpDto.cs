@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Api.Dtos;
 using Api.Entities;
 
 public class SignUpDto
@@ -20,15 +21,12 @@ public class SignUpDto
         public string? RefreshToken { get; set;} = string.Empty;
         public DateOnly? DateOfBirth { get; set; } 
         [JsonConverter(typeof(JsonStringEnumConverter<AccountType>))]
-        public AccountType? Type { get; set; } = AccountType.Customer;
+        public AccountType? AccountType { get; set; }
         [JsonConverter(typeof(JsonStringEnumConverter<Gender>))]
         public Gender Gender { get; set; } = Gender.Unknown;
-        public List<Photo> Photos { get; set; } = [];
-        public Guid? HighlightPhotoId { get; set; }
-        public virtual Photo? HighlightPhoto { get; set; }
-        public Guid? AddressId { get; set; } // Foreign Key for optional Address - still nullable for Users
-        public virtual Address? Address { get; set; } // One-to-zero-or-one: IUser can have one Address (optional)
-        public ICollection<Order> Orders { get; set; } = []; // Orders placed by this User (Customer or potentially Member as Customer)
-        public ICollection<Account> Accounts { get; set; } = []; // One-to-many: One IUser can have multiple Accounts (profile accounts)
+        public List<PhotoDto> Photos { get; set; } = []; 
+        public virtual AddressDto ? Address { get; set; } // One-to-zero-or-one: IUser can have one Address (optional)
+        public ICollection<OrderDto > Orders { get; set; } = []; // Orders placed by this User (Customer or potentially Member as Customer)
+        public ICollection<AccountDto > Accounts { get; set; } = []; // One-to-many: One IUser can have multiple Accounts (profile accounts)
         public Guid CurrentAccount { get; set; } // Tracks the currently active Account for the IUser
 } 

@@ -16,7 +16,7 @@ namespace Api.Entities
         #region Relationships
         public Guid? DomainId { get; set; }
         public virtual Domain? Domain { get; set; } = null!; // One-to-many: Product belongs to one Domain
-        public virtual ICollection<Category> Categories { get; set; } = []; // Many-to-many: Product has many Categories
+        public virtual ICollection<Category> Categories { get; set; } = []; 
 
         #endregion
     }

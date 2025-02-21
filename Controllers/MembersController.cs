@@ -1,5 +1,6 @@
 
 using Api.Dtos;
+using Api.Entities;
 using Api.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +16,9 @@ public class MembersController(IMembersRepository members, IMapper mapper) : V1C
     public async Task<ActionResult<IEnumerable<MemberDto>>> Get() {
         var result = await members.Get(); 
 
-        return Ok(result);
+        var membersDtos = mapper.Map<IEnumerable<MemberDto>>(result);
+
+        return Ok(membersDtos);
     }
 
     [HttpGet("{Id:Guid}")] // GET: api/v1/members/{id}
@@ -29,7 +32,7 @@ public class MembersController(IMembersRepository members, IMapper mapper) : V1C
         return Ok(memberDto);
     }
 
-        [HttpGet("name/{input:alpha}")] // GET: api/v1/members/name/{input}
+    [HttpGet("name/{input:alpha}")] // GET: api/v1/members/name/{input}
     public async Task<ActionResult<MemberDto>> GetByUsername(string input) {
         var result = await members.GetByName(input);
 
@@ -74,24 +77,46 @@ public class MembersController(IMembersRepository members, IMapper mapper) : V1C
         if(member?.Email?.Length > 0) existingUser.Email = member.Email;
         if(member?.PhoneNumber?.Length > 0) existingUser.PhoneNumber = member.PhoneNumber;
         if(member?.DateOfBirth != null ) existingUser.DateOfBirth = member.DateOfBirth;
-        if(member?.Gender != null) existingUser.Gender = member.Gender;
-        if(member?.Address != null ) existingUser.Address = member.Address;
+        if(member?.Gender != null) existingUser.Gender = member.Gender.GetValueOrDefault();
+
+             if(member?.Address != null ) {
+                if (existingUser.Address == null) existingUser.Address = new Address();
+                
+                var address = new Address {
+                    Street = member.Address?.Street ?? existingUser.Address.Street,
+                    City = member.Address?.City ?? existingUser.Address.City,
+                    State = member.Address?.State ?? existingUser.Address.State,
+                    Country = member.Address?.Country ?? existingUser.Address.Country,
+                    ZipCode = member.Address?.ZipCode ?? existingUser.Address.ZipCode,
+                };
+                
+                existingUser.Address = address;
+                }
 
         await members.Save();
 
         var memberDto = mapper.Map<MemberDto>(existingUser);
-
-
-  return Ok(memberDto);
+        
+        return Ok(memberDto);
     }
 
 
     [HttpDelete("{id:Guid}")] // DELETE: api/v1/Members/{id}
     public async Task<ActionResult> Delete(Guid Id) {
-        var user = await members.Delete(Id);
+        try
+        {
+            
+        await members.Delete(Id);
+        return Ok(new { message = "Member deleted successfully" });
 
-   
-        return Ok(new Dictionary<string, string>()
-             {{"status","success"}});
+        }
+        catch (Exception ex)
+        {
+            
+           return BadRequest(new { message = ex.Message });
+
+        }
+
+
 } 
 } }
