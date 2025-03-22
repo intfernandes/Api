@@ -20,12 +20,6 @@ namespace Api.Helpers
 
             CreateMap<Category, CategoryDto>();
             
-            CreateMap<Domain, DomainDto>()
-                .ForMember(d => d.Members, o => o.MapFrom(s => s.Members.Count))
-                .ForMember(d => d.Products, o => o.MapFrom(s => s.Products.Count))
-                .ForMember(d => d.Orders, o => o.MapFrom(s => s.Orders.Count))
-                .ForMember(d => d.AddressDto, o => o.MapFrom(s => s.Address!.Street + ", " + s.Address.City + ", " + s.Address.State + ", " + s.Address.ZipCode));
-
             CreateMap<Customer, CustomerDto>()
                .ForMember(d => d.Age, o => o.MapFrom(s => s.DateOfBirth.HasValue ? s.DateOfBirth.Value.CalculateAge() : (int?)null) )
                .ForMember(d => d.Address , o => o.MapFrom(s => s.Address))
@@ -45,8 +39,7 @@ namespace Api.Helpers
                .ForMember(d => d.Conversations, o => o.MapFrom(s => s.Conversations))
                .ForMember(d => d.Messages, o => o.MapFrom(s => s.Messages))
                .ForMember(d => d.Notifications, o => o.MapFrom(s => s.Notifications))
-               .ForMember(d => d.CurrentAccount, o => o.MapFrom(s => s.CurrentAccount))
-               ;
+               .ForMember(d => d.CurrentAccount, o => o.MapFrom(s => s.CurrentAccount));
 
             CreateMap<Member, MemberDto>()
                 .ForMember(d => d.Age, o => o.MapFrom(s => s.DateOfBirth.HasValue ? s.DateOfBirth.Value.CalculateAge() : (int?)null) );
@@ -62,7 +55,16 @@ namespace Api.Helpers
                 .ForMember(d => d.Price, o => o.MapFrom(s => s.Price))
                 .ForMember(d => d.Quantity, o => o.MapFrom(s => s.Quantity));
 
-            
+           CreateMap<Domain, DomainDto>()
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Members, opt => opt.MapFrom(src => src.Members))
+                .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products))
+                .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders))
+                .ForMember(dest => dest.AddressDto, opt => opt.MapFrom(src => src.Address))
+                .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Photos));
+
         }
         
     }

@@ -7,14 +7,12 @@ namespace Api.Interfaces
 {
     public interface IMembersRepository
     {
-        Task<Member?> Create(SignUpDto user);
-        Task<Member?> SignIn(SignInDto signIn);
+        Task<Member?> Create(SignUpDto dto);
+        Task<Member?> SignIn(SignInDto dto);
         Task<IEnumerable<Member>> Get();
+        Task<IEnumerable<Member>?> Search(string input);
         Task<Member?> GetById(Guid id);
-        Task<Member?> GetByName(string username);
-        Task<Member?> GetByEmail(string email);
-        Task<Member?> GetByPhoneNumber(string phoneNumber);
-        Task<Member?> Update(MemberDto user);
+        Task<Member?> Update(MemberDto dto);
         Task<bool> Delete(Guid id);  
         Task<bool> Save();   
     }

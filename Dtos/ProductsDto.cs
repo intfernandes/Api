@@ -1,7 +1,9 @@
 
+using Api.Entities;
+
 namespace Api.Dtos
 {
-public class ProductDto
+public class ProductDto : BaseEntity
 {
     public int ProductId { get; set; } 
     public required string Name { get; set; }

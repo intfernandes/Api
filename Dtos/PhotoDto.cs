@@ -1,11 +1,11 @@
 
 using System.ComponentModel.DataAnnotations;
+using Api.Entities;
 
 namespace Api.Dtos
 {
-    public class PhotoDto
+    public class PhotoDto : BaseEntity
     {
-    public Guid Id { get; set; }
     [Required]
     [MaxLength(2048)]
     public string ImageUrl { get; set; } = null!;

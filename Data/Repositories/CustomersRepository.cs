@@ -3,8 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Api.Dtos;
 using Api.Entities;
-using Api.Interfaces;
-using AutoMapper; 
+using Api.Interfaces; 
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Data.Repositories
@@ -105,41 +104,53 @@ namespace Api.Data.Repositories
             return users;
         }
 
-        public async  Task<Customer?> GetByName(string username)
+        public async Task<IEnumerable<Customer>?> Search(string input)
         {
-                   var users = await context.Customers
+           var users = new List<Customer>();
+
+            users.AddRange( await GetByName(input));
+            users.AddRange( await GetByEmail(input));
+            users.AddRange( await GetByPhoneNumber(input));
+       
+            return users;
+        }
+
+        public async  Task<IEnumerable<Customer>> GetByName(string username)
+        {
+            var users = await context.Customers
             .Include(x => x.Photos)
             .Include(x => x.Accounts)
             .Include(x => x.Address)
             .Include(x => x.Orders)
-            .Where(x => x.IsDeleted == false)
-            .FirstOrDefaultAsync(x => x.FirstName == username);
+            .Where(x => x.IsDeleted == false
+            || x.FirstName.Contains(username) || (x.LastName != null && x.LastName.Contains(username))
+            ).ToListAsync(); 
 
             return users;
         }
 
-        public async  Task<Customer?> GetByEmail(string email)
+        public async  Task<IEnumerable<Customer>> GetByEmail(string email)
         {
-                  var users = await context.Customers
+            var users = await context.Customers
             .Include(x => x.Photos)
             .Include(x => x.Accounts)
             .Include(x => x.Address)
             .Include(x => x.Orders)
-            .Where(x => x.IsDeleted == false)
-            .FirstOrDefaultAsync(x => x.Email == email);
+            .Where(x => x.IsDeleted == false &&  x.Email == email )
+            .ToListAsync();
 
             return users;
         }
 
-        public async  Task<Customer?> GetByPhoneNumber(string phoneNumber)
+        public async  Task<IEnumerable<Customer>> GetByPhoneNumber(string phoneNumber)
         {
-                  var users = await context.Customers
+            var users = await context.Customers
             .Include(x => x.Photos)
             .Include(x => x.Accounts)
             .Include(x => x.Address)
             .Include(x => x.Orders)
-            .Where(x => x.IsDeleted == false)
-            .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            .Where(x => x.IsDeleted == false &&  x.PhoneNumber == phoneNumber )
+            .ToListAsync();
 
             return users;
         }
@@ -148,7 +159,7 @@ namespace Api.Data.Repositories
 
                 #region Update
 
-        public async Task<Customer> Update(CustomerDto user)
+        public async Task<Customer?> Update(CustomerDto user)
         {
             var cs = await context.Customers
                 .Include(x => x.Photos)

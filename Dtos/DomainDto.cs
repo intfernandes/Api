@@ -1,16 +1,21 @@
 
 using System.ComponentModel.DataAnnotations;
+using Api.Entities;
 
 namespace Api.Dtos
 {
-   public class DomainDto
+   public class DomainDto : BaseEntity
 {
-    public int Id { get; set; }
+    
     [Required]
     [MaxLength(255)]
     public string Name { get; set; } = null!;
     [MaxLength(500)]
     public string? Description { get; set; }
+    [Required]
+    [EmailAddress]
+    [MaxLength(255)]
+    public required string Email { get; set; } = string.Empty;
     public virtual ICollection<UserDto>? Members { get; set; } = [];
     public virtual ICollection<ProductDto>? Products { get; set; } = [];
     public virtual ICollection<OrderDto>? Orders { get; set; } = [];

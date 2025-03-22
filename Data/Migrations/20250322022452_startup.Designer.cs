@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250221032912_Initial")]
-    partial class Initial
+    [Migration("20250322022452_startup")]
+    partial class startup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,7 @@ namespace Api.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.PrimitiveCollection<string>("Permissions")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
@@ -193,6 +194,7 @@ namespace Api.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
 

@@ -29,9 +29,11 @@ namespace Api.Controllers
                 return Ok(customerDto);
             }
 
-            [HttpGet("name/{input:alpha}")] // GET: api/v1/customers/name/{input}
-            public async Task<ActionResult<CustomerDto>> GetByName(string input) {
-                var result = await customers.GetByName(input);
+         
+
+            [HttpGet("/search={input:alpha}")] // GET: api/v1/customers/search={input}
+            public async Task<ActionResult<CustomerDto>> Search(string input) {
+                var result = await customers.Search(input);
 
                 if(result == null) return NotFound();
                 
@@ -40,28 +42,7 @@ namespace Api.Controllers
                 return Ok(customerDto);
             }
 
-            [HttpGet("email/{input}")] // GET: api/v1/customers/email/{input}
-            public async Task<ActionResult<CustomerDto>> GetByEmail(string input) {
-                var result = await customers.GetByEmail(input);
-
-                if(result == null) return NotFound();
-                
-                var customerDto = mapper.Map<CustomerDto>(result);
-
-                return Ok(customerDto);
-            }
-
-            [HttpGet("phone/{input}")] // GET: api/v1/customers/phone/{input}
-            public async Task<ActionResult<CustomerDto>> GetByPhoneNumber(string input) {
-                var result = await customers.GetByPhoneNumber(input);
-
-                if(result == null) return NotFound();
-                
-                var customerDto = mapper.Map<CustomerDto>(result);
-
-                return Ok(customerDto);
-            }
-    
+        
       
             [HttpPut("{id:int}")]
             public async Task<ActionResult<Customer>> Update(int Id, Customer customer) {

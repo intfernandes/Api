@@ -1,78 +1,77 @@
-
-using Api.Data;
+using Api.Dtos;
 using Api.Entities;
+using Api.Interfaces;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
-
-    public class AccountsController( DataContext context )  : V1Controller
+    [Authorize]
+    public class AccountsController( IAccountsRepository accounts, IMapper mapper)  : V1Controller
     {
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts() {
-                     var accounts = await context.Accounts.ToListAsync();
-    
-                return Ok(accounts);
+        [HttpGet] // GET: api/v1/accounts
+        public async Task<ActionResult<IEnumerable<AccountDto>>> Get() {
+            var result = await accounts.Get(); 
+
+            var accountsDtos = mapper.Map<IEnumerable<AccountDto>>(result);
+
+            return Ok(accountsDtos);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<Account>> GetAccount(int Id) {
-            var account = await context.Accounts.FindAsync(Id);
+        [HttpGet("{Id:Guid}")] // GET: api/v1/accounts/{id}
+        public async Task<ActionResult<AccountDto>> GetById(Guid Id) {
+            var result = await accounts.GetById(Id);
 
-            if(account == null) {
-                return NotFound();
-            }
-
-            return Ok(account);
-        }
-
-        [HttpPost] 
-        public async Task<ActionResult> CreateAccount(Account account) {
-            if (account == null) return BadRequest("Account is required");
-
-            var existingAccount = await context.Accounts.SingleOrDefaultAsync(x => x.Id == account.Id);
-
-             if (existingAccount != null) {
-
-           return Ok(existingAccount);
-             
-             } else {
-   context.Accounts.Add(account);
-            await context.SaveChangesAsync();
-            return Ok(account);
-             }
-
-
-         
-        }
-
-        [HttpPut("{id:int}")] 
-        public async Task<ActionResult<Account>> UpdateAccount( Account account) {
-            var existingAccount = await context.Accounts.SingleOrDefaultAsync(x => x.Id == account.Id);
-
-            if(existingAccount == null) return NotFound();
+            if(result == null) return NotFound();
             
-     
-            if(account?.Permissions != null ) existingAccount.Permissions = account.Permissions;
-            if(account?.AccountType != null) existingAccount.AccountType = account.AccountType;
-            if(account?.AccountStatus != null) existingAccount.AccountStatus = account.AccountStatus;
+            var accountDto = mapper.Map<AccountDto>(result);
 
-            await context.SaveChangesAsync();
-
-            return Ok(existingAccount);
+            return Ok(accountDto);
         }
 
-        [HttpDelete("{id:int}")] 
-        public async Task<ActionResult> DeleteAccount(Guid id) {
-            var existingAccount = await context.Accounts.Where(x => x.Id == id ).ToListAsync();
-            if(existingAccount == null) {
-                return NotFound();
-            }
-            context.Accounts.RemoveRange(existingAccount);
+        [HttpGet("/search={input:alpha}")] // GET: api/v1/accounts/search={input}
+        public async Task<ActionResult<AccountDto>> Search(string input) {
+            var result = await accounts.Search(input);
 
-            await context.SaveChangesAsync();
-            return Ok();
+            if(result == null) return NotFound();
+            
+            var accountDto = mapper.Map<AccountDto>(result);
+
+            return Ok(accountDto);
+        }
+
+        [HttpPut("{id:Guid}")] // PUT: api/v1/accounts/{id}
+        [ProducesResponseType(typeof(AccountDto), 200)]
+        public async Task<ActionResult<AccountDto>> Update(AccountDto account) {
+            var existingUser = await accounts.GetById(account.Id);
+
+            if(existingUser == null) return NotFound();
+            
+            if(account?.AccountType != null) existingUser.AccountType = account.AccountType ?? AccountType.Customer;
+            if(account?.AccountStatus != null) existingUser.AccountStatus = account.AccountStatus ?? AccountStatus.Pending ;
+            if(account?.Permissions != null) existingUser.Permissions = account.Permissions;
+       
+            return Ok(existingUser);
+        }
+
+        [HttpPost] // POST: api/v1/accounts
+        [ProducesResponseType(typeof(AccountDto), 201)]
+        public async Task<ActionResult<AccountDto>> Create(AccountDto account) {
+            var result = await accounts.Create(account);
+
+            if(result == null) return BadRequest();
+
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        }
+
+        [HttpDelete("{id:Guid}")] // DELETE: api/v1/accounts/{id}
+        public async Task<ActionResult> Delete(Guid id) {
+            var result = await accounts.Delete(id);
+
+            if(result) return NoContent();
+
+            return NotFound();
         }
     }
 }

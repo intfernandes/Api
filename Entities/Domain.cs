@@ -17,7 +17,7 @@ namespace Api.Entities
         [Required]
         public byte[] PasswordSalt { get; set; } = [];
         [MaxLength(500)]
-        public string? Description { get; set; }
+        public string Description { get; set; } = String.Empty;
 
         #region Relationships
 

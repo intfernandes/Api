@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Api.Dtos;
 using Api.Entities;
 
-public class SignUpDto
+public class SignUpDto : BaseEntity
 {
         [Required]
         [MaxLength(255)]

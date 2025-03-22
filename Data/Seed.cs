@@ -247,7 +247,7 @@ namespace Api.Data
 
                             continue;
                         }
-                        if(i >= 20 && i < 30){
+                        if(i >= 20 && i < 30) {
                             var product = products[i-20];
                             var photo =    new Photo { Id = GuidGenerator.GenerateSequentialGuid(), Highlight = true, ProductId = products[i-20].Id, ImageUrl = $"https://randomuser.me/api/portraits/men/{i}.jpg", Description = $"Product Photo for Product {products[i-20].Id}" };
                             context.Photos.Add(photo); 

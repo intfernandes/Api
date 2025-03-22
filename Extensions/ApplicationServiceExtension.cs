@@ -2,6 +2,7 @@
 using Api.Data;
 using Api.Data.Repositories;
 using Api.Interfaces;
+using Api.Repositories;
 using Api.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,10 +33,17 @@ namespace Api.Extensions
                 
                 services.AddCors();
                 
+
+                services.AddScoped<IAccountsRepository, AccountsRepository>(); 
+                services.AddScoped<IAddressRepository, AddressRepository>();
+                services.AddScoped<ICategoriesRepository, CategoryRepository>();
+                services.AddScoped<ICustomersRepository, CustomersRepository>();
+                services.AddScoped<IDomainsRepository, DomainsRepository>();
+                services.AddScoped<IMembersRepository, MembersRepository>(); 
+                services.AddScoped<IOrdersRepository, OrdersRepository>();
+                services.AddScoped<IPhotosRepository, PhotoRepository>();
+                services.AddScoped<IProductsRepository, ProductRepository>();
                 services.AddScoped<ITokenService, TokenService>();
-                services.AddScoped<IMembersRepository, MembersRepository>(); 
-                services.AddScoped<ICustomersRepository, CustomersRepository>(); 
-                services.AddScoped<IMembersRepository, MembersRepository>(); 
                 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
                 
                 return services;

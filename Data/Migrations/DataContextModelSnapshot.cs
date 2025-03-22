@@ -44,6 +44,7 @@ namespace Api.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.PrimitiveCollection<string>("Permissions")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
@@ -190,6 +191,7 @@ namespace Api.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
 

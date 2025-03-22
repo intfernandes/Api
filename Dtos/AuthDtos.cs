@@ -7,7 +7,7 @@ namespace Api.Dtos
 
     // DTOs for Authentication
 
-    public class SignUpDto
+    public class SignUpDto : BaseEntity
 {
     [Required]
     [MaxLength(255)]
@@ -24,7 +24,7 @@ namespace Api.Dtos
     public string ConfirmPassword { get; set; } = null!;
 }
 
-public class SignInDto
+public class SignInDto : BaseEntity
 {
     [Required]
     [MaxLength(255)]
@@ -38,13 +38,13 @@ public class SignInDto
     public AccountType AccountType { get; set; } 
 }
 
-public class SignOutDto
+public class SignOutDto : BaseEntity
 { 
     public string? Token { get; set; } 
 }
 
 
-public class AuthResponseDto
+public class AuthResponseDto : BaseEntity
 {
     public string? Token { get; set; } = null!; 
     public string? RefreshToken { get; set; } 

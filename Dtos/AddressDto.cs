@@ -1,9 +1,10 @@
 
 using System.ComponentModel.DataAnnotations;
+using Api.Entities;
 
 namespace Api.Dtos
 {
-   public class AddressDto
+   public class AddressDto : BaseEntity
 {
     [MaxLength(255)]
     public string? Street { get; set; }

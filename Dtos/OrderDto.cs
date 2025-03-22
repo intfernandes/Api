@@ -5,10 +5,9 @@ using Api.Entities;
 
 namespace Api.Dtos
 {
-  public class OrderDto
+  public class OrderDto : BaseEntity
 {
-    [Required]
-    public Guid Id { get; set; } 
+
     [Required]
     public Guid CustomerId { get; set; } 
     [Required]
@@ -28,9 +27,8 @@ namespace Api.Dtos
 
 }
 
-public class OrderItemDto
+public class OrderItemDto : BaseEntity
 {
-    public Guid Id { get; set; }
     public Guid OrderId { get; set; }
 
     public Guid ProductId { get; set; }

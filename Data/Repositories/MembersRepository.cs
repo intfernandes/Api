@@ -105,24 +105,34 @@ namespace Api.Data.Repositories
             return mb;
         }
 
-        public async Task<Member?> GetByEmail(string email)
+        public async Task<IEnumerable<Member>?> Search(string input)
+        {
+          var members = new List<Member>();
+
+            if(input == null) throw new ArgumentNullException(nameof(input));
+
+            members.AddRange(await GetByEmail(input));
+            members.AddRange(await GetByPhoneNumber(input));
+            members.AddRange(await GetByName(input));
+
+            return members;
+        }
+
+        public async Task<IEnumerable<Member>> GetByEmail(string email)
         {
             var mb = await context.Members
             .Include(x => x.Photos)
             .Include(x => x.Accounts)
             .Include(x => x.Address)
             .Include(x => x.Orders)
-            
-            .Where(x => x.IsDeleted == false)
-            .FirstOrDefaultAsync(x => 
-                    x.Email.Equals(email.ToLower())
-                ) ?? throw new Exception("User not found");
+            .Where(x => x.IsDeleted == false && x.Email.Equals(email.ToLower()  ))
+            .ToListAsync() ;
 
             return mb;
                 
         }
 
-        public async Task<Member?> GetByPhoneNumber(string phoneNumber)
+        public async Task<IEnumerable<Member>> GetByPhoneNumber(string phoneNumber)
         {
             if (phoneNumber == null) throw new ArgumentNullException(nameof(phoneNumber));
 
@@ -131,27 +141,21 @@ namespace Api.Data.Repositories
                 .Include(x => x.Accounts)
                 .Include(x => x.Address)
                 .Include(x => x.Orders)
-                
-                .Where(x => x.IsDeleted == false)
-                .FirstOrDefaultAsync(x => 
-                    x.PhoneNumber != null && x.PhoneNumber.Equals(phoneNumber)
-                ) ?? throw new Exception("User not found");
+                .Where(x => x.IsDeleted == false && x.PhoneNumber != null && x.PhoneNumber.Equals(phoneNumber)  )
+                .ToListAsync() ;
 
             return mb;
         }
 
-        public async Task<Member?> GetByName(string username)
+        public async Task<IEnumerable<Member>> GetByName(string username)
         {
             var mb = await context.Members
             .Include(x => x.Photos)
             .Include(x => x.Accounts)
             .Include(x => x.Address)
             .Include(x => x.Orders)
-            
-            .FirstOrDefaultAsync(x =>
-                x.IsDeleted == false &&
-                username.Contains(x.FirstName)  || username.Contains(x.LastName ?? "")
-                ) ?? throw new Exception("User not found");
+            .Where(x => x.IsDeleted != false && username.Contains(x.FirstName)  || username.Contains(x.LastName ?? ""))
+            .ToListAsync();
                 
             return mb;
 

@@ -7,7 +7,7 @@ namespace Api.Entities
     public class Account : AuditableBaseEntity
     {
         [MaxLength(20)]
-        public List<string>? Permissions { get; set; }
+        public List<string> Permissions { get; set; } = new List<string>();
         [Column(TypeName = "nvarchar(24)")]
         public AccountType AccountType { get; set; }
         [Column(TypeName = "nvarchar(24)")]

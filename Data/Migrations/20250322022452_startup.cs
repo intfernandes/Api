@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Api.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class startup : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -65,7 +65,7 @@ namespace Api.Data.Migrations
                     Email = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
                     PasswordHash = table.Column<byte[]>(type: "BLOB", nullable: false),
                     PasswordSalt = table.Column<byte[]>(type: "BLOB", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
+                    Description = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
                     AddressId = table.Column<Guid>(type: "TEXT", nullable: false),
                     AccountId = table.Column<Guid>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -181,7 +181,7 @@ namespace Api.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Permissions = table.Column<string>(type: "TEXT", maxLength: 20, nullable: true),
+                    Permissions = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     AccountType = table.Column<string>(type: "nvarchar(24)", nullable: false),
                     AccountStatus = table.Column<string>(type: "nvarchar(24)", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: true),

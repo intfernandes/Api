@@ -32,9 +32,9 @@ public class MembersController(IMembersRepository members, IMapper mapper) : V1C
         return Ok(memberDto);
     }
 
-    [HttpGet("name/{input:alpha}")] // GET: api/v1/members/name/{input}
-    public async Task<ActionResult<MemberDto>> GetByUsername(string input) {
-        var result = await members.GetByName(input);
+    [HttpGet("/search={input:alpha}")] // GET: api/v1/members/search={input}
+    public async Task<ActionResult<MemberDto>> Search(string input) {
+        var result = await members.Search(input);
 
         if(result == null) return NotFound();
         
@@ -43,28 +43,7 @@ public class MembersController(IMembersRepository members, IMapper mapper) : V1C
         return Ok(memberDto);
     }
 
-    [HttpGet("email/{input}")] // GET: api/v1/members/email/{input}
-    public async Task<ActionResult<MemberDto>> GetByEmail(string input) {
-        var result = await members.GetByEmail(input);
-
-        if(result == null) return NotFound();
-        
-        var memberDto = mapper.Map<MemberDto>(result);
-
-        return Ok(memberDto);
-    }
-
-    [HttpGet("phone/{input}")] // GET: api/v1/members/phone/{input}
-    public async Task<ActionResult<MemberDto>> GetByPhoneNumber(string input) {
-        var result = await members.GetByPhoneNumber(input);
-
-        if(result == null) return NotFound();
-        
-        var memberDto = mapper.Map<MemberDto>(result);
-
-        return Ok(memberDto);
-    }
-
+  
     [HttpPut("{id:Guid}")] // PUT: api/v1/members/{id}
     [ProducesResponseType(typeof(MemberDto), 200)]
     public async Task<ActionResult<MemberDto>> Update(MemberDto member) {

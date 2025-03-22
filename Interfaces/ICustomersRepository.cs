@@ -7,14 +7,12 @@ namespace Api.Interfaces
 {
     public interface ICustomersRepository
     {
-        Task<Customer?> Create(SignUpDto user);
-        Task<Customer?> SignIn(SignInDto signIn);
+        Task<Customer?> Create(SignUpDto dto);
+        Task<Customer?> SignIn(SignInDto dto);
         Task<IEnumerable<Customer>> Get();
+        Task<IEnumerable<Customer>?> Search(string input);
         Task<Customer?> GetById(Guid id);
-        Task<Customer?> GetByName(string username);
-        Task<Customer?> GetByEmail(string email);
-        Task<Customer?> GetByPhoneNumber(string phoneNumber);
-        Task<Customer?> Update(CustomerDto user);
+        Task<Customer?> Update(CustomerDto dto);
         Task<bool> Delete(Guid id);  
         Task<bool> Save(); 
     }

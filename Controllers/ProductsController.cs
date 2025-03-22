@@ -1,68 +1,78 @@
 using Microsoft.AspNetCore.Mvc;
-using Api.Data;
-using Api.Entities;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Api.Interfaces;
+using AutoMapper;
+using Api.Dtos;
 
 namespace Api.Controllers
 {
-
-    public class ProductsController(DataContext context) : V1Controller
+    [Authorize]
+    public class ProductsController(IProductsRepository products, IMapper mapper) : V1Controller
     {
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts() {
-            var products = await context.Products.ToListAsync();
+        [HttpGet] // GET: api/v1/products
+        public async Task<ActionResult<IEnumerable<ProductDto>>> Get() {
+            var result = await products.Get(); 
 
-            return Ok(products);
+            var productsDtos = mapper.Map<IEnumerable<ProductDto>>(result);
+
+            return Ok(productsDtos);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<Product>> GetProduct(int Id) {
-            var product = await context.Products.FindAsync(Id);
+        [HttpGet("{Id:Guid}")] // GET: api/v1/products/{id}
+        public async Task<ActionResult<ProductDto>> GetById(Guid Id) {
+            var result = await products.GetById(Id);
 
-            if(product == null) {
-                return NotFound();
-            }
-
-            return Ok(product);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct(Product product) {
-            if(product.Name == null) return BadRequest("Name is required");
-            if(product.Price == 0) return BadRequest("Price is required");
-            context.Products.Add(product);
-            await context.SaveChangesAsync();
-            return Ok(product);
-        }
-
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult<Product>> UpdateProduct(int Id, Product product) {
-            var existingProduct = await context.Products.FindAsync(Id);
-
-            if(existingProduct == null) {
-                return NotFound();
-            }
-
-            if(product.Name.Length > 0) existingProduct.Name = product.Name;
-            if(product.Price > 0) existingProduct.Price = product.Price;
+            if(result == null) return NotFound();
             
-            await context.SaveChangesAsync();
+            var productDto = mapper.Map<ProductDto>(result);
 
-            return Ok(existingProduct);
+            return Ok(productDto);
         }
 
-        [HttpDelete("{id:int}")]
-        public async Task<ActionResult<Product>> DeleteProduct(int Id) {
-            var product = await context.Products.FindAsync(Id);
+        [HttpGet("/search={input:alpha}")] // GET: api/v1/products/search={input}
+        public async Task<ActionResult<ProductDto>> Search(string input) {
+            var result = await products.Search(input);
 
-            if(product == null) {
-                return NotFound();
-            }
+            if(result == null) return NotFound();
+            
+            var productDto = mapper.Map<ProductDto>(result);
 
-            context.Products.Remove(product);
-            await context.SaveChangesAsync();
+            return Ok(productDto);
+        }
 
-            return Ok(product);
+        [HttpPut("{id:Guid}")] // PUT: api/v1/products/{id}
+        [ProducesResponseType(typeof(ProductDto), 200)]
+        public async Task<ActionResult<ProductDto>> Update(ProductDto product) {
+            var existingUser = await products.GetById(product.Id);
+
+            if(existingUser == null) return NotFound();
+
+            if(product?.Name ?.Length > 0) existingUser.Name = product.Name;
+            if(product?.Description?.Length > 0) existingUser.Description = product.Description;
+            if(product?.Price != null) existingUser.Price = product.Price;
+       
+
+            return Ok(existingUser);
+        }
+
+        [HttpPost] // POST: api/v1/products
+        [ProducesResponseType(typeof(ProductDto), 201)]
+        public async Task<ActionResult<ProductDto>> Create(ProductDto product) {
+            var result = await products.Create(product);
+
+            if(result == null) return BadRequest();
+
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        }
+
+        [HttpDelete("{id:Guid}")] // DELETE: api/v1/products/{id}
+        public async Task<ActionResult> Delete(Guid id) {
+            var result = await products.Delete(id);
+
+            if(result) return NoContent();
+
+            return NotFound();
         }
     }
+    
 }
