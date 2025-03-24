@@ -3,7 +3,7 @@ using Api.Labs;
 
 namespace Api.Entities
 {
-    public class Customer : IUser // Inherits from IUser (which inherits from AuditableBaseEntity)
+    public class Customer : IUser
     {
         public List<PaymentMethod> PaymentMethods { get; set; } = [];
         public List<Review> Reviews { get; set; } = [];

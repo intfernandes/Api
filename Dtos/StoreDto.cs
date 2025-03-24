@@ -4,7 +4,7 @@ using Api.Entities;
 
 namespace Api.Dtos
 {
-   public class DomainDto : BaseEntity
+   public class StoreDto : BaseEntity
 {
     
     [Required]
@@ -16,7 +16,7 @@ namespace Api.Dtos
     [EmailAddress]
     [MaxLength(255)]
     public required string Email { get; set; } = string.Empty;
-    public virtual ICollection<UserDto>? Members { get; set; } = [];
+    public virtual ICollection<UserDto>? Employees { get; set; } = [];
     public virtual ICollection<ProductDto>? Products { get; set; } = [];
     public virtual ICollection<OrderDto>? Orders { get; set; } = [];
     public virtual AddressDto? AddressDto { get; set; }

@@ -9,21 +9,43 @@ namespace Api.Data.Repositories
     {
         public async Task<Account?> Create(AccountDto dto)
         {
-            var account = new Account
-            {
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
 
-                Id = Guid.NewGuid(),
-                UserId = dto.UserId,
-                DomainId = dto.DomainId,
-                AccountType = dto.AccountType ?? AccountType.Customer ,
-                AccountStatus = dto.AccountStatus ?? AccountStatus.Pending ,
-                Permissions = dto.Permissions,
+            if (dto.AccountStatus == null || dto.AccountType == null) throw new ArgumentNullException();
 
-            };
+Account account;
 
-            await context.Accounts.AddAsync(account);
-            await Save();
-            return account;
+            if(dto.AccountType != AccountType.Customer) {
+                 account = new Account
+                    {
+                        Id = Guid.NewGuid(),
+                        CustomerId = dto.UserId, 
+                        AccountType = dto.AccountType ?? AccountType.Customer ,
+                        AccountStatus = dto.AccountStatus ?? AccountStatus.Pending ,
+                        Permissions = dto.Permissions,
+
+                    };
+                    await context.Accounts.AddAsync(account);
+                    await Save();
+                    return account;
+            } 
+
+
+            if (dto.StoreId == null) throw new ArgumentNullException("StoreId");
+            
+            account = new Account
+                    {
+                        Id = Guid.NewGuid(),
+                        EmployeeId = dto.UserId,
+                        StoreId = dto.StoreId,
+                        AccountType = dto.AccountType ?? AccountType.Staff,
+                        AccountStatus = dto.AccountStatus ?? AccountStatus.Pending ,
+                        Permissions = dto.Permissions,
+
+                    };
+                    await context.Accounts.AddAsync(account);
+                    await Save();
+                    return account;
         }
 
         public async Task<IEnumerable<Account>> Get()

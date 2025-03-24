@@ -5,7 +5,7 @@ namespace Api.Entities
 {
  public class AuditableBaseEntity : BaseEntity
     {
-        public Guid? LastModifiedByEntityId { get; set; } // Tracks the ID of the Entity (Domain, Member, Customer) that last updated this entity.
+        public Guid? LastModifiedByEntityId { get; set; } // Tracks the ID of the Entity (Store, Employee, Customer) that last updated this entity.
     }
 
 
@@ -28,9 +28,11 @@ namespace Api.Entities
         [Required]
         public DateTime Timestamp { get; set; }
 
-        public Guid? UserId { get; set; }
-        // Now with Navigation Property to User:
-        public virtual IUser? User { get; set; }  // Navigation Property to IUser who performed the action -  OPTIONAL relationship
+        public Guid? CustomerId { get; set; }
+        public virtual Customer? Customer { get; set; }  
+
+        public Guid? EmployeeId { get; set; }
+        public virtual Employee? Employee { get; set; }  
     }
 
 }

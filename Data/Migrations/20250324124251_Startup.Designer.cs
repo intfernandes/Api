@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250322022452_startup")]
-    partial class startup
+    [Migration("20250324124251_Startup")]
+    partial class Startup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,7 +37,10 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("DomainId")
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("EmployeeId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -51,18 +54,20 @@ namespace Api.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<Guid?>("StoreId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DomainId")
-                        .IsUnique();
+                    b.HasIndex("CustomerId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("StoreId")
+                        .IsUnique();
 
                     b.ToTable("Accounts", (string)null);
                 });
@@ -94,7 +99,10 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("DomainId")
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("EmployeeId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Floor")
@@ -122,6 +130,9 @@ namespace Api.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("StoreId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -132,9 +143,6 @@ namespace Api.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("UserId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ZipCode")
@@ -178,106 +186,7 @@ namespace Api.Data.Migrations
                     b.ToTable("Categories", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Entities.Domain", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("AddressId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("LastModifiedByEntityId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("TEXT");
-
-                    b.Property<byte[]>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("BLOB");
-
-                    b.Property<byte[]>("PasswordSalt")
-                        .IsRequired()
-                        .HasColumnType("BLOB");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId")
-                        .IsUnique();
-
-                    b.ToTable("Domains", (string)null);
-                });
-
-            modelBuilder.Entity("Api.Entities.EntityAuditLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ActionType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Changes")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("EntityId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("EntityType")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("EntityAuditLogs", (string)null);
-                });
-
-            modelBuilder.Entity("Api.Entities.IUser", b =>
+            modelBuilder.Entity("Api.Entities.Customer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -345,9 +254,86 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserType")
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId")
+                        .IsUnique();
+
+                    b.ToTable("Customers", (string)null);
+                });
+
+            modelBuilder.Entity("Api.Entities.Employee", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("AddressId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CurrentAccount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly?>("DateOfBirth")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(8)
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsStoreResponsible")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastActiveAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("LastModifiedByEntityId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(22)
+                        .HasColumnType("TEXT");
+
+                    b.PrimitiveCollection<string>("RefreshTokens")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -355,11 +341,58 @@ namespace Api.Data.Migrations
                     b.HasIndex("AddressId")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.HasIndex("StoreId");
 
-                    b.HasDiscriminator<string>("UserType").HasValue("IUser");
+                    b.ToTable("Employees", (string)null);
+                });
 
-                    b.UseTphMappingStrategy();
+            modelBuilder.Entity("Api.Entities.EntityAuditLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ActionType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Changes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("EntityId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("EntityAuditLogs", (string)null);
                 });
 
             modelBuilder.Entity("Api.Entities.Order", b =>
@@ -380,16 +413,13 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("DeliveryTerm")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("DomainId")
+                    b.Property<Guid>("EmployeeId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("LastModifiedByEntityId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("MemberId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Notes")
@@ -403,6 +433,9 @@ namespace Api.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(24)");
 
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("TEXT");
+
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("TEXT");
 
@@ -415,11 +448,11 @@ namespace Api.Data.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("DomainId");
-
-                    b.HasIndex("MemberId");
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("ShippingAddressId");
+
+                    b.HasIndex("StoreId");
 
                     b.ToTable("Orders", (string)null);
                 });
@@ -472,11 +505,14 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("DomainId")
+                    b.Property<Guid?>("EmployeeId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Highlight")
@@ -496,21 +532,23 @@ namespace Api.Data.Migrations
                     b.Property<Guid?>("ProductId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<Guid?>("StoreId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("DomainId");
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("StoreId");
 
                     b.ToTable("Photos");
                 });
@@ -528,9 +566,6 @@ namespace Api.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("DomainId")
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
@@ -545,12 +580,15 @@ namespace Api.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
 
+                    b.Property<Guid?>("StoreId")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DomainId");
+                    b.HasIndex("StoreId");
 
                     b.ToTable("Products", (string)null);
                 });
@@ -570,6 +608,61 @@ namespace Api.Data.Migrations
                     b.ToTable("ProductCategories", (string)null);
                 });
 
+            modelBuilder.Entity("Api.Entities.Store", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("LastModifiedByEntityId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId")
+                        .IsUnique();
+
+                    b.ToTable("Stores", (string)null);
+                });
+
             modelBuilder.Entity("Api.Labs.Cart", b =>
                 {
                     b.Property<Guid>("Id")
@@ -579,7 +672,7 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CustomerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")
@@ -594,14 +687,9 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Cart");
                 });
@@ -692,11 +780,14 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CustomerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("EmployeeId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -706,9 +797,6 @@ namespace Api.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ResolvedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("ResolvedById")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
@@ -726,18 +814,13 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
 
+                    b.HasIndex("EmployeeId");
+
                     b.HasIndex("OrderId");
-
-                    b.HasIndex("ResolvedById");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Complaint");
                 });
@@ -779,7 +862,7 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CustomerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("FeedbackDate")
@@ -809,14 +892,9 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Feedback");
                 });
@@ -840,14 +918,11 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CustomerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
-
-                    b.Property<Guid>("SenderId")
-                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("TEXT");
@@ -862,8 +937,6 @@ namespace Api.Data.Migrations
                     b.HasIndex("ConversationId");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("SenderId");
 
                     b.ToTable("Message");
                 });
@@ -881,7 +954,7 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CustomerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -908,14 +981,9 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Notification");
                 });
@@ -944,7 +1012,7 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CustomerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ExpirationDate")
@@ -963,14 +1031,9 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("PaymentMethod");
                 });
@@ -988,7 +1051,7 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CustomerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -1009,16 +1072,11 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Rating");
                 });
@@ -1032,7 +1090,7 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CustomerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -1066,16 +1124,11 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("OrderId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Refund");
                 });
@@ -1089,7 +1142,7 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CustomerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -1127,14 +1180,9 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Report");
                 });
@@ -1148,7 +1196,7 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CustomerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -1184,16 +1232,11 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Review");
                 });
@@ -1211,7 +1254,7 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CustomerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("EndDate")
@@ -1233,9 +1276,6 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("SubscriberId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("SubscriptionType")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -1247,8 +1287,6 @@ namespace Api.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("SubscriberId");
 
                     b.ToTable("Subscription");
                 });
@@ -1265,20 +1303,20 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("UserChat");
                 });
@@ -1295,20 +1333,20 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ConversationId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("UserConversation");
                 });
@@ -1322,7 +1360,7 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CustomerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
@@ -1331,14 +1369,9 @@ namespace Api.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Wishlist");
                 });
@@ -1388,73 +1421,73 @@ namespace Api.Data.Migrations
                     b.ToTable("WishlistItem");
                 });
 
-            modelBuilder.Entity("Api.Entities.Customer", b =>
-                {
-                    b.HasBaseType("Api.Entities.IUser");
-
-                    b.HasDiscriminator().HasValue("Customer");
-                });
-
-            modelBuilder.Entity("Api.Entities.Member", b =>
-                {
-                    b.HasBaseType("Api.Entities.IUser");
-
-                    b.Property<Guid>("DomainId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsDomainResponsible")
-                        .HasColumnType("INTEGER");
-
-                    b.HasIndex("DomainId");
-
-                    b.HasDiscriminator().HasValue("Member");
-                });
-
             modelBuilder.Entity("Api.Entities.Account", b =>
                 {
-                    b.HasOne("Api.Entities.Domain", "Domain")
-                        .WithOne("Account")
-                        .HasForeignKey("Api.Entities.Account", "DomainId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Api.Entities.IUser", "User")
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("Accounts")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Domain");
+                    b.HasOne("Api.Entities.Employee", "Employee")
+                        .WithMany("Accounts")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("User");
+                    b.HasOne("Api.Entities.Store", "Store")
+                        .WithOne("Account")
+                        .HasForeignKey("Api.Entities.Account", "StoreId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Store");
                 });
 
-            modelBuilder.Entity("Api.Entities.Domain", b =>
+            modelBuilder.Entity("Api.Entities.Customer", b =>
                 {
                     b.HasOne("Api.Entities.Address", "Address")
-                        .WithOne("Domain")
-                        .HasForeignKey("Api.Entities.Domain", "AddressId")
+                        .WithOne("Customer")
+                        .HasForeignKey("Api.Entities.Customer", "AddressId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("Api.Entities.Employee", b =>
+                {
+                    b.HasOne("Api.Entities.Address", "Address")
+                        .WithOne("Employee")
+                        .HasForeignKey("Api.Entities.Employee", "AddressId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Api.Entities.Store", "Store")
+                        .WithMany("Employees")
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("Api.Entities.EntityAuditLog", b =>
                 {
-                    b.HasOne("Api.Entities.IUser", "User")
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Api.Entities.IUser", b =>
-                {
-                    b.HasOne("Api.Entities.Address", "Address")
-                        .WithOne("User")
-                        .HasForeignKey("Api.Entities.IUser", "AddressId")
+                    b.HasOne("Api.Entities.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Address");
+                    b.Navigation("Customer");
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Api.Entities.Order", b =>
@@ -1464,21 +1497,15 @@ namespace Api.Data.Migrations
                         .HasForeignKey("BillingAddressId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Api.Entities.IUser", "Customer")
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Api.Entities.Domain", "Domain")
+                    b.HasOne("Api.Entities.Employee", "Employee")
                         .WithMany("Orders")
-                        .HasForeignKey("DomainId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Api.Entities.Member", "Member")
-                        .WithMany()
-                        .HasForeignKey("MemberId")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1487,15 +1514,21 @@ namespace Api.Data.Migrations
                         .HasForeignKey("ShippingAddressId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Api.Entities.Store", "Store")
+                        .WithMany("Orders")
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("BillingAddress");
 
                     b.Navigation("Customer");
 
-                    b.Navigation("Domain");
-
-                    b.Navigation("Member");
+                    b.Navigation("Employee");
 
                     b.Navigation("ShippingAddress");
+
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("Api.Entities.OrderItem", b =>
@@ -1524,9 +1557,14 @@ namespace Api.Data.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Api.Entities.Domain", "Domain")
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("Photos")
-                        .HasForeignKey("DomainId")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Api.Entities.Employee", "Employee")
+                        .WithMany("Photos")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Api.Entities.Product", "Product")
@@ -1534,28 +1572,30 @@ namespace Api.Data.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Api.Entities.IUser", "User")
+                    b.HasOne("Api.Entities.Store", "Store")
                         .WithMany("Photos")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("StoreId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Category");
 
-                    b.Navigation("Domain");
+                    b.Navigation("Customer");
+
+                    b.Navigation("Employee");
 
                     b.Navigation("Product");
 
-                    b.Navigation("User");
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("Api.Entities.Product", b =>
                 {
-                    b.HasOne("Api.Entities.Domain", "Domain")
+                    b.HasOne("Api.Entities.Store", "Store")
                         .WithMany("Products")
-                        .HasForeignKey("DomainId")
+                        .HasForeignKey("StoreId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Domain");
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("Api.Entities.ProductCategory", b =>
@@ -1577,19 +1617,25 @@ namespace Api.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Api.Entities.Store", b =>
+                {
+                    b.HasOne("Api.Entities.Address", "Address")
+                        .WithOne("Store")
+                        .HasForeignKey("Api.Entities.Store", "AddressId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Address");
+                });
+
             modelBuilder.Entity("Api.Labs.Cart", b =>
                 {
-                    b.HasOne("Api.Entities.Customer", null)
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("Carts")
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("Api.Entities.IUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Api.Labs.CartItem", b =>
@@ -1616,29 +1662,25 @@ namespace Api.Data.Migrations
 
             modelBuilder.Entity("Api.Labs.Complaint", b =>
                 {
-                    b.HasOne("Api.Entities.Customer", null)
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("Complaints")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Api.Entities.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
 
                     b.HasOne("Api.Entities.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId");
 
-                    b.HasOne("Api.Entities.IUser", "ResolvedBy")
-                        .WithMany()
-                        .HasForeignKey("ResolvedById");
-
-                    b.HasOne("Api.Entities.IUser", "Customer")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Customer");
 
-                    b.Navigation("Order");
+                    b.Navigation("Employee");
 
-                    b.Navigation("ResolvedBy");
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Api.Labs.Conversation", b =>
@@ -1650,17 +1692,13 @@ namespace Api.Data.Migrations
 
             modelBuilder.Entity("Api.Labs.Feedback", b =>
                 {
-                    b.HasOne("Api.Entities.Customer", null)
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("Feedbacks")
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("Api.Entities.IUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Api.Labs.Message", b =>
@@ -1673,13 +1711,9 @@ namespace Api.Data.Migrations
                         .WithMany("Messages")
                         .HasForeignKey("ConversationId");
 
-                    b.HasOne("Api.Entities.Customer", null)
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("Messages")
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("Api.Entities.IUser", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1687,44 +1721,38 @@ namespace Api.Data.Migrations
 
                     b.Navigation("Conversation");
 
-                    b.Navigation("Sender");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Api.Labs.Notification", b =>
                 {
-                    b.HasOne("Api.Entities.Customer", null)
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("Notifications")
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("Api.Entities.IUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Api.Labs.PaymentMethod", b =>
                 {
-                    b.HasOne("Api.Entities.Customer", null)
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("PaymentMethods")
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("Api.Entities.IUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Api.Labs.Rating", b =>
                 {
-                    b.HasOne("Api.Entities.Customer", null)
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("Ratings")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Api.Entities.Product", "Product")
                         .WithMany()
@@ -1732,22 +1760,18 @@ namespace Api.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Api.Entities.IUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Customer");
 
                     b.Navigation("Product");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Api.Labs.Refund", b =>
                 {
-                    b.HasOne("Api.Entities.Customer", null)
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("Refunds")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Api.Entities.Order", "Order")
                         .WithMany()
@@ -1755,37 +1779,29 @@ namespace Api.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Api.Entities.IUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Customer");
 
                     b.Navigation("Order");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Api.Labs.Report", b =>
                 {
-                    b.HasOne("Api.Entities.Customer", null)
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("Reports")
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("Api.Entities.IUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Api.Labs.Review", b =>
                 {
-                    b.HasOne("Api.Entities.Customer", null)
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("Reviews")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Api.Entities.Product", "Product")
                         .WithMany()
@@ -1793,30 +1809,20 @@ namespace Api.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Api.Entities.IUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Customer");
 
                     b.Navigation("Product");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Api.Labs.Subscription", b =>
                 {
-                    b.HasOne("Api.Entities.Customer", null)
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("Subscriptions")
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("Api.Entities.IUser", "Subscriber")
-                        .WithMany()
-                        .HasForeignKey("SubscriberId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Subscriber");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Api.Labs.UserChat", b =>
@@ -1827,15 +1833,15 @@ namespace Api.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Api.Entities.IUser", "User")
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Chat");
 
-                    b.Navigation("User");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Api.Labs.UserConversation", b =>
@@ -1846,30 +1852,26 @@ namespace Api.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Api.Entities.IUser", "User")
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Conversation");
 
-                    b.Navigation("User");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Api.Labs.Wishlist", b =>
                 {
-                    b.HasOne("Api.Entities.Customer", null)
+                    b.HasOne("Api.Entities.Customer", "Customer")
                         .WithMany("Wishlists")
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("Api.Entities.IUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Api.Labs.WishlistItem", b =>
@@ -1887,22 +1889,13 @@ namespace Api.Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Api.Entities.Member", b =>
-                {
-                    b.HasOne("Api.Entities.Domain", "Domain")
-                        .WithMany("Members")
-                        .HasForeignKey("DomainId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Domain");
-                });
-
             modelBuilder.Entity("Api.Entities.Address", b =>
                 {
-                    b.Navigation("Domain");
+                    b.Navigation("Customer");
 
-                    b.Navigation("User");
+                    b.Navigation("Employee");
+
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("Api.Entities.Category", b =>
@@ -1910,20 +1903,44 @@ namespace Api.Data.Migrations
                     b.Navigation("Photos");
                 });
 
-            modelBuilder.Entity("Api.Entities.Domain", b =>
+            modelBuilder.Entity("Api.Entities.Customer", b =>
                 {
-                    b.Navigation("Account");
+                    b.Navigation("Accounts");
 
-                    b.Navigation("Members");
+                    b.Navigation("Carts");
+
+                    b.Navigation("Chats");
+
+                    b.Navigation("Complaints");
+
+                    b.Navigation("Conversations");
+
+                    b.Navigation("Feedbacks");
+
+                    b.Navigation("Messages");
+
+                    b.Navigation("Notifications");
 
                     b.Navigation("Orders");
 
+                    b.Navigation("PaymentMethods");
+
                     b.Navigation("Photos");
 
-                    b.Navigation("Products");
+                    b.Navigation("Ratings");
+
+                    b.Navigation("Refunds");
+
+                    b.Navigation("Reports");
+
+                    b.Navigation("Reviews");
+
+                    b.Navigation("Subscriptions");
+
+                    b.Navigation("Wishlists");
                 });
 
-            modelBuilder.Entity("Api.Entities.IUser", b =>
+            modelBuilder.Entity("Api.Entities.Employee", b =>
                 {
                     b.Navigation("Accounts");
 
@@ -1940,6 +1957,19 @@ namespace Api.Data.Migrations
             modelBuilder.Entity("Api.Entities.Product", b =>
                 {
                     b.Navigation("Photos");
+                });
+
+            modelBuilder.Entity("Api.Entities.Store", b =>
+                {
+                    b.Navigation("Account");
+
+                    b.Navigation("Employees");
+
+                    b.Navigation("Orders");
+
+                    b.Navigation("Photos");
+
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Api.Labs.Cart", b =>
@@ -1964,37 +1994,6 @@ namespace Api.Data.Migrations
             modelBuilder.Entity("Api.Labs.Wishlist", b =>
                 {
                     b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("Api.Entities.Customer", b =>
-                {
-                    b.Navigation("Carts");
-
-                    b.Navigation("Chats");
-
-                    b.Navigation("Complaints");
-
-                    b.Navigation("Conversations");
-
-                    b.Navigation("Feedbacks");
-
-                    b.Navigation("Messages");
-
-                    b.Navigation("Notifications");
-
-                    b.Navigation("PaymentMethods");
-
-                    b.Navigation("Ratings");
-
-                    b.Navigation("Refunds");
-
-                    b.Navigation("Reports");
-
-                    b.Navigation("Reviews");
-
-                    b.Navigation("Subscriptions");
-
-                    b.Navigation("Wishlists");
                 });
 #pragma warning restore 612, 618
         }

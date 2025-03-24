@@ -21,7 +21,7 @@ public enum AccountStatus
 
 public enum AccountType
 {
-    Domain,
+    Store,
     Admin,
     Manager,
     Staff,

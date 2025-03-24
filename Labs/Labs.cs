@@ -6,12 +6,18 @@ using Api.Entities;
 namespace Api.Labs
 {
 
+        //     public Guid? CustomerId { get; set; }
+        // public virtual Customer? Customer { get; set; }
+        // public Guid? EmployeeId { get; set; }
+        // public virtual Employee? Employee { get; set; }
+
         public class PaymentMethod : BaseEntity
     {
+
         [Required]
-        public Guid UserId { get; set; }  // Foreign key to IUser (assuming Customer/Member inherits IUser)
-        [ForeignKey(nameof(UserId))] // Explicit ForeignKey attribute
-        public virtual IUser User { get; set; } = null!;  // Navigation property to User
+        public Guid? CustomerId { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual Customer? Customer { get; set; }
 
         [Required]
         [CreditCard] // Basic format validation for credit card number
@@ -48,9 +54,9 @@ namespace Api.Labs
         public class Complaint : BaseEntity
     {
         [Required]
-        public Guid UserId { get; set; }  // The customer who filed the complaint
-        [ForeignKey(nameof(UserId))]
-        public virtual IUser Customer { get; set; } = null!;  // Navigation property - assuming Customer inherits from IUser
+        public Guid? CustomerId { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual Customer? Customer { get; set; }
 
         public Guid? OrderId { get; set; }  // Optional - Complaint related to an order
         [ForeignKey(nameof(OrderId))]
@@ -69,9 +75,9 @@ namespace Api.Labs
         public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;  // When the complaint was submitted
         public DateTime? ResolvedAt { get; set; }  // When the complaint was resolved
 
-        public Guid? ResolvedById { get; set; }  // Admin/Support resolving the complaint
-        [ForeignKey(nameof(ResolvedById))]
-        public virtual IUser? ResolvedBy { get; set; }  // Navigation property - Assuming Admin/Support are also Users
+        public Guid? EmployeeId { get; set; }  // Admin/Support resolving the complaint
+        [ForeignKey(nameof(EmployeeId))]
+        public virtual Employee? Employee { get; set; }  // Navigation property - Assuming Admin/Support are also Users
 
         // Consider adding:
         // - ComplaintPriority (Enum: High, Medium, Low)
@@ -94,9 +100,9 @@ namespace Api.Labs
         public class Subscription : BaseEntity
     {
         [Required]
-        public Guid SubscriberId { get; set; }  // Foreign key to IUser (Customer or Member)
-        [ForeignKey(nameof(SubscriberId))]
-        public virtual IUser Subscriber { get; set; } = null!; // Navigation property to Subscriber (User)
+        public Guid? CustomerId { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual Customer? Customer { get; set; }
 
         [Required]
         [MaxLength(100)] // Limit length of SubscriptionType
@@ -123,13 +129,13 @@ namespace Api.Labs
         // Constructor to initialize required properties (if any) - Constructors are less important for EF Core entities, but good practice.
         public Subscription() { /* EF Core needs a parameterless constructor */ }
 
-        public Subscription(Guid subscriberId, string subscriptionType, DateTime startDate, decimal price)
+        public Subscription(Guid customerId, string subscriptionType, DateTime startDate, decimal price)
         {
-            SubscriberId = subscriberId; // Changed to Guid
+            CustomerId = customerId;
             SubscriptionType = subscriptionType ?? throw new ArgumentNullException(nameof(subscriptionType));
             StartDate = startDate;
             Price = price;
-            IsActive = true; // Default active status
+            IsActive = true;
         }
     }
 
@@ -138,9 +144,9 @@ namespace Api.Labs
   public class Wishlist : BaseEntity
     {
         [Required]
-        public Guid UserId { get; set; } // Foreign key to IUser
-        [ForeignKey(nameof(UserId))]
-        public virtual IUser User { get; set; } = null!; // Navigation to User
+        public Guid? CustomerId { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual Customer? Customer { get; set; }
 
         public virtual ICollection<WishlistItem> Items { get; set; } = new List<WishlistItem>(); // Navigation to WishlistItems (One-to-Many)
 
@@ -151,10 +157,10 @@ namespace Api.Labs
         // Parameterless constructor for EF Core
         public Wishlist() { }
 
-        // Constructor to initialize the wishlist - Adjusted UserId to Guid
-        public Wishlist(Guid userId)
+        // Constructor to initialize the wishlist - Adjusted customerId to Guid
+        public Wishlist(Guid customerId)
         {
-            UserId = userId;
+            CustomerId = customerId;
             Items = new List<WishlistItem>();  // Initialize the items list
             // CreatedAt and UpdatedAt are handled by BaseEntity or database defaults.
         }
@@ -199,9 +205,9 @@ namespace Api.Labs
         public class Cart : BaseEntity
     {
         [Required]
-        public Guid UserId { get; set; } // Foreign key to IUser
-        [ForeignKey(nameof(UserId))]
-        public virtual IUser User { get; set; } = null!; // Navigation to User
+        public Guid? CustomerId { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual Customer? Customer { get; set; }
 
         public virtual ICollection<CartItem> Items { get; set; } = new List<CartItem>(); // Navigation to CartItems (One-to-Many)
 
@@ -213,10 +219,10 @@ namespace Api.Labs
         // Parameterless constructor for EF Core
         public Cart() { }
 
-        // Constructor to initialize the cart - Adjusted UserId to Guid
-        public Cart(Guid userId)
+        // Constructor to initialize the cart - Adjusted CustomerId to Guid
+        public Cart(Guid customerId)
         {
-            UserId = userId; // Changed to Guid
+            CustomerId = customerId; // Changed to Guid
             Items = new List<CartItem>();  // Initialize the items list
             TotalPrice = 0; // Initialize TotalPrice
             IsActive = true;  // By default, a cart is active
@@ -275,9 +281,9 @@ namespace Api.Labs
         public virtual Product Product { get; set; } = null!; // Navigation to Product
 
         [Required]
-        public Guid UserId { get; set; } // Foreign key to IUser
-        [ForeignKey(nameof(UserId))]
-        public virtual IUser User { get; set; } = null!; // Navigation to User
+        public Guid? CustomerId { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual Customer? Customer { get; set; }
 
         [Required]
         [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")] // Example: 1-5 star rating
@@ -300,9 +306,9 @@ namespace Api.Labs
         public virtual Product Product { get; set; } = null!; // Navigation to Product
 
         [Required]
-        public Guid UserId { get; set; } // Foreign key to IUser
-        [ForeignKey(nameof(UserId))]
-        public virtual IUser User { get; set; } = null!; // Navigation to User
+        public Guid? CustomerId { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual Customer? Customer { get; set; }
 
         [Required]
         public string ReviewText { get; set; } = null!; // Text of the review
@@ -326,11 +332,11 @@ namespace Api.Labs
         // Parameterless constructor for EF Core
         public Review() { }
 
-        // Constructor to initialize a review - Adjusted ProductId, UserId to Guid
-        public Review(Guid productId, Guid userId, string reviewText, int rating, DateTime reviewDate, bool isVerified, string? mediaUrl = null, string? reviewTitle = null, string? response = null)
+        // Constructor to initialize a review - Adjusted ProductId, CustomerId to Guid
+        public Review(Guid productId, Guid customerId, string reviewText, int rating, DateTime reviewDate, bool isVerified, string? mediaUrl = null, string? reviewTitle = null, string? response = null)
         {
             ProductId = productId; // Changed to Guid
-            UserId = userId;     // Changed to Guid
+            CustomerId = customerId;     // Changed to Guid
             ReviewText = reviewText ?? throw new ArgumentNullException(nameof(reviewText));
             Rating = rating;
             ReviewDate = reviewDate;
@@ -346,9 +352,9 @@ namespace Api.Labs
        public class Feedback : BaseEntity
     {
         [Required]
-        public Guid UserId { get; set; } // Foreign key to IUser
-        [ForeignKey(nameof(UserId))]
-        public virtual IUser User { get; set; } = null!; // Navigation to User
+        public Guid? CustomerId { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual Customer? Customer { get; set; }
 
         [Required]
         public string FeedbackText { get; set; } = null!; // Content of feedback
@@ -369,10 +375,10 @@ namespace Api.Labs
         // Parameterless constructor for EF Core
         public Feedback() { }
 
-        // Constructor to initialize feedback - Adjusted UserId to Guid
-        public Feedback(Guid userId, string feedbackText, string feedbackType, DateTime feedbackDate, int? rating = null, bool isAddressed = false, string? response = null)
+        // Constructor to initialize feedback - Adjusted customerId to Guid
+        public Feedback(Guid customerId, string feedbackText, string feedbackType, DateTime feedbackDate, int? rating = null, bool isAddressed = false, string? response = null)
         {
-            UserId = userId; // Changed to Guid
+            CustomerId = customerId; // Changed to Guid
             FeedbackText = feedbackText ?? throw new ArgumentNullException(nameof(feedbackText));
             FeedbackType = feedbackType ?? throw new ArgumentNullException(nameof(feedbackType));
             FeedbackDate = feedbackDate;
@@ -387,9 +393,9 @@ namespace Api.Labs
        public class Refund : BaseEntity
     {
         [Required]
-        public Guid UserId { get; set; } // Foreign key to IUser (User requesting refund)
-        [ForeignKey(nameof(UserId))]
-        public virtual IUser User { get; set; } = null!; // Navigation to User
+        public Guid? CustomerId { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual Customer? Customer { get; set; }
 
         [Required]
         public Guid OrderId { get; set; } // Foreign key to Order
@@ -417,10 +423,10 @@ namespace Api.Labs
         // Parameterless constructor for EF Core
         public Refund() { }
 
-        // Constructor to initialize refund - Adjusted UserId, OrderId to Guid
-        public Refund(Guid userId, Guid orderId, decimal refundAmount, string refundReason, string refundStatus, DateTime requestDate, DateTime? processedDate = null, string? response = null)
+        // Constructor to initialize refund - Adjusted customerId, OrderId to Guid
+        public Refund(Guid customerId, Guid orderId, decimal refundAmount, string refundReason, string refundStatus, DateTime requestDate, DateTime? processedDate = null, string? response = null)
         {
-            UserId = userId; // Changed to Guid
+            CustomerId = customerId; // Changed to Guid
             OrderId = orderId; // Changed to Guid
             RefundAmount = refundAmount;
             RefundReason = refundReason ?? throw new ArgumentNullException(nameof(refundReason));
@@ -446,9 +452,9 @@ namespace Api.Labs
        public class Report : BaseEntity
     {
         [Required]
-        public Guid UserId { get; set; } // Foreign key to IUser (User creating report)
-        [ForeignKey(nameof(UserId))]
-        public virtual IUser User { get; set; } = null!; // Navigation to User
+        public Guid? CustomerId { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual Customer? Customer { get; set; }
 
         [Required]
         [MaxLength(50)] // Limit length of ReportType
@@ -476,10 +482,10 @@ namespace Api.Labs
         // Parameterless constructor for EF Core
         public Report() { }
 
-        // Constructor to initialize report - Adjusted UserId, ReportedItemId to Guid
-        public Report(Guid userId, string reportType, string reportDescription, Guid reportedItemId, string reportStatus, DateTime reportDate, bool isUrgent, DateTime? resolvedDate = null, string? response = null)
+        // Constructor to initialize report - Adjusted customerId, ReportedItemId to Guid
+        public Report(Guid customerId, string reportType, string reportDescription, Guid reportedItemId, string reportStatus, DateTime reportDate, bool isUrgent, DateTime? resolvedDate = null, string? response = null)
         {
-            UserId = userId; // Changed to Guid
+            CustomerId = customerId; // Changed to Guid
             ReportType = reportType ?? throw new ArgumentNullException(nameof(reportType));
             ReportDescription = reportDescription ?? throw new ArgumentNullException(nameof(reportDescription));
             ReportedItemId = reportedItemId; // Changed to Guid
@@ -529,9 +535,9 @@ namespace Api.Labs
     public class UserChat : BaseEntity
     {
         [Required]
-        public Guid UserId { get; set; }
-        [ForeignKey(nameof(UserId))]
-        public virtual IUser? User { get; set; } // Navigation property to User
+        public Guid? CustomerId { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual Customer? Customer { get; set; }
 
         [Required]
         public Guid ChatId { get; set; }
@@ -571,9 +577,9 @@ namespace Api.Labs
      public class UserConversation : BaseEntity
     {
         [Required]
-        public Guid UserId { get; set; }
-        [ForeignKey(nameof(UserId))]
-        public virtual IUser? User { get; set; } // Navigation property to User
+        public Guid? CustomerId { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual Customer? Customer { get; set; }
 
         [Required]
         public Guid ConversationId { get; set; }
@@ -599,11 +605,10 @@ namespace Api.Labs
 
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
-        // Foreign Key to User (Sender)
         [Required]
-        public Guid SenderId { get; set; }
-        [ForeignKey(nameof(SenderId))]
-        public virtual IUser? Sender { get; set; } // Navigation property to Sender (User)
+        public Guid? CustomerId { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual Customer? Customer { get; set; }
 
         // Foreign Key to Chat (or Conversation, depending on your design)
         public Guid? ChatId { get; set; } // Nullable if messages can be outside a Chat context
@@ -622,9 +627,9 @@ namespace Api.Labs
     public class Notification : BaseEntity
     {
         [Required]
-        public Guid UserId { get; set; } // Foreign key to IUser (User receiving notification)
-        [ForeignKey(nameof(UserId))]
-        public virtual IUser User { get; set; } = null!; // Navigation to User
+        public Guid? CustomerId { get; set; }
+        [ForeignKey(nameof(CustomerId))]
+        public virtual Customer? Customer { get; set; }
 
         [Required]
         [MaxLength(50)] // Limit length of NotificationType
@@ -646,10 +651,10 @@ namespace Api.Labs
         // Parameterless constructor for EF Core
         public Notification() { }
 
-        // Constructor to initialize notification - Adjusted UserId, RelatedEntityId to Guid?
-        public Notification(Guid userId, string notificationType, string notificationMessage, DateTime notificationDate, bool isRead = false, Guid? relatedEntityId = null, string? actionUrl = null)
+        // Constructor to initialize notification - Adjusted customerId, RelatedEntityId to Guid?
+        public Notification(Guid customerId, string notificationType, string notificationMessage, DateTime notificationDate, bool isRead = false, Guid? relatedEntityId = null, string? actionUrl = null)
         {
-            UserId = userId; // Changed to Guid
+            CustomerId = customerId; // Changed to Guid
             NotificationType = notificationType ?? throw new ArgumentNullException(nameof(notificationType));
             NotificationMessage = notificationMessage ?? throw new ArgumentNullException(nameof(notificationMessage));
             NotificationDate = notificationDate;

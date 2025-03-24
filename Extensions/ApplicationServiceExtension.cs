@@ -38,8 +38,8 @@ namespace Api.Extensions
                 services.AddScoped<IAddressRepository, AddressRepository>();
                 services.AddScoped<ICategoriesRepository, CategoryRepository>();
                 services.AddScoped<ICustomersRepository, CustomersRepository>();
-                services.AddScoped<IDomainsRepository, DomainsRepository>();
-                services.AddScoped<IMembersRepository, MembersRepository>(); 
+                services.AddScoped<IStoresRepository, StoresRepository>();
+                services.AddScoped<IEmployeesRepository, EmployeesRepository>(); 
                 services.AddScoped<IOrdersRepository, OrdersRepository>();
                 services.AddScoped<IPhotosRepository, PhotoRepository>();
                 services.AddScoped<IProductsRepository, ProductRepository>();

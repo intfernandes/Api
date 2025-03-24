@@ -16,13 +16,16 @@ namespace Api.Entities
 
         #region Relationships
 
-        public Guid? UserId { get; set; }       
-        public virtual IUser? User { get; set; }  
+        public Guid? CustomerId { get; set; }       
+        public virtual Customer? Customer { get; set; }  
+
+        public Guid? EmployeeId { get; set; }       
+        public virtual Employee? Employee { get; set; }  
 
         public Guid? ProductId { get; set; } 
         public virtual Product? Product { get; set; }
-        public Guid? DomainId { get; set; }
-        public virtual Domain? Domain { get; set; }
+        public Guid? StoreId { get; set; }
+        public virtual Store? Store { get; set; }
 
         public Guid? CategoryId { get; set; }
         public virtual Category? Category { get; set; }

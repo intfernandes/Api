@@ -79,36 +79,36 @@ namespace Api.Data
                     context.SaveChanges(); // Save Categories
                 }
 
-                // --- Seed Domain Accounts ---
-                // Seeds Account entities of type Domain if no Domain Accounts exist.
-                if (!context.Accounts.OfType<Account>().Any(a => a.AccountType == AccountType.Domain)) // Check for Domain Accounts
+                // --- Seed Store Accounts ---
+                // Seeds Account entities of type Store if no Store Accounts exist.
+                if (!context.Accounts.OfType<Account>().Any(a => a.AccountType == AccountType.Store)) // Check for Store Accounts
                 {
                     context.Accounts.AddRange(
-                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Domain, AccountStatus = AccountStatus.Active },
-                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Domain, AccountStatus = AccountStatus.Active },
-                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Domain, AccountStatus = AccountStatus.Inactive },
-                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Domain, AccountStatus = AccountStatus.Pending },
-                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Domain, AccountStatus = AccountStatus.Active }
+                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Store, AccountStatus = AccountStatus.Active },
+                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Store, AccountStatus = AccountStatus.Active },
+                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Store, AccountStatus = AccountStatus.Inactive },
+                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Store, AccountStatus = AccountStatus.Pending },
+                        new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Store, AccountStatus = AccountStatus.Active }
                     );
-                    context.SaveChanges(); // Save Domain Accounts
+                    context.SaveChanges(); // Save Store Accounts
                 }
 
-                // --- Seed Domains ---
-                // Seeds Domain entities if the Domains table is empty, using existing Domain Accounts and Addresses.
-                if (!context.Domains.Any())
+                // --- Seed Stores ---
+                // Seeds Store entities if the Stores table is empty, using existing Store Accounts and Addresses.
+                if (!context.Stores.Any())
                 {
                     // Fetch required entities from context
-                    var DomainAccounts = context.Accounts.OfType<Account>().Where(a => a.AccountType == AccountType.Domain).ToList();
+                    var storeAccounts = context.Accounts.OfType<Account>().Where(a => a.AccountType == AccountType.Store).ToList();
                     var addresses = context.Addresses.ToList();
 
-                    context.Domains.AddRange(
-                        new Domain { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = DomainAccounts[0].Id, AddressId = addresses[0].Id, Email = "admin@techcorp.com", Name = "TechCorp Inc.", Description = "Leading technology solutions provider" },
-                        new Domain { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = DomainAccounts[1].Id, AddressId = addresses[1].Id, Email = "admin@globalbooks.com", Name = "Global Books Ltd.", Description = "Worldwide book retailer" },
-                        new Domain { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = DomainAccounts[2].Id, AddressId = addresses[2].Id, Email = "admin@fashionhub.com", Name = "Fashion Hub", Description = "Trendy clothing and accessories" },
-                        new Domain { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = DomainAccounts[3].Id, AddressId = addresses[3].Id, Email = "admin@londonimports.com", Name = "London Imports", Description = "Importer of fine goods" },
-                        new Domain { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = DomainAccounts[4].Id, AddressId = addresses[4].Id, Email = "admin@citystyle.com", Name = "City Style Apparel", Description = "Urban fashion for everyone" }
+                    context.Stores.AddRange(
+                        new Store { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = storeAccounts[0].Id, AddressId = addresses[0].Id, Email = "admin@techcorp.com", Name = "TechCorp Inc.", Description = "Leading technology solutions provider" },
+                        new Store { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = storeAccounts[1].Id, AddressId = addresses[1].Id, Email = "admin@globalbooks.com", Name = "Global Books Ltd.", Description = "Worldwide book retailer" },
+                        new Store { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = storeAccounts[2].Id, AddressId = addresses[2].Id, Email = "admin@fashionhub.com", Name = "Fashion Hub", Description = "Trendy clothing and accessories" },
+                        new Store { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = storeAccounts[3].Id, AddressId = addresses[3].Id, Email = "admin@londonimports.com", Name = "London Imports", Description = "Importer of fine goods" },
+                        new Store { Id = GuidGenerator.GenerateSequentialGuid(), AccountId = storeAccounts[4].Id, AddressId = addresses[4].Id, Email = "admin@citystyle.com", Name = "City Style Apparel", Description = "Urban fashion for everyone" }
                     );
-                    context.SaveChanges(); // Save Domains
+                    context.SaveChanges(); // Save Stores
                 }
 
                 // --- Seed Customer Accounts ---
@@ -154,9 +154,9 @@ namespace Api.Data
                     context.SaveChanges(); // Save Customers
                 }
 
-                // --- Seed Member Accounts ---
-                // Seeds Account entities of type Staff (Member Accounts) if no Member Accounts exist.
-                if (!context.Accounts.OfType<Account>().Any(a => a.AccountType == AccountType.Staff || a.AccountType == AccountType.Admin || a.AccountType == AccountType.Manager  )) // Check for Member Accounts (Staff/Admin/Manager type)
+                // --- Seed Employee Accounts ---
+                // Seeds Account entities of type Staff (Employee Accounts) if no Employee Accounts exist.
+                if (!context.Accounts.OfType<Account>().Any(a => a.AccountType == AccountType.Staff || a.AccountType == AccountType.Admin || a.AccountType == AccountType.Manager  )) // Check for Employee Accounts (Staff/Admin/Manager type)
                 {
                     context.Accounts.AddRange(
                         new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Admin, AccountStatus = AccountStatus.Active },
@@ -170,32 +170,32 @@ namespace Api.Data
                         new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Staff, AccountStatus = AccountStatus.Active },
                         new Account { Id = GuidGenerator.GenerateSequentialGuid(), AccountType = AccountType.Staff, AccountStatus = AccountStatus.Active }
                     );
-                    context.SaveChanges(); // Save Member Accounts
+                    context.SaveChanges(); // Save Employee Accounts
                 }
 
-                // --- Seed Members ---
-                // Seeds Member entities if the Members table is empty, using existing Member Accounts and Domains.
-                if (!context.Members.Any())
+                // --- Seed Employees ---
+                // Seeds Employee entities if the Employees table is empty, using existing Employee Accounts and Stores.
+                if (!context.Employees.Any())
                 {
-                    var memberAccounts = context.Accounts.OfType<Account>().Where(a => a.AccountType == AccountType.Staff || a.AccountType == AccountType.Admin || a.AccountType == AccountType.Manager).ToList();
-                    var Domains = context.Domains.ToList();
+                    var employeeAccounts = context.Accounts.OfType<Account>().Where(a => a.AccountType == AccountType.Staff || a.AccountType == AccountType.Admin || a.AccountType == AccountType.Manager).ToList();
+                    var stores = context.Stores.ToList();
                     var addresses = context.Addresses.ToList();
 
 
-                    context.Members.AddRange(
-                        // Member 1 ... Member 10 (example Members)
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[10], DomainId = Domains[0].Id, Accounts = [memberAccounts[0]], FirstName = "Fiona", LastName = "Green", Email = "fiona.green@Domain1.com", PhoneNumber = "555-4321" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[11], DomainId = Domains[0].Id, Accounts = [memberAccounts[1]], FirstName = "George", LastName = "Harris", Email = "george.harris@Domain1.com", PhoneNumber = "555-8765" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[12], DomainId = Domains[1].Id, Accounts = [memberAccounts[2]], FirstName = "Hannah", LastName = "Indigo", Email = "hannah.indigo@Domain2.com", PhoneNumber = "555-2109" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[13], DomainId = Domains[1].Id, Accounts = [memberAccounts[3]], FirstName = "Ian", LastName = "Jones", Email = "ian.jones@Domain2.com", PhoneNumber = "555-6543" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[14], DomainId = Domains[2].Id, Accounts = [memberAccounts[4]], FirstName = "Jack", LastName = "King", Email = "jack.king@Domain3.com", PhoneNumber = "555-0987" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[5], DomainId = Domains[2].Id, Accounts = [memberAccounts[5]], FirstName = "Katie", LastName = "Lopez", Email = "katie.lopez@Domain3.com", PhoneNumber = "555-2233" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[6], DomainId = Domains[3].Id, Accounts = [memberAccounts[6]], FirstName = "Mason", LastName = "Nguyen", Email = "mason.nguyen@Domain4.com", PhoneNumber = "555-4455" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[7], DomainId = Domains[3].Id, Accounts = [memberAccounts[7]], FirstName = "Nora", LastName = "Perez", Email = "nora.perez@Domain4.com", PhoneNumber = "555-6677" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[8], DomainId = Domains[4].Id, Accounts = [memberAccounts[8]], FirstName = "Owen", LastName = "Baker", Email = "owen.baker@Domain5.com", PhoneNumber = "555-8899" },
-                        new Member { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[9], DomainId = Domains[4].Id, Accounts = [memberAccounts[9]], FirstName = "Penelope", LastName = "Carter", Email = "penelope.carter@Domain5.com", PhoneNumber = "555-0011" }
+                    context.Employees.AddRange(
+                        // Employee 1 ... Employee 10 (example Employees)
+                        new Employee { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[10], StoreId = stores[0].Id, Accounts = [employeeAccounts[0]], FirstName = "Fiona", LastName = "Green", Email = "fiona.green@Store1.com", PhoneNumber = "555-4321" },
+                        new Employee { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[11], StoreId = stores[0].Id, Accounts = [employeeAccounts[1]], FirstName = "George", LastName = "Harris", Email = "george.harris@Store1.com", PhoneNumber = "555-8765" },
+                        new Employee { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[12], StoreId = stores[1].Id, Accounts = [employeeAccounts[2]], FirstName = "Hannah", LastName = "Indigo", Email = "hannah.indigo@Store2.com", PhoneNumber = "555-2109" },
+                        new Employee { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[13], StoreId = stores[1].Id, Accounts = [employeeAccounts[3]], FirstName = "Ian", LastName = "Jones", Email = "ian.jones@Store2.com", PhoneNumber = "555-6543" },
+                        new Employee { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[14], StoreId = stores[2].Id, Accounts = [employeeAccounts[4]], FirstName = "Jack", LastName = "King", Email = "jack.king@Store3.com", PhoneNumber = "555-0987" },
+                        new Employee { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[5], StoreId = stores[2].Id, Accounts = [employeeAccounts[5]], FirstName = "Katie", LastName = "Lopez", Email = "katie.lopez@Store3.com", PhoneNumber = "555-2233" },
+                        new Employee { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[6], StoreId = stores[3].Id, Accounts = [employeeAccounts[6]], FirstName = "Mason", LastName = "Nguyen", Email = "mason.nguyen@Store4.com", PhoneNumber = "555-4455" },
+                        new Employee { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[7], StoreId = stores[3].Id, Accounts = [employeeAccounts[7]], FirstName = "Nora", LastName = "Perez", Email = "nora.perez@Store4.com", PhoneNumber = "555-6677" },
+                        new Employee { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[8], StoreId = stores[4].Id, Accounts = [employeeAccounts[8]], FirstName = "Owen", LastName = "Baker", Email = "owen.baker@Store5.com", PhoneNumber = "555-8899" },
+                        new Employee { Id = GuidGenerator.GenerateSequentialGuid(), Address = addresses[9], StoreId = stores[4].Id, Accounts = [employeeAccounts[9]], FirstName = "Penelope", LastName = "Carter", Email = "penelope.carter@Store5.com", PhoneNumber = "555-0011" }
                     );
-                    context.SaveChanges(); // Save Members
+                    context.SaveChanges(); // Save Employees
                 }
 
                 // --- Seed Products ---
@@ -205,43 +205,43 @@ namespace Api.Data
                     var categories = context.Categories.ToList();
 
                     context.Products.AddRange(
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = null, Name = "Laptop", Description = "High-performance laptop", Price = 1200.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Electronics")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = null, Name = "Smartphone", Description = "Latest smartphone model", Price = 900.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Electronics")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = null, Name = "The Lord of the Rings", Description = "Fantasy classic", Price = 25.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Books")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = null, Name = "The Catcher in the Rye", Description = "Coming-of-age novel", Price = 15.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Books")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = null, Name = "T-shirt", Description = "Casual cotton t-shirt", Price = 20.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Clothing")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = null, Name = "Jeans", Description = "Slim-fit denim jeans", Price = 40.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Clothing")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = null, Name = "Sneakers", Description = "Canvas sneakers", Price = 30.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Clothing")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = null, Name = "External Hard Drive", Description = "Portable storage device", Price = 80.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Electronics")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = null, Name = "The Great Gatsby", Description = "Jazz Age novel", Price = 20.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Books")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), DomainId = null, Name = "Graphic T-shirt", Description = "Printed cotton t-shirt", Price = 25.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Clothing")! } }
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "Laptop", Description = "High-performance laptop", Price = 1200.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Electronics")! } },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "Smartphone", Description = "Latest smartphone model", Price = 900.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Electronics")! } },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "The Lord of the Rings", Description = "Fantasy classic", Price = 25.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Books")! } },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "The Catcher in the Rye", Description = "Coming-of-age novel", Price = 15.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Books")! } },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "T-shirt", Description = "Casual cotton t-shirt", Price = 20.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Clothing")! } },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "Jeans", Description = "Slim-fit denim jeans", Price = 40.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Clothing")! } },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "Sneakers", Description = "Canvas sneakers", Price = 30.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Clothing")! } },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "External Hard Drive", Description = "Portable storage device", Price = 80.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Electronics")! } },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "The Great Gatsby", Description = "Jazz Age novel", Price = 20.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Books")! } },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "Graphic T-shirt", Description = "Printed cotton t-shirt", Price = 25.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Clothing")! } }
                     );
                     context.SaveChanges(); // Save Products
                 }
 
                  // --- Seed Photos ---
-                // Seeds Photo entities if the Photos table is empty, linking to existing Products and Domains.
+                // Seeds Photo entities if the Photos table is empty, linking to existing Products and Stores.
                 if (!context.Photos.Any())
                 {
-                    var members = context.Members.ToList();
+                    var employees = context.Employees.ToList();
                     var customers = context.Customers.ToList();
                     var products = context.Products.ToList(); 
-                    var domains = context.Domains.ToList();
+                    var stores = context.Stores.ToList();
                     var categories = context.Categories.ToList();
 
                     for (int i = 0; i < 40; i++)
                     {
                         if(i >= 0 && i < 10){
-                            var member = members[i];
-                            var photo = new Photo { Id = GuidGenerator.GenerateSequentialGuid(), Highlight = true, UserId = member.Id, ImageUrl = $"https://randomuser.me/api/portraits/women/{i}.jpg", Description = $"Profile Photo for Member {members[i].Id}" };
+                            var employee = employees[i];
+                            var photo = new Photo { Id = GuidGenerator.GenerateSequentialGuid(), Highlight = true, EmployeeId = employee.Id, ImageUrl = $"https://randomuser.me/api/portraits/women/{i}.jpg", Description = $"Profile Photo for Employee {employees[i].Id}" };
                             context.Photos.Add(photo);
-                            member.Photos = [photo];
+                            employee.Photos = [photo];
 
                             continue;
                         }
                         if(i >= 10 && i < 20){
                             var customer = customers[i-10];
-                            var photo =  new Photo { Id = GuidGenerator.GenerateSequentialGuid(), Highlight = true, UserId = customers[i-10].Id, ImageUrl = $"https://randomuser.me/api/portraits/men/{i}.jpg", Description = $"Profile Photo for Customer {customers[i-10].Id}" };
+                            var photo =  new Photo { Id = GuidGenerator.GenerateSequentialGuid(), Highlight = true, CustomerId = customers[i-10].Id, ImageUrl = $"https://randomuser.me/api/portraits/men/{i}.jpg", Description = $"Profile Photo for Customer {customers[i-10].Id}" };
                             context.Photos.Add(photo);
                             customer.Photos = [photo];
 
@@ -256,16 +256,16 @@ namespace Api.Data
                         }
 
                           if(i >= 30 && i < 35){
-                            var domain = domains[i-30];
-                            var photo = new Photo { Id = GuidGenerator.GenerateSequentialGuid(), Highlight = true, DomainId = domains[i-30].Id, ImageUrl = $"https://randomuser.me/api/portraits/men/{i}.jpg", Description = $"Product Photo for Product {products[i-30].Id}" };               
+                            var store = stores[i-30];
+                            var photo = new Photo { Id = GuidGenerator.GenerateSequentialGuid(), Highlight = true, StoreId = stores[i-30].Id, ImageUrl = $"https://randomuser.me/api/portraits/men/{i}.jpg", Description = $"Product Photo for Product {products[i-30].Id}" };               
                             context.Photos.Add(photo);
-                            domain.Photos = [photo];
+                            store.Photos = [photo];
                             continue;
                         }
                     
                            if(i >= 35 && i < 40){
                             var category = categories[i-35];
-                            var photo = new Photo { Id = GuidGenerator.GenerateSequentialGuid(), Highlight = true, DomainId = domains[i-35].Id, ImageUrl = $"https://randomuser.me/api/portraits/men/{i+35}.jpg", Description = $"Product Photo for Product {products[i-35].Id}" };               
+                            var photo = new Photo { Id = GuidGenerator.GenerateSequentialGuid(), Highlight = true, StoreId = stores[i-35].Id, ImageUrl = $"https://randomuser.me/api/portraits/men/{i+35}.jpg", Description = $"Product Photo for Product {products[i-35].Id}" };               
                             context.Photos.Add(photo);
                             category.Photos = [photo];
                             continue;
@@ -277,12 +277,12 @@ namespace Api.Data
                 }
 
                 // --- Seed Orders and OrderItems ---
-                // Seeds Order and OrderItem entities if the Orders table is empty, linking to existing Customers, Members, Domains, and Products.
+                // Seeds Order and OrderItem entities if the Orders table is empty, linking to existing Customers, Employees, Stores, and Products.
                 if (!context.Orders.Any())
                 {
                     var customers = context.Customers.ToList();
-                    var members = context.Members.ToList();
-                    var Domains = context.Domains.ToList();
+                    var employees = context.Employees.ToList();
+                    var stores = context.Stores.ToList();
                     var products = context.Products.ToList();
 
                     // --- Order 1 ---
@@ -291,8 +291,8 @@ namespace Api.Data
                     {
                         Id = order1Id,
                         CustomerId = customers[0].Id,
-                        MemberId = members[0].Id,
-                        DomainId = Domains[0].Id,
+                        EmployeeId = employees[0].Id,
+                        StoreId = stores[0].Id,
                         DeliveryTerm = DateTime.UtcNow.AddDays(3),
                         Status = OrderStatus.Completed
                     });
@@ -309,8 +309,8 @@ namespace Api.Data
                     {
                         Id = order2Id,
                         CustomerId = customers[1].Id,
-                        MemberId = members[1].Id,
-                        DomainId = Domains[1].Id,
+                        EmployeeId = employees[1].Id,
+                        StoreId = stores[1].Id,
                         DeliveryTerm = DateTime.UtcNow.AddDays(5),
                         Status = OrderStatus.Shipped
                     });
@@ -326,8 +326,8 @@ namespace Api.Data
                     {
                         Id = order3Id,
                         CustomerId = customers[2].Id,
-                        MemberId = members[2].Id,
-                        DomainId = Domains[2].Id,
+                        EmployeeId = employees[2].Id,
+                        StoreId = stores[2].Id,
                         DeliveryTerm = DateTime.UtcNow.AddDays(2),
                         Status = OrderStatus.Processing
                     });
@@ -344,8 +344,8 @@ namespace Api.Data
                     {
                         Id = order4Id,
                         CustomerId = customers[3].Id,
-                        MemberId = members[3].Id,
-                        DomainId = Domains[3].Id,
+                        EmployeeId = employees[3].Id,
+                        StoreId = stores[3].Id,
                         DeliveryTerm = DateTime.UtcNow.AddDays(7),
                         Status = OrderStatus.Pending
                     });
@@ -358,8 +358,8 @@ namespace Api.Data
                     {
                         Id = order5Id,
                         CustomerId = customers[4].Id,
-                        MemberId = members[4].Id,
-                        DomainId = Domains[4].Id,
+                        EmployeeId = employees[4].Id,
+                        StoreId = stores[4].Id,
                         DeliveryTerm = DateTime.UtcNow.AddDays(1), // Express
                         Status = OrderStatus.Completed
                     });
@@ -376,8 +376,8 @@ namespace Api.Data
                     {
                         Id = order6Id,
                         CustomerId = customers[5].Id,
-                        MemberId = members[5].Id,
-                        DomainId = Domains[0].Id, // Domain 1 again
+                        EmployeeId = employees[5].Id,
+                        StoreId = stores[0].Id, // Store 1 again
                         DeliveryTerm = DateTime.UtcNow.AddDays(4),
                         Status = OrderStatus.Shipped
                     });
@@ -393,8 +393,8 @@ namespace Api.Data
                     {
                         Id = order7Id,
                         CustomerId = customers[6].Id,
-                        MemberId = members[6].Id,
-                        DomainId = Domains[2].Id, // Domain 3 again
+                        EmployeeId = employees[6].Id,
+                        StoreId = stores[2].Id, // Store 3 again
                         DeliveryTerm = DateTime.UtcNow.AddDays(6),
                         Status = OrderStatus.Completed
                     });
@@ -410,8 +410,8 @@ namespace Api.Data
                     {
                         Id = order8Id,
                         CustomerId = customers[7].Id,
-                        MemberId = members[7].Id,
-                        DomainId = Domains[4].Id, // Domain 5 again
+                        EmployeeId = employees[7].Id,
+                        StoreId = stores[4].Id, // Store 5 again
                         DeliveryTerm = DateTime.UtcNow.AddDays(2),
                         Status = OrderStatus.Processing
                     });

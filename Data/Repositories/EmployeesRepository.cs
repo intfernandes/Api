@@ -9,23 +9,23 @@ using Microsoft.EntityFrameworkCore;
 namespace Api.Data.Repositories
 {
        
-    public class MembersRepository(DataContext context, ITokenService tokenService) : IMembersRepository
+    public class EmployeesRepository(DataContext context, ITokenService tokenService) : IEmployeesRepository
     {   
         #region Authenthicate
-        public async Task<Member?> Create(SignUpDto user)
+        public async Task<Employee?> Create(SignUpDto user)
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
             
-            var mb = await context.Members
+            var mb = await context.Employees
             .Where(x => x.IsDeleted == false)
             .FirstOrDefaultAsync(x =>
                     x.Email.Equals(user.Email.ToLower())
                 );
-                if (mb != null) throw new Exception("Member already exists");
+                if (mb != null) throw new Exception("Employee already exists");
                 
                 using var hmac = new HMACSHA512();
 
-                mb = new Member
+                mb = new Employee
                 {
                     FirstName = user.FirstName.ToLower() ,
                     LastName = user.LastName?.ToLower() ,
@@ -39,17 +39,17 @@ namespace Api.Data.Repositories
                 mb.Token = tokenService.CreateToken(mb);
                 mb.RefreshTokens = [ tokenService.CreateRefreshToken(mb) ];
 
-                context.Members.Add(mb);
+                context.Employees.Add(mb);
                 
                 await Save();
 
                 return mb;
         }
 
-        public async Task<Member?> SignIn(SignInDto signIn) {
+        public async Task<Employee?> SignIn(SignInDto signIn) {
             if(signIn == null || signIn.Email == null || signIn.Password == null) throw new ArgumentNullException(nameof(signIn));
             
-            var mb = await context.Members
+            var mb = await context.Employees
             .Where(x => x.IsDeleted == false)
             .FirstOrDefaultAsync(x => 
                     x.Email.Equals(signIn.Email.ToLower())
@@ -79,9 +79,9 @@ namespace Api.Data.Repositories
 
         #region Update 
 
-            public async Task<IEnumerable<Member>> Get()
+            public async Task<IEnumerable<Employee>> Get()
         {
-            var members = await context.Members
+            var employees = await context.Employees
             .Include(x => x.Photos)
             .Include(x => x.Accounts)
             .Include(x => x.Address)
@@ -89,12 +89,12 @@ namespace Api.Data.Repositories
             .Where(x => x.IsDeleted == false)
             .ToListAsync();
 
-            return members;
+            return employees;
         }
 
-        public async Task<Member?> GetById(Guid id)
+        public async Task<Employee?> GetById(Guid id)
         {
-            var mb = await context.Members
+            var mb = await context.Employees
             .Include(x => x.Photos)
             .Include(x => x.Accounts)
             .Include(x => x.Address)
@@ -105,22 +105,22 @@ namespace Api.Data.Repositories
             return mb;
         }
 
-        public async Task<IEnumerable<Member>?> Search(string input)
+        public async Task<IEnumerable<Employee>?> Search(string input)
         {
-          var members = new List<Member>();
+          var employees = new List<Employee>();
 
             if(input == null) throw new ArgumentNullException(nameof(input));
 
-            members.AddRange(await GetByEmail(input));
-            members.AddRange(await GetByPhoneNumber(input));
-            members.AddRange(await GetByName(input));
+            employees.AddRange(await GetByEmail(input));
+            employees.AddRange(await GetByPhoneNumber(input));
+            employees.AddRange(await GetByName(input));
 
-            return members;
+            return employees;
         }
 
-        public async Task<IEnumerable<Member>> GetByEmail(string email)
+        public async Task<IEnumerable<Employee>> GetByEmail(string email)
         {
-            var mb = await context.Members
+            var mb = await context.Employees
             .Include(x => x.Photos)
             .Include(x => x.Accounts)
             .Include(x => x.Address)
@@ -132,11 +132,11 @@ namespace Api.Data.Repositories
                 
         }
 
-        public async Task<IEnumerable<Member>> GetByPhoneNumber(string phoneNumber)
+        public async Task<IEnumerable<Employee>> GetByPhoneNumber(string phoneNumber)
         {
             if (phoneNumber == null) throw new ArgumentNullException(nameof(phoneNumber));
 
-            var mb = await context.Members
+            var mb = await context.Employees
                 .Include(x => x.Photos)
                 .Include(x => x.Accounts)
                 .Include(x => x.Address)
@@ -147,9 +147,9 @@ namespace Api.Data.Repositories
             return mb;
         }
 
-        public async Task<IEnumerable<Member>> GetByName(string username)
+        public async Task<IEnumerable<Employee>> GetByName(string username)
         {
-            var mb = await context.Members
+            var mb = await context.Employees
             .Include(x => x.Photos)
             .Include(x => x.Accounts)
             .Include(x => x.Address)
@@ -164,9 +164,9 @@ namespace Api.Data.Repositories
         #endregion
 
         #region Update
-              public async Task<Member?> Update(MemberDto user)
+              public async Task<Employee?> Update(EmployeeDto user)
         {
-                var mb = await context.Members
+                var mb = await context.Employees
                     .Include(x => x.Accounts)
                     .FirstOrDefaultAsync(x => x.Id == user.Id) ?? throw new Exception("User not found");
               
@@ -191,7 +191,7 @@ namespace Api.Data.Repositories
     
               public async Task<bool> Delete(Guid id)
         {
-            var user = await context.Members
+            var user = await context.Employees
             .Where(x => x.IsDeleted == false)
             .FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception("User not found");
 

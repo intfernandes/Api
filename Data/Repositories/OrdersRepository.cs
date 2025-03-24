@@ -14,7 +14,7 @@ namespace Api.Data.Repositories
             var order = new Order
             {
                 CustomerId = dto.CustomerId,
-                MemberId = dto.MemberId,
+                EmployeeId = dto.EmployeeId,
                 
             };
 
@@ -35,7 +35,7 @@ namespace Api.Data.Repositories
                 .Where(x => x.FirstName.Contains(input) || x.Email.Contains(input))
                 .ToListAsync();
 
-            var members = await context.Members
+            var employees = await context.Employees
                 .Include(x => x.Orders)
                 .Where(x => x.FirstName.Contains(input) || x.Email.Contains(input))
                 .ToListAsync();
@@ -48,10 +48,10 @@ namespace Api.Data.Repositories
                 orders.AddRange(customer.Orders);
             }
 
-            foreach (var member in members)
+            foreach (var employee in employees)
             {
                 
-                orders.AddRange(member.Orders);
+                orders.AddRange(employee.Orders);
             }
 
             return [.. orders.Distinct()];

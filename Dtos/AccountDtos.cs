@@ -11,7 +11,7 @@ public class AccountDto : BaseEntity
     [MaxLength(255)]
     public Guid? UserId { get; set; }  
     [MaxLength(20)]
-    public Guid? DomainId { get; set; }
+    public Guid? StoreId { get; set; }
     public List<string> Permissions { get; set; } = new List<string>();
     [JsonConverter(typeof(JsonStringEnumConverter<AccountType>))]
     public AccountType? AccountType { get; set; } 

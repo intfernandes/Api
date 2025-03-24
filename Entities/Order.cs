@@ -19,14 +19,14 @@ namespace Api.Entities
         #region Relationships
         [Required]
         public required Guid CustomerId { get; set; } 
-        public virtual IUser Customer { get; set; } = null!; 
+        public virtual Customer Customer { get; set; } = null!; 
 
         [Required]
-        public required Guid MemberId { get; set; }
-        public virtual Member Member { get; set; } = null!;
+        public required Guid EmployeeId { get; set; }
+        public virtual Employee Employee { get; set; } = null!;
         [Required]
-        public Guid DomainId { get; set; }
-        public virtual Domain? Domain { get; set; }
+        public Guid StoreId { get; set; }
+        public virtual Store? Store { get; set; }
         public Guid? ShippingAddressId { get; set; }
         public Guid? BillingAddressId { get; set; }
         [MaxLength(255)]
@@ -40,7 +40,7 @@ namespace Api.Entities
 
         public override string ToString()
         {
-            return $"Order ID: {Id}, Customer: {Customer?.FirstName}, Seller: {Member?.FirstName}, DeliveryTerm: {DeliveryTerm}"; // Updated ToString to use OrderPlacer
+            return $"Order ID: {Id}, Customer: {Customer?.FirstName}, Seller: {Employee?.FirstName}, DeliveryTerm: {DeliveryTerm}"; // Updated ToString to use OrderPlacer
         }
     }
     

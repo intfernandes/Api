@@ -21,7 +21,7 @@ public class UserDto : BaseEntity
         public ICollection<OrderDto> Orders { get; set; } = []; 
         public ICollection<AccountDto> Accounts { get; set; } = [];
         public Guid? CurrentAccount { get; set; } = null!;
-        public bool? IsDomainResponsible { get; set; } = null!; 
+        public bool? IsStoreResponsible { get; set; } = null!; 
         public string Token { get; set;} = string.Empty;
         public ICollection<string> RefreshTokens { get; set; } = [];
 }

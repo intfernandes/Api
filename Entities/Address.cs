@@ -35,11 +35,13 @@ namespace Api.Entities
         public string? ZipCode { get; set; }
 
         #region Relationships
-        public Guid? DomainId { get; set; }
-        public virtual Domain? Domain { get; set; }
+        public Guid? StoreId { get; set; }
+        public virtual Store? Store { get; set; }
 
-        public Guid? UserId { get; set; }
-        public virtual IUser? User { get; set; }
+        public Guid? CustomerId { get; set; }
+        public virtual Customer? Customer { get; set; }
+        public Guid? EmployeeId { get; set; }
+        public virtual Employee? Employee { get; set; }
 
         #endregion
     }

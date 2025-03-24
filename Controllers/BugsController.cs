@@ -14,19 +14,19 @@ namespace Api.Controllers
         }
 
         [HttpGet("not-found")]
-        public ActionResult<Member> GetNotFound(){
-            var member = context.Members.Find(-1);
+        public ActionResult<Employee> GetNotFound(){
+            var employee = context.Employees.Find(-1);
 
-            if(member == null)   return NotFound();
+            if(employee == null)   return NotFound();
 
-            return member;
+            return employee;
         }
 
 
     [HttpGet("server-error")]
-    public ActionResult<Member> GetServerError()
+    public ActionResult<Employee> GetServerError()
     {
-        var thing = context.Members.Find(-1) ?? throw new Exception("A bad thing has happened");
+        var thing = context.Employees.Find(-1) ?? throw new Exception("A bad thing has happened");
         return thing;
     }
     [HttpGet("bad-request")]

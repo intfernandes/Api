@@ -20,73 +20,89 @@ public static void ConfigureAccounts(ModelBuilder modelBuilder)
               .HasConversion<string>()
               .HasColumnType("nvarchar(24)");
 
-        // Updated relationships to use generic IUser:
-
-        entity.HasOne(e => e.User)
+        entity.HasOne(e => e.Customer)
             .WithMany(u => u.Accounts)
-            .HasForeignKey(e => e.UserId)
+            .HasForeignKey(e => e.CustomerId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // The Domain - Account relationship remains unchanged:
-        entity.HasOne(e => e.Domain)
+        entity.HasOne(e => e.Employee)
+            .WithMany(u => u.Accounts)
+            .HasForeignKey(e => e.EmployeeId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // The Store - Account relationship remains unchanged:
+        entity.HasOne(e => e.Store)
              .WithOne(c => c.Account)
-             .HasForeignKey<Account>(e => e.DomainId)
+             .HasForeignKey<Account>(e => e.StoreId)
              .OnDelete(DeleteBehavior.Restrict);
     });
 }
 
 public static void ConfigureCompanies(ModelBuilder modelBuilder)
 {
-    modelBuilder.Entity<Domain>(entity =>
+    modelBuilder.Entity<Store>(entity =>
     {
-            entity.ToTable("Domains");
+            entity.ToTable("Stores");
  
-            entity.HasMany(c => c.Members)
-              .WithOne(m => m.Domain)
-              .HasForeignKey(m => m.DomainId)
+            entity.HasMany(c => c.Employees)
+              .WithOne(m => m.Store)
+              .HasForeignKey(m => m.StoreId)
               .IsRequired()
               .OnDelete(DeleteBehavior.Cascade);
   
             entity.HasMany(c => c.Products)
-              .WithOne(p => p.Domain)
-              .HasForeignKey(p => p.DomainId)
+              .WithOne(p => p.Store)
+              .HasForeignKey(p => p.StoreId)
               .OnDelete(DeleteBehavior.Cascade);
  
             entity.HasMany(c => c.Orders)
-              .WithOne(o => o.Domain)
-              .HasForeignKey(o => o.DomainId)
+              .WithOne(o => o.Store)
+              .HasForeignKey(o => o.StoreId)
               .IsRequired()
               .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasMany(c => c.Photos)    
-              .WithOne(p => p.Domain)     
-              .HasForeignKey(p => p.DomainId) 
+              .WithOne(p => p.Store)     
+              .HasForeignKey(p => p.StoreId) 
               .OnDelete(DeleteBehavior.Cascade);
     });
 }
 
-public static void ConfigureIUser(ModelBuilder modelBuilder)
+public static void ConfigureUsers(ModelBuilder modelBuilder)
 {
-    modelBuilder.Entity<IUser>(entity =>
+    modelBuilder.Entity<Employee>(entity =>
     {
-            entity.ToTable("Users");
+            entity.ToTable("Employees");
         
             entity.HasKey(a => a.Id);
-
-            entity.HasDiscriminator<string>("UserType") 
-            .HasValue<Customer>("Customer")  
-            .HasValue<Member>("Member");
         
             entity.Property(e => e.Gender)
               .HasConversion<string>()
               .HasColumnType("nvarchar(24)");
 
             entity.HasMany(c => c.Photos)    
-              .WithOne(p => p.User)     
-              .HasForeignKey(p => p.UserId) 
+              .WithOne(p => p.Employee)     
+              .HasForeignKey(p => p.EmployeeId) 
               .OnDelete(DeleteBehavior.Cascade);
-    }) ;
+    });
+
+        modelBuilder.Entity<Customer>(entity =>
+    {
+            entity.ToTable("Customers");
+        
+            entity.HasKey(a => a.Id);
+        
+            entity.Property(e => e.Gender)
+              .HasConversion<string>()
+              .HasColumnType("nvarchar(24)");
+
+            entity.HasMany(c => c.Photos)    
+              .WithOne(p => p.Customer)     
+              .HasForeignKey(p => p.CustomerId) 
+              .OnDelete(DeleteBehavior.Cascade);
+    });
 }
 
 public static void ConfigureAddresses(ModelBuilder modelBuilder)
@@ -111,16 +127,22 @@ public static void ConfigureAddresses(ModelBuilder modelBuilder)
               .IsRequired(false)        
               .HasMaxLength(10);     
 
-      entity.HasOne(a => a.Domain)      
+      entity.HasOne(a => a.Store)      
               .WithOne(c => c.Address)      
-              .HasForeignKey<Domain>(c => c.AddressId) 
+              .HasForeignKey<Store>(c => c.AddressId) 
               .IsRequired(false)                
               .OnDelete(DeleteBehavior.Restrict);  
 
-      entity.HasOne(a => a.User)        
+      entity.HasOne(a => a.Customer)        
               .WithOne(u => u.Address)       
-              .HasForeignKey<IUser>(u => u.AddressId) 
+              .HasForeignKey<Customer>(u => u.AddressId) 
               .IsRequired(false)                
+              .OnDelete(DeleteBehavior.Restrict);
+
+      entity.HasOne(a => a.Employee)
+              .WithOne(u => u.Address)
+              .HasForeignKey<Employee>(u => u.AddressId)
+              .IsRequired(false)
               .OnDelete(DeleteBehavior.Restrict);
     });
 }
@@ -143,9 +165,9 @@ public static void ConfigureProducts(ModelBuilder modelBuilder)
               .IsRequired()           
               .HasColumnType("decimal(18, 2)");
                                                  
-            entity.HasOne(p => p.Domain)      
+            entity.HasOne(p => p.Store)      
               .WithMany(c => c.Products)        
-              .HasForeignKey(p => p.DomainId)  
+              .HasForeignKey(p => p.StoreId)  
               .IsRequired(false)                
               .OnDelete(DeleteBehavior.Restrict); 
 
@@ -252,15 +274,15 @@ public static void ConfigureOrders(ModelBuilder modelBuilder)
               .IsRequired(true) 
               .OnDelete(DeleteBehavior.Restrict);
 
-        entity.HasOne(o => o.Member)
-              .WithMany() 
-              .HasForeignKey(o => o.MemberId)
+        entity.HasOne(o => o.Employee)
+              .WithMany(u => u.Orders) 
+              .HasForeignKey(o => o.EmployeeId)
               .IsRequired()
               .OnDelete(DeleteBehavior.Restrict);
 
-        entity.HasOne(o => o.Domain)
+        entity.HasOne(o => o.Store)
               .WithMany(c => c.Orders)
-              .HasForeignKey(o => o.DomainId)
+              .HasForeignKey(o => o.StoreId)
               .IsRequired()
               .OnDelete(DeleteBehavior.Restrict);
 
@@ -326,14 +348,23 @@ public static void ConfigureEntityAuditLogs(ModelBuilder modelBuilder)
         entity.Property(e => e.Timestamp)
               .IsRequired();
 
-        entity.Property(e => e.UserId)
+        entity.Property(e => e.CustomerId)
               .IsRequired(false); 
 
-        entity.HasOne(e => e.User)
+        entity.HasOne(e => e.Customer)
               .WithMany()       
-              .HasForeignKey(e => e.UserId) 
+              .HasForeignKey(e => e.CustomerId) 
               .IsRequired(false) 
               .OnDelete(DeleteBehavior.Restrict); 
+
+        entity.Property(e => e.EmployeeId)
+              .IsRequired(false);
+
+        entity.HasOne(e => e.Employee)
+              .WithMany()       
+              .HasForeignKey(e => e.EmployeeId) 
+              .IsRequired(false) 
+              .OnDelete(DeleteBehavior.Restrict);
 
     });
 }

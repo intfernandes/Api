@@ -13,14 +13,14 @@ namespace Api.Entities
         [Column(TypeName = "nvarchar(24)")]
         public AccountStatus AccountStatus { get; set; }
 
-        #region Relationships
+        #region Relationships 
 
-        // Replaced MemberId, CustomerId, Member, Customer with generic IUser relationship:
-
-        public Guid? UserId { get; set; }       
-        public virtual IUser? User { get; set; }  
-        public Guid? DomainId { get; set; }      
-        public virtual Domain? Domain { get; set; }
+        public Guid? CustomerId { get; set; }
+        public virtual Customer? Customer { get; set; }
+        public Guid? EmployeeId { get; set; }
+        public virtual Employee? Employee { get; set; }
+        public Guid? StoreId { get; set; }      
+        public virtual Store? Store { get; set; }
 
         #endregion
     }

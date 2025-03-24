@@ -11,7 +11,7 @@ namespace Api.Dtos
     [Required]
     public Guid CustomerId { get; set; } 
     [Required]
-    public Guid MemberId { get; set; } 
+    public Guid EmployeeId { get; set; } 
     public DateTime OrderDate { get; set; }
     [JsonConverter(typeof(JsonStringEnumConverter<OrderStatus>))]
     public OrderStatus Status { get; set; }

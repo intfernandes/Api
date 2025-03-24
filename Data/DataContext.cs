@@ -11,11 +11,10 @@ namespace Api.Data
    public DbSet<Account> Accounts { get; set; } = null!;
     public DbSet<Address> Addresses { get; set; } = null!;
     public DbSet<Category> Categories { get; set; } = null!;
-    public DbSet<Domain> Domains { get; set; } = null!;
+    public DbSet<Store> Stores { get; set; } = null!;
     public DbSet<EntityAuditLog> EntityAuditLogs { get; set; } = null!;
     public DbSet<Customer> Customers { get; set; } = null!;
-    public DbSet<Member> Members { get; set; } = null!;
-    public DbSet<IUser> Users { get; set; } = null!; // DbSet for IUser (TPH will use this for Customers and Members too)
+    public DbSet<Employee> Employees { get; set; } = null!;
     public DbSet<Order> Orders { get; set; } = null!;
     public DbSet<OrderItem> OrderItems { get; set; } = null!;
     public DbSet<Photo> Photos { get; set; } = null!;
@@ -26,7 +25,7 @@ namespace Api.Data
     {
         EntityConfigurations.ConfigureAccounts(modelBuilder);
         EntityConfigurations.ConfigureCompanies(modelBuilder);
-        EntityConfigurations.ConfigureIUser(modelBuilder); 
+        EntityConfigurations.ConfigureUsers(modelBuilder); 
         EntityConfigurations.ConfigureAddresses(modelBuilder);
         EntityConfigurations.ConfigureProducts(modelBuilder);
         EntityConfigurations.ConfigureCategories(modelBuilder);

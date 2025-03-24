@@ -8,7 +8,7 @@ namespace Api.Controllers
 {
     public class AuthController( 
         ICustomersRepository customers,
-        IMembersRepository members,
+        IEmployeesRepository Employees,
         IMapper mapper
     ) : V1Controller
     {
@@ -20,9 +20,9 @@ namespace Api.Controllers
 
             if (signUp.AccountType != null && signUp.AccountType != AccountType.Customer)
             { 
-                var mb = await members.Create(signUp) ?? throw new Exception("An error occurred while creating a member");
-                var memberDto = mapper.Map<MemberDto>(mb); 
-                return Ok(memberDto);
+                var mb = await Employees.Create(signUp) ?? throw new Exception("An error occurred while creating a Employee");
+                var employeeDto = mapper.Map<EmployeeDto>(mb); 
+                return Ok(employeeDto);
 
             }
             else
@@ -44,9 +44,9 @@ namespace Api.Controllers
 
              if(cs != null) return Ok(mapper.Map<CustomerDto>(cs));
         
-             var mb = await members.SignIn(signin);
+             var mb = await Employees.SignIn(signin);
 
-            if (mb != null) return Ok(mapper.Map<MemberDto>(mb));
+            if (mb != null) return Ok(mapper.Map<EmployeeDto>(mb));
             
             return Unauthorized("User not found");
 
