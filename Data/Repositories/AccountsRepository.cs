@@ -19,7 +19,7 @@ Account account;
                  account = new Account
                     {
                         Id = Guid.NewGuid(),
-                        CustomerId = dto.UserId, 
+                        CustomerId = dto.CustomerId, 
                         AccountType = dto.AccountType ?? AccountType.Customer ,
                         AccountStatus = dto.AccountStatus ?? AccountStatus.Pending ,
                         Permissions = dto.Permissions,
@@ -36,7 +36,7 @@ Account account;
             account = new Account
                     {
                         Id = Guid.NewGuid(),
-                        EmployeeId = dto.UserId,
+                        EmployeeId = dto.EmployeeId,
                         StoreId = dto.StoreId,
                         AccountType = dto.AccountType ?? AccountType.Staff,
                         AccountStatus = dto.AccountStatus ?? AccountStatus.Pending ,

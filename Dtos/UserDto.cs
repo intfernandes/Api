@@ -15,10 +15,8 @@ public class UserDto : BaseEntity
         public DateTime? LastActiveAt { get; set; }= null!; 
         [JsonConverter(typeof(JsonStringEnumConverter<Gender>))]
         public Gender? Gender { get; set; } = null!;
-        public List<PhotoDto> Photos { get; set; } = [];
-        public Guid? AddressId { get; set; } = null!; 
+        public List<PhotoDto> Photos { get; set; } = []; 
         public virtual AddressDto? Address { get; set; }= null!; 
-        public ICollection<OrderDto> Orders { get; set; } = []; 
         public ICollection<AccountDto> Accounts { get; set; } = [];
         public Guid? CurrentAccount { get; set; } = null!;
         public bool? IsStoreResponsible { get; set; } = null!; 

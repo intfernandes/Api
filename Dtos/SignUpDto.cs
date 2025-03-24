@@ -23,7 +23,7 @@ public class SignUpDto : BaseEntity
         [JsonConverter(typeof(JsonStringEnumConverter<AccountType>))]
         public AccountType? AccountType { get; set; }
         [JsonConverter(typeof(JsonStringEnumConverter<Gender>))]
-        public Gender Gender { get; set; } = Gender.Unknown;
+        public Gender? Gender { get; set; }
         public List<PhotoDto> Photos { get; set; } = []; 
         public virtual AddressDto ? Address { get; set; } 
         public ICollection<OrderDto > Orders { get; set; } = []; 

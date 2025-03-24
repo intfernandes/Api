@@ -76,7 +76,7 @@ namespace Api.Data.Migrations
                     RefreshTokens = table.Column<string>(type: "TEXT", nullable: false),
                     DateOfBirth = table.Column<DateOnly>(type: "TEXT", nullable: true),
                     LastActiveAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Gender = table.Column<string>(type: "nvarchar(24)", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(24)", nullable: true),
                     AddressId = table.Column<Guid>(type: "TEXT", nullable: true),
                     CurrentAccount = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
@@ -349,7 +349,7 @@ namespace Api.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    StoreId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    StoreId = table.Column<Guid>(type: "TEXT", nullable: true),
                     IsStoreResponsible = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -365,7 +365,7 @@ namespace Api.Data.Migrations
                     RefreshTokens = table.Column<string>(type: "TEXT", nullable: false),
                     DateOfBirth = table.Column<DateOnly>(type: "TEXT", nullable: true),
                     LastActiveAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Gender = table.Column<string>(type: "nvarchar(24)", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(24)", nullable: true),
                     AddressId = table.Column<Guid>(type: "TEXT", nullable: true),
                     CurrentAccount = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
@@ -383,7 +383,7 @@ namespace Api.Data.Migrations
                         column: x => x.StoreId,
                         principalTable: "Stores",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

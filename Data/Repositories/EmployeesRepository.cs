@@ -22,11 +22,21 @@ namespace Api.Data.Repositories
                     x.Email.Equals(user.Email.ToLower())
                 );
                 if (mb != null) throw new Exception("Employee already exists");
+
+
+            var st = await context.Stores
+            .Where(x => x.IsDeleted == false)
+            .FirstOrDefaultAsync(x =>
+                    x.Id == user.StoreId
+                );
                 
+                if (user.StoreId == null || st == null ) throw new Exception("Store not found");
+
                 using var hmac = new HMACSHA512();
 
                 mb = new Employee
                 {
+                    StoreId = user.StoreId.Value,
                     FirstName = user.FirstName.ToLower() ,
                     LastName = user.LastName?.ToLower() ,
                     Email = user.Email.ToLower() ,
@@ -86,6 +96,7 @@ namespace Api.Data.Repositories
             .Include(x => x.Accounts)
             .Include(x => x.Address)
             .Include(x => x.Orders)
+            .Include(x => x.Orders)
             .Where(x => x.IsDeleted == false)
             .ToListAsync();
 
@@ -99,8 +110,9 @@ namespace Api.Data.Repositories
             .Include(x => x.Accounts)
             .Include(x => x.Address)
             .Include(x => x.Orders)
+            .Include(x => x.Store)
             .Where(x => x.IsDeleted == false)
-            .FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception("User not found");
+            .FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception("Employee not found");
 
             return mb;
         }

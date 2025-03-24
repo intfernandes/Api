@@ -80,7 +80,14 @@ public static void ConfigureUsers(ModelBuilder modelBuilder)
         
             entity.Property(e => e.Gender)
               .HasConversion<string>()
-              .HasColumnType("nvarchar(24)");
+              .HasColumnType("nvarchar(24)")
+              .IsRequired(false);
+
+            entity.HasOne(c => c.Store)      
+              .WithMany(m => m.Employees)      
+              .HasForeignKey(c => c.StoreId) 
+              .IsRequired(false)                
+              .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasMany(c => c.Photos)    
               .WithOne(p => p.Employee)     
@@ -96,7 +103,8 @@ public static void ConfigureUsers(ModelBuilder modelBuilder)
         
             entity.Property(e => e.Gender)
               .HasConversion<string>()
-              .HasColumnType("nvarchar(24)");
+              .HasColumnType("nvarchar(24)")
+              .IsRequired(false);
 
             entity.HasMany(c => c.Photos)    
               .WithOne(p => p.Customer)     

@@ -9,14 +9,14 @@ namespace Api.Dtos
     
     [Required]
     [MaxLength(255)]
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = string.Empty;
     [MaxLength(500)]
-    public string? Description { get; set; }
+    public string? Description { get; set; } = string.Empty;
     [Required]
     [EmailAddress]
     [MaxLength(255)]
     public required string Email { get; set; } = string.Empty;
-    public virtual ICollection<UserDto>? Employees { get; set; } = [];
+    public virtual ICollection<EmployeeDto>? Employees { get; set; } = [];
     public virtual ICollection<ProductDto>? Products { get; set; } = [];
     public virtual ICollection<OrderDto>? Orders { get; set; } = [];
     public virtual AddressDto? AddressDto { get; set; }

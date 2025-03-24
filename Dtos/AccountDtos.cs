@@ -7,10 +7,11 @@ namespace Api.Dtos
 {
 public class AccountDto : BaseEntity
 {
-    [Required]
-    [MaxLength(255)]
-    public Guid? UserId { get; set; }  
-    [MaxLength(20)]
+    [MaxLength(40)]
+    public Guid? CustomerId { get; set; }  
+    [MaxLength(40)]
+    public Guid? EmployeeId { get; set; }  
+    [MaxLength(40)]
     public Guid? StoreId { get; set; }
     public List<string> Permissions { get; set; } = new List<string>();
     [JsonConverter(typeof(JsonStringEnumConverter<AccountType>))]

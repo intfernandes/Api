@@ -25,7 +25,7 @@ namespace Api.Entities
         public DateOnly? DateOfBirth { get; set; }
         public DateTime? LastActiveAt { get; set; }
         [Column(TypeName = "nvarchar(24)")]
-        public Gender Gender { get; set; } = Gender.Unknown;
+        public Gender? Gender { get; set; }
         public List<Photo> Photos { get; set; } = [];
         public Guid? AddressId { get; set; } 
         public virtual Address? Address { get; set; }

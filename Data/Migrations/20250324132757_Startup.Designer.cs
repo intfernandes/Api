@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250324124251_Startup")]
+    [Migration("20250324132757_Startup")]
     partial class Startup
     {
         /// <inheritdoc />
@@ -215,7 +215,6 @@ namespace Api.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("nvarchar(24)");
 
                     b.Property<bool>("IsDeleted")
@@ -291,7 +290,6 @@ namespace Api.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("nvarchar(24)");
 
                     b.Property<bool>("IsDeleted")
@@ -326,7 +324,7 @@ namespace Api.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("StoreId")
+                    b.Property<Guid?>("StoreId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Token")
@@ -1465,8 +1463,7 @@ namespace Api.Data.Migrations
                     b.HasOne("Api.Entities.Store", "Store")
                         .WithMany("Employees")
                         .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Address");
 
