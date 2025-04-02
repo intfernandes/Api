@@ -21,17 +21,16 @@ namespace Api.Entities
 
         #region Relationships
 
-        [Required] // Enforcing Store MUST have an Address
+        [Required]
         public Guid AddressId { get; set; }
-        public virtual Address? Address { get; set; } // One-to-one or one-to-zero-or-one: Store has one Address
-
-        [Required] // Enforcing Store MUST have an Account
+        public virtual Address? Address { get; set; } 
+        [Required]
         public Guid AccountId { get; set; }
-        public virtual Account? Account { get; set; } // One-to-one: Store has one Account
-
-        public virtual ICollection<Employee> Employees { get; set; } = []; // One-to-many: Store has many Employees
-        public virtual ICollection<Product> Products { get; set; } = []; // One-to-many: Store has many Products
-        public virtual ICollection<Order> Orders { get; set; } = [];   // One-to-many: Store receives many Orders
+        public virtual Account? Account { get; set; } 
+        public virtual ICollection<Employee> Employees { get; set; } = [];
+        public virtual ICollection<Product> Products { get; set; } = [];
+        public virtual ICollection<Order> Orders { get; set; } = [];   
+        public virtual ICollection<Category> Categories { get; set; } = [];
         public List<Photo> Photos { get; set; } = []; 
 
         #endregion

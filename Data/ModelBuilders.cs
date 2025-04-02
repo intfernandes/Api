@@ -185,23 +185,23 @@ public static void ConfigureProducts(ModelBuilder modelBuilder)
               .OnDelete(DeleteBehavior.Cascade);
 
      
-            entity.HasMany(p => p.Categories)    
-              .WithMany(c => c.Products)       
-              .UsingEntity<ProductCategory>(     
+            entity.HasMany(p => p.Categories)
+              .WithMany(c => c.Products)
+              .UsingEntity<ProductCategory>(
                   j => j
-                      .HasOne(pc => pc.Category)  
-                      .WithMany()               
-                      .HasForeignKey(pc => pc.CategoryId) 
-                      .OnDelete(DeleteBehavior.Cascade), 
+                      .HasOne(pc => pc.Category)
+                      .WithMany()
+                      .HasForeignKey(pc => pc.CategoryId)
+                      .OnDelete(DeleteBehavior.Cascade),
                   j => j
-                      .HasOne(pc => pc.Product)  
-                      .WithMany()               
-                      .HasForeignKey(pc => pc.ProductId)  
-                      .OnDelete(DeleteBehavior.Cascade), 
+                      .HasOne(pc => pc.Product)
+                      .WithMany()
+                      .HasForeignKey(pc => pc.ProductId)
+                      .OnDelete(DeleteBehavior.Cascade),
                   j =>
                   {
-                      j.ToTable("ProductCategories"); 
-                      j.HasKey(pc => new { pc.ProductId, pc.CategoryId }); 
+                      j.ToTable("ProductCategories");
+                      j.HasKey(pc => new { pc.ProductId, pc.CategoryId });
                   });
     });
 }

@@ -203,19 +203,22 @@ namespace Api.Data
                 if (!context.Products.Any())
                 {
                     var categories = context.Categories.ToList();
+                    var stores = context.Stores.ToList();
 
                     context.Products.AddRange(
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "Laptop", Description = "High-performance laptop", Price = 1200.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Electronics")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "Smartphone", Description = "Latest smartphone model", Price = 900.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Electronics")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "The Lord of the Rings", Description = "Fantasy classic", Price = 25.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Books")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "The Catcher in the Rye", Description = "Coming-of-age novel", Price = 15.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Books")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "T-shirt", Description = "Casual cotton t-shirt", Price = 20.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Clothing")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "Jeans", Description = "Slim-fit denim jeans", Price = 40.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Clothing")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "Sneakers", Description = "Canvas sneakers", Price = 30.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Clothing")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "External Hard Drive", Description = "Portable storage device", Price = 80.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Electronics")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "The Great Gatsby", Description = "Jazz Age novel", Price = 20.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Books")! } },
-                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = null, Name = "Graphic T-shirt", Description = "Printed cotton t-shirt", Price = 25.00m, Categories = new List<Category> { categories.FirstOrDefault(c => c.Name == "Clothing")! } }
-                    );
+                        // Product 1 ... Product 10 (example Products)
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = stores[0].Id, Name = "Laptop", Description = "High-performance laptop", Price = 999.99m, Categories = [categories[0]] },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = stores[0].Id, Name = "Tablet", Description = "Portable tablet device", Price = 299.99m, Categories = [categories[0]] },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = stores[1].Id, Name = "Smartphone", Description = "Latest smartphone model", Price = 699.99m, Categories = [categories[0]] },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = stores[1].Id, Name = "E-Reader", Description = "E-ink reader for books", Price = 149.99m, Categories = [categories[1]] },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = stores[2].Id, Name = "T-Shirt", Description = "Casual cotton t-shirt", Price = 19.99m, Categories = [categories[2]] },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = stores[2].Id, Name = "Jeans", Description = "Denim jeans for all", Price = 39.99m, Categories = [categories[2]] },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = stores[3].Id, Name = "Dress", Description = "Elegant evening dress", Price = 79.99m, Categories = [categories[2]] },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = stores[3].Id, Name = "Suit", Description = "Formal business suit", Price = 149.99m, Categories = [categories[2]] },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = stores[4].Id, Name = "Sneakers", Description = "Sporty sneakers for all", Price = 59.99m, Categories = [categories[2]] },
+                        new Product { Id = GuidGenerator.GenerateSequentialGuid(), StoreId = stores[4].Id, Name = "Gloves", Description = "Warm up your hands, soft touch", Price = 9.99m, Categories = [categories[2]] }
+
+              );
                     context.SaveChanges(); // Save Products
                 }
 

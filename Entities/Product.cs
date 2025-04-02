@@ -15,9 +15,8 @@ namespace Api.Entities
 
         #region Relationships
         public Guid? StoreId { get; set; }
-        public virtual Store? Store { get; set; } = null!; // One-to-many: Product belongs to one Store
-        public virtual ICollection<Category> Categories { get; set; } = []; 
-
+        public virtual Store? Store { get; set; } = null!;
+        public virtual List<Category> Categories { get; set; } = [];
         #endregion
     }
 }

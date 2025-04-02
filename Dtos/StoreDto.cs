@@ -16,9 +16,12 @@ namespace Api.Dtos
     [EmailAddress]
     [MaxLength(255)]
     public required string Email { get; set; } = string.Empty;
-    public virtual ICollection<EmployeeDto>? Employees { get; set; } = [];
-    public virtual ICollection<ProductDto>? Products { get; set; } = [];
-    public virtual ICollection<OrderDto>? Orders { get; set; } = [];
+
+    // TODO: transform those fields into new routes
+    // public virtual ICollection<EmployeeDto>? Employees { get; set; } = [];
+    // public virtual ICollection<ProductDto>? Products { get; set; } = [];
+    // public virtual ICollection<OrderDto>? Orders { get; set; } = [];
+
     public virtual AddressDto? AddressDto { get; set; }
     public List<PhotoDto> Photos { get; set; } = [];
 

@@ -34,9 +34,24 @@ namespace Api.Data.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Product>?> Filter(string category)
+        {
+            var ids = category.Split('id=')[1].Split('&');
+            var category = Guid.Parse(ids[0]);
+
+
+
+            return await context.Products
+                .Include(x => x.Categories)
+                .Where(x => x.Categories.Any(x => x.Id == category))
+                .ToListAsync();
+        }
+
         public async Task<Product?> GetById(Guid id)
         {
-            return await context.Products.FirstOrDefaultAsync(x => x.Id == id);
+            return await context.Products
+            .Include(x => x.Categories)
+            .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Product?> Update(ProductDto dto)

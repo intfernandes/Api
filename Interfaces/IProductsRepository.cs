@@ -10,6 +10,7 @@ namespace Api.Interfaces
         Task<Product?> Create(ProductDto dto);
         Task<IEnumerable<Product>> Get();
         Task<IEnumerable<Product>?> Search(string input);
+        Task<IEnumerable<Product>?> Filter(string input);
         Task<Product?> GetById(Guid id);
         Task<Product?> Update(ProductDto dto);
         Task<bool> Delete(Guid id);  
